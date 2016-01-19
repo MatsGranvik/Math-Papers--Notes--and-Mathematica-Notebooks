@@ -1,0 +1,427 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 8.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       157,          7]
+NotebookDataLength[     13210,        418]
+NotebookOptionsPosition[     12854,        401]
+NotebookOutlinePosition[     13198,        416]
+CellTagsIndexPosition[     13155,        413]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"StrictDivisorsHyperbola", "[", 
+   RowBox[{"A_", ",", "k_", ",", "n_", ",", "s_"}], "]"}], ":=", 
+  RowBox[{"Sum", "[", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"(", 
+      RowBox[{
+       RowBox[{"(", 
+        RowBox[{"m", "^", "A"}], ")"}], "^", 
+       RowBox[{"(", 
+        RowBox[{"k", "-", "j"}], ")"}]}], ")"}], " ", 
+     RowBox[{"Binomial", "[", 
+      RowBox[{"k", ",", "j"}], "]"}], " ", 
+     RowBox[{"StrictDivisorsHyperbola", "[", 
+      RowBox[{"A", ",", "j", ",", 
+       RowBox[{"n", "/", 
+        RowBox[{"(", 
+         RowBox[{"m", "^", 
+          RowBox[{"(", 
+           RowBox[{"k", "-", "j"}], ")"}]}], ")"}]}], ",", 
+       RowBox[{"m", "+", "1"}]}], "]"}]}], ",", 
+    RowBox[{"{", 
+     RowBox[{"m", ",", "s", ",", 
+      RowBox[{"n", "^", 
+       RowBox[{"(", 
+        RowBox[{"1", "/", "k"}], ")"}]}]}], "}"}], ",", 
+    RowBox[{"{", 
+     RowBox[{"j", ",", "0", ",", 
+      RowBox[{"k", "-", "1"}]}], "}"}]}], "]"}]}], "\n", 
+ RowBox[{
+  RowBox[{"StrictDivisorsHyperbola", "[", 
+   RowBox[{"A_", ",", "0", ",", "n_", ",", "s_"}], "]"}], ":=", "1"}], "\n", 
+ RowBox[{
+  RowBox[{"SumPrimesHyperbola", "[", 
+   RowBox[{"A_", ",", "n_"}], "]"}], ":=", 
+  RowBox[{"Sum", "[", 
+   RowBox[{
+    RowBox[{
+     RowBox[{
+      RowBox[{
+       RowBox[{"(", 
+        RowBox[{"-", "1"}], ")"}], "^", 
+       RowBox[{"(", 
+        RowBox[{"k", "+", "1"}], ")"}]}], "/", 
+      RowBox[{"(", 
+       RowBox[{"j", " ", "k"}], ")"}]}], " ", 
+     RowBox[{"MoebiusMu", "[", "j", "]"}], 
+     RowBox[{"StrictDivisorsHyperbola", "[", 
+      RowBox[{
+       RowBox[{"j", " ", "A"}], ",", "k", ",", 
+       RowBox[{"n", "^", 
+        RowBox[{"(", 
+         RowBox[{"1", "/", "j"}], ")"}]}], ",", "2"}], "]"}]}], ",", 
+    RowBox[{"{", 
+     RowBox[{"j", ",", "1", ",", 
+      RowBox[{"Log", "[", 
+       RowBox[{"2", ",", "n"}], "]"}]}], "}"}], ",", 
+    RowBox[{"{", 
+     RowBox[{"k", ",", "1", ",", 
+      RowBox[{"Log", "[", 
+       RowBox[{"2", ",", 
+        RowBox[{"(", 
+         RowBox[{"n", "^", 
+          RowBox[{"(", 
+           RowBox[{"1", "/", "j"}], ")"}]}], ")"}]}], "]"}]}], "}"}]}], 
+   "]"}]}], "\n", 
+ RowBox[{
+  RowBox[{"Smalld", "[", 
+   RowBox[{"A_", ",", "k_", ",", "n_"}], "]"}], ":=", 
+  RowBox[{
+   RowBox[{"StrictDivisorsHyperbola", "[", 
+    RowBox[{"A", ",", "k", ",", "n", ",", "2"}], "]"}], "-", 
+   RowBox[{"StrictDivisorsHyperbola", "[", 
+    RowBox[{"A", ",", "k", ",", 
+     RowBox[{"n", "-", "1"}], ",", "2"}], "]"}]}]}], "\n", 
+ RowBox[{
+  RowBox[{"StrictDivisorsReduced", "[", 
+   RowBox[{"a_", ",", "A_", ",", "k_", ",", "n_"}], "]"}], ":=", 
+  RowBox[{
+   RowBox[{"Sum", "[", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"Smalld", "[", 
+       RowBox[{"A", ",", "1", ",", "j"}], "]"}], " ", 
+      RowBox[{"StrictDivisors", "[", 
+       RowBox[{"A", ",", 
+        RowBox[{"k", "-", "1"}], ",", 
+        RowBox[{"n", "/", "j"}]}], "]"}]}], ",", 
+     RowBox[{"{", 
+      RowBox[{"j", ",", 
+       RowBox[{"a", "+", "1"}], ",", "n"}], "}"}]}], "]"}], "+", 
+   RowBox[{"Sum", "[", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"Smalld", "[", 
+       RowBox[{"A", ",", 
+        RowBox[{"k", "-", "1"}], ",", "j"}], "]"}], " ", 
+      RowBox[{"StrictDivisors", "[", 
+       RowBox[{"A", ",", "1", ",", 
+        RowBox[{"n", "/", "j"}]}], "]"}]}], ",", 
+     RowBox[{"{", 
+      RowBox[{"j", ",", "2", ",", "a"}], "}"}]}], "]"}], "+", 
+   RowBox[{"Sum", "[", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"Smalld", "[", 
+       RowBox[{"A", ",", "1", ",", "s"}], "]"}], " ", 
+      RowBox[{"Smalld", "[", 
+       RowBox[{"A", ",", "m", ",", "j"}], "]"}], " ", 
+      RowBox[{"StrictDivisors", "[", 
+       RowBox[{"A", ",", 
+        RowBox[{"k", "-", "m", "-", "1"}], ",", 
+        RowBox[{"n", "/", 
+         RowBox[{"(", 
+          RowBox[{"j", " ", "s"}], ")"}]}]}], "]"}]}], ",", 
+     RowBox[{"{", 
+      RowBox[{"j", ",", "2", ",", "a"}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"s", ",", 
+       RowBox[{
+        RowBox[{"Floor", "[", 
+         RowBox[{"a", "/", "j"}], "]"}], "+", "1"}], ",", 
+       RowBox[{"n", "/", "j"}]}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"m", ",", "1", ",", 
+       RowBox[{"k", "-", "2"}]}], "}"}]}], "]"}]}]}], "\n", 
+ RowBox[{
+  RowBox[{"StrictDivisorsReduced", "[", 
+   RowBox[{"a_", ",", "A_", ",", "1", ",", "n_"}], "]"}], ":=", 
+  RowBox[{"Sum", "[", 
+   RowBox[{
+    RowBox[{"j", "^", "A"}], ",", 
+    RowBox[{"{", 
+     RowBox[{"j", ",", "2", ",", "n"}], "}"}]}], "]"}]}], "\n", 
+ RowBox[{
+  RowBox[{"SumPrimesReduced", "[", 
+   RowBox[{"A_", ",", "n_"}], "]"}], ":=", 
+  RowBox[{"Sum", "[", 
+   RowBox[{
+    RowBox[{
+     RowBox[{
+      RowBox[{
+       RowBox[{"(", 
+        RowBox[{"-", "1"}], ")"}], "^", 
+       RowBox[{"(", 
+        RowBox[{"k", "+", "1"}], ")"}]}], "/", 
+      RowBox[{"(", 
+       RowBox[{"j", " ", "k"}], ")"}]}], " ", 
+     RowBox[{"MoebiusMu", "[", "j", "]"}], 
+     RowBox[{"StrictDivisorsReduced", "[", 
+      RowBox[{
+       RowBox[{"Floor", "[", 
+        RowBox[{"n", "^", 
+         RowBox[{"(", 
+          RowBox[{"1", "/", "3"}], ")"}]}], "]"}], ",", 
+       RowBox[{"j", " ", "A"}], ",", "k", ",", 
+       RowBox[{"n", "^", 
+        RowBox[{"(", 
+         RowBox[{"1", "/", "j"}], ")"}]}]}], "]"}]}], ",", 
+    RowBox[{"{", 
+     RowBox[{"j", ",", "1", ",", 
+      RowBox[{"Log", "[", 
+       RowBox[{"2", ",", "n"}], "]"}]}], "}"}], ",", 
+    RowBox[{"{", 
+     RowBox[{"k", ",", "1", ",", 
+      RowBox[{"Log", "[", 
+       RowBox[{"2", ",", 
+        RowBox[{"(", 
+         RowBox[{"n", "^", 
+          RowBox[{"(", 
+           RowBox[{"1", "/", "j"}], ")"}]}], ")"}]}], "]"}]}], "}"}]}], 
+   "]"}]}], "\n", 
+ RowBox[{
+  RowBox[{"StrictDivisorsFullReduced", "[", 
+   RowBox[{"A_", ",", "k_", ",", "n_"}], "]"}], ":=", 
+  RowBox[{
+   RowBox[{"Sum", "[", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"j", "^", "A"}], " ", 
+      RowBox[{"StrictDivisorsHyperbola", "[", 
+       RowBox[{"A", ",", 
+        RowBox[{"k", "-", "1"}], ",", 
+        RowBox[{"n", "/", "j"}], ",", "2"}], "]"}]}], ",", 
+     RowBox[{"{", 
+      RowBox[{"j", ",", 
+       RowBox[{
+        RowBox[{"Floor", "[", 
+         RowBox[{"n", "^", 
+          RowBox[{"(", 
+           RowBox[{"1", "/", "3"}], ")"}]}], "]"}], "+", "1"}], ",", 
+       RowBox[{"n", "^", 
+        RowBox[{"(", 
+         RowBox[{"1", "/", "2"}], ")"}]}]}], "}"}]}], "]"}], "+", 
+   RowBox[{"Sum", "[", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"Sum", "[", 
+       RowBox[{
+        RowBox[{"m", "^", "A"}], ",", 
+        RowBox[{"{", 
+         RowBox[{"m", ",", 
+          RowBox[{
+           RowBox[{"Floor", "[", 
+            RowBox[{"n", "/", 
+             RowBox[{"(", 
+              RowBox[{"j", "+", "1"}], ")"}]}], "]"}], "+", "1"}], ",", 
+          RowBox[{"n", "/", "j"}]}], "}"}]}], "]"}], 
+      RowBox[{"StrictDivisorsHyperbola", "[", 
+       RowBox[{"A", ",", 
+        RowBox[{"k", "-", "1"}], ",", "j", ",", "2"}], "]"}]}], ",", 
+     RowBox[{"{", 
+      RowBox[{"j", ",", "1", ",", 
+       RowBox[{
+        RowBox[{"n", "/", 
+         RowBox[{"Floor", "[", 
+          RowBox[{"n", "^", 
+           RowBox[{"(", 
+            RowBox[{"1", "/", "2"}], ")"}]}], "]"}]}], "-", "1"}]}], "}"}]}], 
+    "]"}], "+", 
+   RowBox[{"Sum", "[", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"Smalld", "[", 
+       RowBox[{"A", ",", 
+        RowBox[{"k", "-", "1"}], ",", "j"}], "]"}], " ", 
+      RowBox[{"Sum", "[", 
+       RowBox[{
+        RowBox[{"m", "^", "A"}], ",", 
+        RowBox[{"{", 
+         RowBox[{"m", ",", "2", ",", 
+          RowBox[{"n", "/", "j"}]}], "}"}]}], "]"}]}], ",", 
+     RowBox[{"{", 
+      RowBox[{"j", ",", "2", ",", 
+       RowBox[{"n", "^", 
+        RowBox[{"(", 
+         RowBox[{"1", "/", "3"}], ")"}]}]}], "}"}]}], "]"}], "+", 
+   RowBox[{"Sum", "[", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"s", "^", "A"}], " ", 
+      RowBox[{"Smalld", "[", 
+       RowBox[{"A", ",", "m", ",", "j"}], "]"}], " ", 
+      RowBox[{"StrictDivisorsHyperbola", "[", 
+       RowBox[{"A", ",", 
+        RowBox[{"k", "-", "m", "-", "1"}], ",", 
+        RowBox[{"n", "/", 
+         RowBox[{"(", 
+          RowBox[{"j", " ", "s"}], ")"}]}], ",", "2"}], "]"}]}], ",", 
+     RowBox[{"{", 
+      RowBox[{"j", ",", "2", ",", 
+       RowBox[{"n", "^", 
+        RowBox[{"(", 
+         RowBox[{"1", "/", "3"}], ")"}]}]}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"s", ",", 
+       RowBox[{
+        RowBox[{"Floor", "[", 
+         RowBox[{
+          RowBox[{"Floor", "[", 
+           RowBox[{"n", "^", 
+            RowBox[{"(", 
+             RowBox[{"1", "/", "3"}], ")"}]}], "]"}], "/", "j"}], "]"}], "+", 
+        "1"}], ",", 
+       RowBox[{
+        RowBox[{"Floor", "[", 
+         RowBox[{"n", "/", "j"}], "]"}], "^", 
+        RowBox[{"(", 
+         RowBox[{"1", "/", "2"}], ")"}]}]}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"m", ",", "1", ",", 
+       RowBox[{"k", "-", "2"}]}], "}"}]}], "]"}], "+", 
+   RowBox[{"Sum", "[", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"(", 
+       RowBox[{"Sum", "[", 
+        RowBox[{
+         RowBox[{"m", "^", "A"}], ",", 
+         RowBox[{"{", 
+          RowBox[{"m", ",", 
+           RowBox[{
+            RowBox[{"Floor", "[", 
+             RowBox[{"n", "/", 
+              RowBox[{"(", 
+               RowBox[{"j", 
+                RowBox[{"(", 
+                 RowBox[{"s", "+", "1"}], ")"}]}], ")"}]}], "]"}], "+", "1"}],
+            ",", 
+           RowBox[{"n", "/", 
+            RowBox[{"(", 
+             RowBox[{"j", " ", "s"}], ")"}]}]}], "}"}]}], "]"}], ")"}], 
+      RowBox[{"(", 
+       RowBox[{"Sum", "[", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"Smalld", "[", 
+           RowBox[{"A", ",", "m", ",", "j"}], "]"}], " ", 
+          RowBox[{"StrictDivisorsHyperbola", "[", 
+           RowBox[{"A", ",", 
+            RowBox[{"k", "-", "m", "-", "1"}], ",", "s", ",", "2"}], "]"}]}], 
+         ",", 
+         RowBox[{"{", 
+          RowBox[{"m", ",", "1", ",", 
+           RowBox[{"k", "-", "2"}]}], "}"}]}], "]"}], ")"}]}], ",", 
+     RowBox[{"{", 
+      RowBox[{"j", ",", "2", ",", 
+       RowBox[{"n", "^", 
+        RowBox[{"(", 
+         RowBox[{"1", "/", "3"}], ")"}]}]}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"s", ",", "1", ",", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"Floor", "[", 
+          RowBox[{"n", "/", "j"}], "]"}], "/", 
+         RowBox[{"Floor", "[", 
+          RowBox[{
+           RowBox[{"Floor", "[", 
+            RowBox[{"n", "/", "j"}], "]"}], "^", 
+           RowBox[{"(", 
+            RowBox[{"1", "/", "2"}], ")"}]}], "]"}]}], "-", "1"}]}], "}"}]}], 
+    "]"}]}]}], "\n", 
+ RowBox[{
+  RowBox[{"StrictDivisorsFullReduced", "[", 
+   RowBox[{"A_", ",", "1", ",", "n_"}], "]"}], ":=", 
+  RowBox[{"Sum", "[", 
+   RowBox[{
+    RowBox[{"j", "^", "A"}], ",", 
+    RowBox[{"{", 
+     RowBox[{"j", ",", "2", ",", "n"}], "}"}]}], "]"}]}], "\n", 
+ RowBox[{
+  RowBox[{"SumPrimesFullReduced", "[", 
+   RowBox[{"A_", ",", "n_"}], "]"}], ":=", 
+  RowBox[{"Sum", "[", 
+   RowBox[{
+    RowBox[{
+     RowBox[{
+      RowBox[{
+       RowBox[{"(", 
+        RowBox[{"-", "1"}], ")"}], "^", 
+       RowBox[{"(", 
+        RowBox[{"k", "+", "1"}], ")"}]}], "/", 
+      RowBox[{"(", 
+       RowBox[{"j", " ", "k"}], ")"}]}], " ", 
+     RowBox[{"MoebiusMu", "[", "j", "]"}], 
+     RowBox[{"StrictDivisorsFullReduced", "[", 
+      RowBox[{
+       RowBox[{"j", " ", "A"}], ",", "k", ",", 
+       RowBox[{"n", "^", 
+        RowBox[{"(", 
+         RowBox[{"1", "/", "j"}], ")"}]}]}], "]"}]}], ",", 
+    RowBox[{"{", 
+     RowBox[{"j", ",", "1", ",", 
+      RowBox[{"Log", "[", 
+       RowBox[{"2", ",", "n"}], "]"}]}], "}"}], ",", 
+    RowBox[{"{", 
+     RowBox[{"k", ",", "1", ",", 
+      RowBox[{"Log", "[", 
+       RowBox[{"2", ",", 
+        RowBox[{"(", 
+         RowBox[{"n", "^", 
+          RowBox[{"(", 
+           RowBox[{"1", "/", "j"}], ")"}]}], ")"}]}], "]"}]}], "}"}]}], 
+   "]"}]}], "\n"}], "Input",
+ CellChangeTimes->{{3.618583241130861*^9, 3.618583252193494*^9}, {
+  3.619113454956933*^9, 3.619113478211263*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"SumPrimesFullReduced", "[", 
+  RowBox[{"1", ",", "100"}], "]"}]], "Input",
+ CellChangeTimes->{{3.618583256559743*^9, 3.618583259007883*^9}}],
+
+Cell[BoxData["1060"], "Output",
+ CellChangeTimes->{3.618583259249897*^9}]
+}, Open  ]]
+},
+WindowSize->{1588, 829},
+WindowMargins->{{0, Automatic}, {Automatic, 0}},
+FrontEndVersion->"8.0 for Microsoft Windows (64-bit) (February 23, 2011)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[557, 20, 12016, 368, 312, "Input"],
+Cell[CellGroupData[{
+Cell[12598, 392, 164, 3, 31, "Input"],
+Cell[12765, 397, 73, 1, 30, "Output"]
+}, Open  ]]
+}
+]
+*)
+
+(* End of internal cache information *)

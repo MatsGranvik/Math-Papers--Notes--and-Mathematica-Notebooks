@@ -1,0 +1,1447 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 8.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       157,          7]
+NotebookDataLength[     54257,       1438]
+NotebookOptionsPosition[     53138,       1397]
+NotebookOutlinePosition[     53484,       1412]
+CellTagsIndexPosition[     53441,       1409]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"K", "[", "n_", "]"}], ":=", 
+  RowBox[{"If", "[", 
+   RowBox[{
+    RowBox[{"n", "\[Equal]", "1"}], ",", "0", ",", 
+    RowBox[{"FullSimplify", "[", 
+     RowBox[{
+      RowBox[{"MangoldtLambda", "[", "n", "]"}], "/", 
+      RowBox[{"Log", "[", "n", "]"}]}], "]"}]}], "]"}]}], "\n", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"P", "[", 
+    RowBox[{"n_", ",", "k_"}], "]"}], ":=", 
+   RowBox[{
+    RowBox[{"P", "[", 
+     RowBox[{"n", ",", "k"}], "]"}], "=", 
+    RowBox[{"Sum", "[", " ", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"K", "[", "j", "]"}], 
+       RowBox[{"P", "[", 
+        RowBox[{
+         RowBox[{"Floor", "[", 
+          RowBox[{"n", "/", "j"}], "]"}], ",", 
+         RowBox[{"k", "-", "1"}]}], "]"}]}], ",", 
+      RowBox[{"{", 
+       RowBox[{"j", ",", "2", ",", "n"}], "}"}]}], "]"}]}]}], ";", 
+  RowBox[{
+   RowBox[{"P", "[", 
+    RowBox[{"n_", ",", "0"}], "]"}], ":=", "1"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"Phyp", "[", 
+   RowBox[{"n_", ",", "k_", ",", "a_"}], "]"}], ":=", 
+  RowBox[{
+   RowBox[{"Phyp", "[", 
+    RowBox[{"n", ",", "k", ",", "a"}], "]"}], "=", 
+   RowBox[{"Sum", "[", 
+    RowBox[{
+     RowBox[{"If", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"K", "[", "m", "]"}], "\[Equal]", "0"}], ",", "0", ",", 
+       RowBox[{
+        RowBox[{"Binomial", "[", 
+         RowBox[{"k", ",", "j"}], "]"}], " ", 
+        RowBox[{
+         RowBox[{"K", "[", "m", "]"}], "^", 
+         RowBox[{"(", 
+          RowBox[{"k", "-", "j"}], ")"}]}], 
+        RowBox[{"Phyp", "[", 
+         RowBox[{
+          RowBox[{"Floor", "[", 
+           RowBox[{"n", "/", 
+            RowBox[{"(", 
+             RowBox[{"m", "^", 
+              RowBox[{"(", 
+               RowBox[{"k", "-", "j"}], ")"}]}], ")"}]}], "]"}], ",", "j", 
+          ",", 
+          RowBox[{"m", "+", "1"}]}], "]"}]}]}], "]"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"m", ",", "a", ",", 
+       RowBox[{"n", "^", 
+        RowBox[{"(", 
+         RowBox[{"1", "/", "k"}], ")"}]}]}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"j", ",", "0", ",", 
+       RowBox[{"k", "-", "1"}]}], "}"}]}], "]"}]}]}], "\n", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"Phyp", "[", 
+    RowBox[{"n_", ",", "1", ",", "a_"}], "]"}], ":=", 
+   RowBox[{
+    RowBox[{"Phyp", "[", 
+     RowBox[{"n", ",", "1", ",", "a"}], "]"}], "=", 
+    RowBox[{"Sum", "[", " ", 
+     RowBox[{
+      RowBox[{"K", "[", "j", "]"}], ",", 
+      RowBox[{"{", 
+       RowBox[{"j", ",", "a", ",", "n"}], "}"}]}], "]"}]}]}], ";", 
+  RowBox[{
+   RowBox[{"Phyp", "[", 
+    RowBox[{"n_", ",", "0", ",", "a_"}], "]"}], ":=", 
+   "1"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"bins", "[", " ", 
+   RowBox[{"z_", ",", " ", "a_"}], "]"}], " ", ":=", " ", 
+  RowBox[{
+   RowBox[{"Product", "[", " ", 
+    RowBox[{
+     RowBox[{"(", 
+      RowBox[{"z", "-", "k"}], ")"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"k", ",", "0", ",", 
+       RowBox[{"a", "-", "1"}]}], "}"}]}], "]"}], "/", 
+   RowBox[{"a", "!"}]}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"P1", "[", 
+   RowBox[{"n_", ",", "z_"}], "]"}], ":=", 
+  RowBox[{"Expand", "[", 
+   RowBox[{"Sum", "[", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"bins", "[", 
+       RowBox[{"z", ",", "a"}], "]"}], 
+      RowBox[{"P", "[", 
+       RowBox[{"n", ",", "a"}], "]"}]}], ",", 
+     RowBox[{"{", 
+      RowBox[{"a", ",", "0", ",", 
+       RowBox[{"Log", "[", 
+        RowBox[{"2", ",", "n"}], "]"}]}], "}"}]}], "]"}], 
+   "]"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"P1h", "[", 
+   RowBox[{"n_", ",", "z_"}], "]"}], ":=", 
+  RowBox[{"Expand", "[", 
+   RowBox[{"Sum", "[", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"bins", "[", 
+       RowBox[{"z", ",", "a"}], "]"}], 
+      RowBox[{"Phyp", "[", 
+       RowBox[{"n", ",", "a", ",", "2"}], "]"}]}], ",", 
+     RowBox[{"{", 
+      RowBox[{"a", ",", "0", ",", 
+       RowBox[{"Log", "[", 
+        RowBox[{"2", ",", "n"}], "]"}]}], "}"}]}], "]"}], 
+   "]"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"P1h2", "[", 
+   RowBox[{"n_", ",", "z_"}], "]"}], " ", ":=", " ", 
+  RowBox[{"Expand", "[", 
+   RowBox[{"FullSimplify", "[", 
+    RowBox[{
+     RowBox[{"(", 
+      RowBox[{
+       RowBox[{"P1h", "[", 
+        RowBox[{"n", ",", 
+         RowBox[{"z", "+", "1"}]}], "]"}], "-", "1"}], ")"}], "/", 
+     RowBox[{"(", 
+      RowBox[{"z", "+", "1"}], ")"}]}], "]"}], 
+   "]"}]}], "\[IndentingNewLine]"}], "Input",
+ CellChangeTimes->{{3.5941659104258595`*^9, 3.594165956972522*^9}, {
+  3.5941661843975296`*^9, 3.5941662771478343`*^9}, {3.5941663148259897`*^9, 
+  3.59416633756429*^9}, {3.594166402899027*^9, 3.5941664144616885`*^9}, {
+  3.594167301811442*^9, 3.5941673354923687`*^9}}],
+
+Cell[BoxData["\[IndentingNewLine]"], "Input",
+ CellChangeTimes->{{3.594165938281452*^9, 3.5941659635358973`*^9}, {
+  3.5941662817640986`*^9, 3.5941663094686832`*^9}, {3.5941751251559114`*^9, 
+  3.594175126908012*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"RootLocusPlot", "[", 
+  RowBox[{
+   RowBox[{"1", "/", 
+    RowBox[{"Expand", "[", 
+     RowBox[{"P1h", "[", 
+      RowBox[{"530000", ",", "x"}], "]"}], "]"}]}], ",", 
+   RowBox[{"{", 
+    RowBox[{"k", ",", "0", ",", "1"}], "}"}], ",", 
+   RowBox[{"FeedbackType", "\[Rule]", "None"}]}], "]"}]], "Input",
+ CellChangeTimes->{{3.594165964432948*^9, 3.5941659984418936`*^9}, {
+   3.5941661278462954`*^9, 3.5941661366848*^9}, {3.5941663431456094`*^9, 
+   3.594166348273903*^9}, {3.594166441483234*^9, 3.5941664493766856`*^9}, {
+   3.594167097065731*^9, 3.5941670978287745`*^9}, 3.5941671914401293`*^9, {
+   3.594167440016347*^9, 3.59416744076639*^9}}],
+
+Cell[BoxData[
+ GraphicsBox[{{{}, {}, 
+    {Hue[0.67, 0.6, 0.6], Thickness[Large], LineBox[CompressedData["
+1:eJxTTMoPSmViYGAwAWIQfan5UP9LloQDDFAwyh/lj/KJ5wMAARj2Pg==
+      "]]}, 
+    {Hue[0.9060679774997897, 0.6, 0.6], Thickness[Large], 
+     LineBox[CompressedData["
+1:eJxTTMoPSmViYGAwAWIQHWJY5lRlEHPg36kza+4KNR0Y5Y/yR/nE8wHApbmB
+
+      "]]}, 
+    {Hue[0.1421359549995791, 0.6, 0.6], Thickness[Large], 
+     LineBox[CompressedData["
+1:eJxTTMoPSmViYGAwAWIQHWJY5lRlEHPg36kza+4KNTmM8kf5o3zi+QA0Pp+B
+
+      "]]}, 
+    {Hue[0.37820393249936934`, 0.6, 0.6], Thickness[Large], 
+     LineBox[CompressedData["
+1:eJxTTMoPSmViYGAwAWIQ/ehHyv5bydoHzmzfcGByatCBUf4of5RPPB8AoWgQ
+6A==
+      "]]}, 
+    {Hue[0.6142719099991583, 0.6, 0.6], Thickness[Large], 
+     LineBox[CompressedData["
+1:eJxTTMoPSmViYGAwAWIQ/ehHyv5bydoHzmzfcGByapDDKH+UP8onng8AFQH2
+2Q==
+      "]]}, 
+    {Hue[0.8503398874989481, 0.6, 0.6], Thickness[Large], 
+     LineBox[CompressedData["
+1:eJxTTMoPSmViYGAwAWIQLfGU2zQ09/Z+BigY5Y/yR/nE8wECr7z2
+      "]]}, 
+    {Hue[0.08640786499873876, 0.6, 0.6], Thickness[Large], 
+     LineBox[CompressedData["
+1:eJxTTMoPSmViYGAwAWIQfVYw1KA87vD+tdqXDi5e8XX/KH+UP8onng8AmQPd
+QQ==
+      "]]}, 
+    {Hue[0.3224758424985268, 0.6, 0.6], Thickness[Large], 
+     LineBox[CompressedData["
+1:eJxTTMoPSmViYGAwAWIQfVYw1KA87vD+tdqXDi5e8dV+lD/KH+UTzwcADJzD
+QQ==
+      "]]}, 
+    {Hue[0.5585438199983166, 0.6, 0.6], Thickness[Large], 
+     LineBox[CompressedData["
+1:eJxTTMoPSmViYGAwAWIQ/c3ww6K/m2X3M0DBKH+UP8onng8ApaQT9Q==
+      "]]}, 
+    {Hue[0.7946117974981064, 0.6, 0.6], Thickness[Large], 
+     LineBox[CompressedData["
+1:eJxTTMoPSmViYGAwAWIQnfbzdaB63EN7g1PtfyN0OQ+M8kf5o3zi+QAFfKRh
+
+      "]]}, 
+    {Hue[0.030679774997896203`, 0.6, 0.6], Thickness[Large], 
+     LineBox[CompressedData["
+1:eJxTTMoPSmViYGAwAWIQnfbzdaB63EN7g1PtfyN0OR1G+aP8UT7xfAB5Boph
+
+      "]]}, 
+    {Hue[0.266747752497686, 0.6, 0.6], Thickness[Large], 
+     LineBox[CompressedData["
+1:eJxTTMoPSmViYGAwAWIQ/erchLJ/j3/Y+xY+W7/6qtiBUf4of5RPPB8AfVUj
+zA==
+      "]]}, 
+    {Hue[0.5028157299974758, 0.6, 0.6], Thickness[Large], 
+     LineBox[CompressedData["
+1:eJxTTMoPSmViYGAwAWIQ/erchLJ/j3/Y+xY+W7/6qpjDKH+UP8onng8A8N8J
+zA==
+      "]]}, 
+    {Hue[0.7388837074972656, 0.6, 0.6], Thickness[Large], 
+     LineBox[CompressedData["
+1:eJxTTMoPSmViYGAwAWIQvV3I9BNHK5NDhnjeRtlCpQOj/FH+KJ94PgD9CC+V
+
+      "]]}, 
+    {Hue[0.9749516849970554, 0.6, 0.6], Thickness[Large], 
+     LineBox[CompressedData["
+1:eJxTTMoPSmViYGAwAWIQvV3I9BNHK5NDhnjeRtlCJYdR/ih/lE88HwBwoRWV
+
+      "]]}, 
+    {Hue[0.21101966249684523`, 0.6, 0.6], Thickness[Large], 
+     LineBox[CompressedData["
+1:eJxTTMoPSmViYGAwAWIQbSPeFje5itnh97kI1oVbrA+M8kf5o3zi+QBP/G1V
+
+      "]]}, 
+    {Hue[0.44708763999663503`, 0.6, 0.6], Thickness[Large], 
+     LineBox[CompressedData["
+1:eJxTTMoPSmViYGAwAWIQbSPeFje5itnh97kI1oVbrB1G+aP8UT7xfADDhlNV
+
+      "]]}, 
+    {Hue[0.6831556174964248, 0.6, 0.6], Thickness[Large], 
+     LineBox[CompressedData["
+1:eJxTTMoPSmViYGAwAWIQzbu6Pm5WPI9Df9yPlVun6xwY5Y/yR/nE8wEoXo5x
+
+      "]]}, 
+    {Hue[0.9192235949962146, 0.6, 0.6], Thickness[Large], 
+     LineBox[CompressedData["
+1:eJxTTMoPSmViYGAwAWIQzbu6Pm5WPI9Df9yPlVun6ziM8kf5o3zi+QCb6HRx
+
+      "]]}}, GraphicsComplexBox[CompressedData["
+1:eJxTTMoPSmViYGDQAmIQfan5UP9LloQDDFCAzg8xLHOqMog58O/UmTV3hZoO
+oPEdHv1I2X8rWfvAme0bDkxODTog8ZTbNDT39n6Y/rOCoQblcYf3r9W+dHDx
+iq/70fj23ww/LPq7WRauPu3n60D1uIf2Bqfa/0boch5A4zu8Ojeh7N/jH/a+
+hc/Wr74qdgCN77BdyPQTRyuTQ4Z43kbZQqUDaHwHG/G2uMlVzA6/z0WwLtxi
+fQCN78C7uj5uVjyPQ3/cj5Vbp+scQOM7fE3q+Ju6Iv4AhO8DDw8cfIe6Cc7b
+PuobwOU//PuyPeuEA1weFn4weTS+w5wZnjMfVqpiqIeGt8NwD28Ann1EWA==
+
+    "], {{
+      {Hue[0.67, 0.6, 0.6], InsetBox[
+        GraphicsBox[CircleBox[{0, 0}],
+         ImageSize->{7, Automatic}], 2], InsetBox[
+        GraphicsBox[CircleBox[{0, 0}],
+         ImageSize->{7, Automatic}], 3], InsetBox[
+        GraphicsBox[CircleBox[{0, 0}],
+         ImageSize->{7, Automatic}], 4], InsetBox[
+        GraphicsBox[CircleBox[{0, 0}],
+         ImageSize->{7, Automatic}], 5], InsetBox[
+        GraphicsBox[CircleBox[{0, 0}],
+         ImageSize->{7, Automatic}], 28], InsetBox[
+        GraphicsBox[CircleBox[{0, 0}],
+         ImageSize->{7, Automatic}], 29], InsetBox[
+        GraphicsBox[CircleBox[{0, 0}],
+         ImageSize->{7, Automatic}], 30], InsetBox[
+        GraphicsBox[CircleBox[{0, 0}],
+         ImageSize->{7, Automatic}], 31], InsetBox[
+        GraphicsBox[CircleBox[{0, 0}],
+         ImageSize->{7, Automatic}], 32], InsetBox[
+        GraphicsBox[CircleBox[{0, 0}],
+         ImageSize->{7, Automatic}], 33], InsetBox[
+        GraphicsBox[CircleBox[{0, 0}],
+         ImageSize->{7, Automatic}], 34], InsetBox[
+        GraphicsBox[CircleBox[{0, 0}],
+         ImageSize->{7, Automatic}], 35], InsetBox[
+        GraphicsBox[CircleBox[{0, 0}],
+         ImageSize->{7, Automatic}], 36], InsetBox[
+        GraphicsBox[CircleBox[{0, 0}],
+         ImageSize->{7, Automatic}], 37], InsetBox[
+        GraphicsBox[CircleBox[{0, 0}],
+         ImageSize->{7, Automatic}], 38], InsetBox[
+        GraphicsBox[CircleBox[{0, 0}],
+         ImageSize->{7, Automatic}], 39], InsetBox[
+        GraphicsBox[CircleBox[{0, 0}],
+         ImageSize->{7, Automatic}], 40], InsetBox[
+        GraphicsBox[CircleBox[{0, 0}],
+         ImageSize->{7, Automatic}], 41], InsetBox[
+        GraphicsBox[CircleBox[{0, 0}],
+         ImageSize->{7, Automatic}], 42]}, {}}, {
+      TagBox[
+       TooltipBox[
+        {Opacity[0.], PointBox[2]},
+        RowBox[{"k", "\[Equal]", 
+          RowBox[{"Interval", "[", 
+            RowBox[{"{", 
+              RowBox[{"0", ",", "1"}], "}"}], "]"}]}]],
+       Annotation[#, $CellContext`k == Interval[{0, 1}], "Tooltip"]& ], 
+      TagBox[
+       TooltipBox[
+        {Opacity[0.], PointBox[3]},
+        RowBox[{"k", "\[Equal]", 
+          RowBox[{"Interval", "[", 
+            RowBox[{"{", 
+              RowBox[{"0", ",", "1"}], "}"}], "]"}]}]],
+       Annotation[#, $CellContext`k == Interval[{0, 1}], "Tooltip"]& ], 
+      TagBox[
+       TooltipBox[
+        {Opacity[0.], PointBox[4]},
+        RowBox[{"k", "\[Equal]", 
+          RowBox[{"Interval", "[", 
+            RowBox[{"{", 
+              RowBox[{"0", ",", "1"}], "}"}], "]"}]}]],
+       Annotation[#, $CellContext`k == Interval[{0, 1}], "Tooltip"]& ], 
+      TagBox[
+       TooltipBox[
+        {Opacity[0.], PointBox[5]},
+        RowBox[{"k", "\[Equal]", 
+          RowBox[{"Interval", "[", 
+            RowBox[{"{", 
+              RowBox[{"0", ",", "1"}], "}"}], "]"}]}]],
+       Annotation[#, $CellContext`k == Interval[{0, 1}], "Tooltip"]& ], 
+      TagBox[
+       TooltipBox[
+        {Opacity[0.], PointBox[28]},
+        RowBox[{"k", "\[Equal]", 
+          RowBox[{"Interval", "[", 
+            RowBox[{"{", 
+              RowBox[{"0", ",", "1"}], "}"}], "]"}]}]],
+       Annotation[#, $CellContext`k == Interval[{0, 1}], "Tooltip"]& ], 
+      TagBox[
+       TooltipBox[
+        {Opacity[0.], PointBox[29]},
+        RowBox[{"k", "\[Equal]", 
+          RowBox[{"Interval", "[", 
+            RowBox[{"{", 
+              RowBox[{"0", ",", "1"}], "}"}], "]"}]}]],
+       Annotation[#, $CellContext`k == Interval[{0, 1}], "Tooltip"]& ], 
+      TagBox[
+       TooltipBox[
+        {Opacity[0.], PointBox[30]},
+        RowBox[{"k", "\[Equal]", 
+          RowBox[{"Interval", "[", 
+            RowBox[{"{", 
+              RowBox[{"0", ",", "1"}], "}"}], "]"}]}]],
+       Annotation[#, $CellContext`k == Interval[{0, 1}], "Tooltip"]& ], 
+      TagBox[
+       TooltipBox[
+        {Opacity[0.], PointBox[31]},
+        RowBox[{"k", "\[Equal]", 
+          RowBox[{"Interval", "[", 
+            RowBox[{"{", 
+              RowBox[{"0", ",", "1"}], "}"}], "]"}]}]],
+       Annotation[#, $CellContext`k == Interval[{0, 1}], "Tooltip"]& ], 
+      TagBox[
+       TooltipBox[
+        {Opacity[0.], PointBox[32]},
+        RowBox[{"k", "\[Equal]", 
+          RowBox[{"Interval", "[", 
+            RowBox[{"{", 
+              RowBox[{"0", ",", "1"}], "}"}], "]"}]}]],
+       Annotation[#, $CellContext`k == Interval[{0, 1}], "Tooltip"]& ], 
+      TagBox[
+       TooltipBox[
+        {Opacity[0.], PointBox[33]},
+        RowBox[{"k", "\[Equal]", 
+          RowBox[{"Interval", "[", 
+            RowBox[{"{", 
+              RowBox[{"0", ",", "1"}], "}"}], "]"}]}]],
+       Annotation[#, $CellContext`k == Interval[{0, 1}], "Tooltip"]& ], 
+      TagBox[
+       TooltipBox[
+        {Opacity[0.], PointBox[34]},
+        RowBox[{"k", "\[Equal]", 
+          RowBox[{"Interval", "[", 
+            RowBox[{"{", 
+              RowBox[{"0", ",", "1"}], "}"}], "]"}]}]],
+       Annotation[#, $CellContext`k == Interval[{0, 1}], "Tooltip"]& ], 
+      TagBox[
+       TooltipBox[
+        {Opacity[0.], PointBox[35]},
+        RowBox[{"k", "\[Equal]", 
+          RowBox[{"Interval", "[", 
+            RowBox[{"{", 
+              RowBox[{"0", ",", "1"}], "}"}], "]"}]}]],
+       Annotation[#, $CellContext`k == Interval[{0, 1}], "Tooltip"]& ], 
+      TagBox[
+       TooltipBox[
+        {Opacity[0.], PointBox[36]},
+        RowBox[{"k", "\[Equal]", 
+          RowBox[{"Interval", "[", 
+            RowBox[{"{", 
+              RowBox[{"0", ",", "1"}], "}"}], "]"}]}]],
+       Annotation[#, $CellContext`k == Interval[{0, 1}], "Tooltip"]& ], 
+      TagBox[
+       TooltipBox[
+        {Opacity[0.], PointBox[37]},
+        RowBox[{"k", "\[Equal]", 
+          RowBox[{"Interval", "[", 
+            RowBox[{"{", 
+              RowBox[{"0", ",", "1"}], "}"}], "]"}]}]],
+       Annotation[#, $CellContext`k == Interval[{0, 1}], "Tooltip"]& ], 
+      TagBox[
+       TooltipBox[
+        {Opacity[0.], PointBox[38]},
+        RowBox[{"k", "\[Equal]", 
+          RowBox[{"Interval", "[", 
+            RowBox[{"{", 
+              RowBox[{"0", ",", "1"}], "}"}], "]"}]}]],
+       Annotation[#, $CellContext`k == Interval[{0, 1}], "Tooltip"]& ], 
+      TagBox[
+       TooltipBox[
+        {Opacity[0.], PointBox[39]},
+        RowBox[{"k", "\[Equal]", 
+          RowBox[{"Interval", "[", 
+            RowBox[{"{", 
+              RowBox[{"0", ",", "1"}], "}"}], "]"}]}]],
+       Annotation[#, $CellContext`k == Interval[{0, 1}], "Tooltip"]& ], 
+      TagBox[
+       TooltipBox[
+        {Opacity[0.], PointBox[40]},
+        RowBox[{"k", "\[Equal]", 
+          RowBox[{"Interval", "[", 
+            RowBox[{"{", 
+              RowBox[{"0", ",", "1"}], "}"}], "]"}]}]],
+       Annotation[#, $CellContext`k == Interval[{0, 1}], "Tooltip"]& ], 
+      TagBox[
+       TooltipBox[
+        {Opacity[0.], PointBox[41]},
+        RowBox[{"k", "\[Equal]", 
+          RowBox[{"Interval", "[", 
+            RowBox[{"{", 
+              RowBox[{"0", ",", "1"}], "}"}], "]"}]}]],
+       Annotation[#, $CellContext`k == Interval[{0, 1}], "Tooltip"]& ], 
+      TagBox[
+       TooltipBox[
+        {Opacity[0.], PointBox[42]},
+        RowBox[{"k", "\[Equal]", 
+          RowBox[{"Interval", "[", 
+            RowBox[{"{", 
+              RowBox[{"0", ",", "1"}], "}"}], "]"}]}]],
+       Annotation[#, $CellContext`k == Interval[{0, 1}], "Tooltip"]& ]}}], 
+   GraphicsComplexBox[CompressedData["
+1:eJxTTMoPSmViYGDQAmIQfan5UP9LloQDDFCAzg8xLHOqMog58O/UmTV3hZoO
+oPEdHv1I2X8rWfvAme0bDkxODTog8ZTbNDT39n6Y/rOCoQblcYf3r9W+dHDx
+iq/70fj23ww/LPq7WRauPu3n60D1uIf2Bqfa/0boch5A4zu8Ojeh7N/jH/a+
+hc/Wr74qdgCN77BdyPQTRyuTQ4Z43kbZQqUDaHwHG/G2uMlVzA6/z0WwLtxi
+fQCN78C7uj5uVjyPQ3/cj5Vbp+scQOM7fE3q+Ju6Iv4AhO8DDw8cfIe6Cc7b
+PuobwOU//PuyPeuEA1weFn4weTS+w5wZnjMfVqpiqIeGt8NwD28Ann1EWA==
+
+    "], {{
+      {Hue[0.67, 0.6, 0.6], InsetBox[
+        GraphicsBox[DiskBox[{0, 0}],
+         ImageSize->{7, Automatic}], 2], InsetBox[
+        GraphicsBox[DiskBox[{0, 0}],
+         ImageSize->{7, Automatic}], 3], InsetBox[
+        GraphicsBox[DiskBox[{0, 0}],
+         ImageSize->{7, Automatic}], 4], InsetBox[
+        GraphicsBox[DiskBox[{0, 0}],
+         ImageSize->{7, Automatic}], 5], InsetBox[
+        GraphicsBox[DiskBox[{0, 0}],
+         ImageSize->{7, Automatic}], 28], InsetBox[
+        GraphicsBox[DiskBox[{0, 0}],
+         ImageSize->{7, Automatic}], 29], InsetBox[
+        GraphicsBox[DiskBox[{0, 0}],
+         ImageSize->{7, Automatic}], 30], InsetBox[
+        GraphicsBox[DiskBox[{0, 0}],
+         ImageSize->{7, Automatic}], 31], InsetBox[
+        GraphicsBox[DiskBox[{0, 0}],
+         ImageSize->{7, Automatic}], 32], InsetBox[
+        GraphicsBox[DiskBox[{0, 0}],
+         ImageSize->{7, Automatic}], 33], InsetBox[
+        GraphicsBox[DiskBox[{0, 0}],
+         ImageSize->{7, Automatic}], 34], InsetBox[
+        GraphicsBox[DiskBox[{0, 0}],
+         ImageSize->{7, Automatic}], 35], InsetBox[
+        GraphicsBox[DiskBox[{0, 0}],
+         ImageSize->{7, Automatic}], 36], InsetBox[
+        GraphicsBox[DiskBox[{0, 0}],
+         ImageSize->{7, Automatic}], 37], InsetBox[
+        GraphicsBox[DiskBox[{0, 0}],
+         ImageSize->{7, Automatic}], 38], InsetBox[
+        GraphicsBox[DiskBox[{0, 0}],
+         ImageSize->{7, Automatic}], 39], InsetBox[
+        GraphicsBox[DiskBox[{0, 0}],
+         ImageSize->{7, Automatic}], 40], InsetBox[
+        GraphicsBox[DiskBox[{0, 0}],
+         ImageSize->{7, Automatic}], 41], InsetBox[
+        GraphicsBox[DiskBox[{0, 0}],
+         ImageSize->{7, Automatic}], 42]}, {}}, {
+      TagBox[
+       TooltipBox[
+        {Opacity[0.], PointBox[2]},
+        RowBox[{"k", "\[Equal]", 
+          RowBox[{"Interval", "[", 
+            RowBox[{"{", 
+              RowBox[{"0", ",", "1"}], "}"}], "]"}]}]],
+       Annotation[#, $CellContext`k == Interval[{0, 1}], "Tooltip"]& ], 
+      TagBox[
+       TooltipBox[
+        {Opacity[0.], PointBox[3]},
+        RowBox[{"k", "\[Equal]", 
+          RowBox[{"Interval", "[", 
+            RowBox[{"{", 
+              RowBox[{"0", ",", "1"}], "}"}], "]"}]}]],
+       Annotation[#, $CellContext`k == Interval[{0, 1}], "Tooltip"]& ], 
+      TagBox[
+       TooltipBox[
+        {Opacity[0.], PointBox[4]},
+        RowBox[{"k", "\[Equal]", 
+          RowBox[{"Interval", "[", 
+            RowBox[{"{", 
+              RowBox[{"0", ",", "1"}], "}"}], "]"}]}]],
+       Annotation[#, $CellContext`k == Interval[{0, 1}], "Tooltip"]& ], 
+      TagBox[
+       TooltipBox[
+        {Opacity[0.], PointBox[5]},
+        RowBox[{"k", "\[Equal]", 
+          RowBox[{"Interval", "[", 
+            RowBox[{"{", 
+              RowBox[{"0", ",", "1"}], "}"}], "]"}]}]],
+       Annotation[#, $CellContext`k == Interval[{0, 1}], "Tooltip"]& ], 
+      TagBox[
+       TooltipBox[
+        {Opacity[0.], PointBox[28]},
+        RowBox[{"k", "\[Equal]", 
+          RowBox[{"Interval", "[", 
+            RowBox[{"{", 
+              RowBox[{"0", ",", "1"}], "}"}], "]"}]}]],
+       Annotation[#, $CellContext`k == Interval[{0, 1}], "Tooltip"]& ], 
+      TagBox[
+       TooltipBox[
+        {Opacity[0.], PointBox[29]},
+        RowBox[{"k", "\[Equal]", 
+          RowBox[{"Interval", "[", 
+            RowBox[{"{", 
+              RowBox[{"0", ",", "1"}], "}"}], "]"}]}]],
+       Annotation[#, $CellContext`k == Interval[{0, 1}], "Tooltip"]& ], 
+      TagBox[
+       TooltipBox[
+        {Opacity[0.], PointBox[30]},
+        RowBox[{"k", "\[Equal]", 
+          RowBox[{"Interval", "[", 
+            RowBox[{"{", 
+              RowBox[{"0", ",", "1"}], "}"}], "]"}]}]],
+       Annotation[#, $CellContext`k == Interval[{0, 1}], "Tooltip"]& ], 
+      TagBox[
+       TooltipBox[
+        {Opacity[0.], PointBox[31]},
+        RowBox[{"k", "\[Equal]", 
+          RowBox[{"Interval", "[", 
+            RowBox[{"{", 
+              RowBox[{"0", ",", "1"}], "}"}], "]"}]}]],
+       Annotation[#, $CellContext`k == Interval[{0, 1}], "Tooltip"]& ], 
+      TagBox[
+       TooltipBox[
+        {Opacity[0.], PointBox[32]},
+        RowBox[{"k", "\[Equal]", 
+          RowBox[{"Interval", "[", 
+            RowBox[{"{", 
+              RowBox[{"0", ",", "1"}], "}"}], "]"}]}]],
+       Annotation[#, $CellContext`k == Interval[{0, 1}], "Tooltip"]& ], 
+      TagBox[
+       TooltipBox[
+        {Opacity[0.], PointBox[33]},
+        RowBox[{"k", "\[Equal]", 
+          RowBox[{"Interval", "[", 
+            RowBox[{"{", 
+              RowBox[{"0", ",", "1"}], "}"}], "]"}]}]],
+       Annotation[#, $CellContext`k == Interval[{0, 1}], "Tooltip"]& ], 
+      TagBox[
+       TooltipBox[
+        {Opacity[0.], PointBox[34]},
+        RowBox[{"k", "\[Equal]", 
+          RowBox[{"Interval", "[", 
+            RowBox[{"{", 
+              RowBox[{"0", ",", "1"}], "}"}], "]"}]}]],
+       Annotation[#, $CellContext`k == Interval[{0, 1}], "Tooltip"]& ], 
+      TagBox[
+       TooltipBox[
+        {Opacity[0.], PointBox[35]},
+        RowBox[{"k", "\[Equal]", 
+          RowBox[{"Interval", "[", 
+            RowBox[{"{", 
+              RowBox[{"0", ",", "1"}], "}"}], "]"}]}]],
+       Annotation[#, $CellContext`k == Interval[{0, 1}], "Tooltip"]& ], 
+      TagBox[
+       TooltipBox[
+        {Opacity[0.], PointBox[36]},
+        RowBox[{"k", "\[Equal]", 
+          RowBox[{"Interval", "[", 
+            RowBox[{"{", 
+              RowBox[{"0", ",", "1"}], "}"}], "]"}]}]],
+       Annotation[#, $CellContext`k == Interval[{0, 1}], "Tooltip"]& ], 
+      TagBox[
+       TooltipBox[
+        {Opacity[0.], PointBox[37]},
+        RowBox[{"k", "\[Equal]", 
+          RowBox[{"Interval", "[", 
+            RowBox[{"{", 
+              RowBox[{"0", ",", "1"}], "}"}], "]"}]}]],
+       Annotation[#, $CellContext`k == Interval[{0, 1}], "Tooltip"]& ], 
+      TagBox[
+       TooltipBox[
+        {Opacity[0.], PointBox[38]},
+        RowBox[{"k", "\[Equal]", 
+          RowBox[{"Interval", "[", 
+            RowBox[{"{", 
+              RowBox[{"0", ",", "1"}], "}"}], "]"}]}]],
+       Annotation[#, $CellContext`k == Interval[{0, 1}], "Tooltip"]& ], 
+      TagBox[
+       TooltipBox[
+        {Opacity[0.], PointBox[39]},
+        RowBox[{"k", "\[Equal]", 
+          RowBox[{"Interval", "[", 
+            RowBox[{"{", 
+              RowBox[{"0", ",", "1"}], "}"}], "]"}]}]],
+       Annotation[#, $CellContext`k == Interval[{0, 1}], "Tooltip"]& ], 
+      TagBox[
+       TooltipBox[
+        {Opacity[0.], PointBox[40]},
+        RowBox[{"k", "\[Equal]", 
+          RowBox[{"Interval", "[", 
+            RowBox[{"{", 
+              RowBox[{"0", ",", "1"}], "}"}], "]"}]}]],
+       Annotation[#, $CellContext`k == Interval[{0, 1}], "Tooltip"]& ], 
+      TagBox[
+       TooltipBox[
+        {Opacity[0.], PointBox[41]},
+        RowBox[{"k", "\[Equal]", 
+          RowBox[{"Interval", "[", 
+            RowBox[{"{", 
+              RowBox[{"0", ",", "1"}], "}"}], "]"}]}]],
+       Annotation[#, $CellContext`k == Interval[{0, 1}], "Tooltip"]& ], 
+      TagBox[
+       TooltipBox[
+        {Opacity[0.], PointBox[42]},
+        RowBox[{"k", "\[Equal]", 
+          RowBox[{"Interval", "[", 
+            RowBox[{"{", 
+              RowBox[{"0", ",", "1"}], "}"}], "]"}]}]],
+       Annotation[#, $CellContext`k == Interval[{0, 1}], "Tooltip"]& ]}}], 
+   GraphicsComplexBox[CompressedData["
+1:eJxTTMoPSmViYGDQAmIQfan5UP9LloQDDFCAzg8xLHOqMog58O/UmTV3hZoO
+oPEdHv1I2X8rWfvAme0bDkxODTog8ZTbNDT39n6Y/rOCoQblcYf3r9W+dHDx
+iq/70fj23ww/LPq7WRauPu3n60D1uIf2Bqfa/0boch5A4zu8Ojeh7N/jH/a+
+hc/Wr74qdgCN77BdyPQTRyuTQ4Z43kbZQqUDaHwHG/G2uMlVzA6/z0WwLtxi
+fQCN78C7uj5uVjyPQ3/cj5Vbp+scQOM7fE3q+Ju6Iv4AhO8DDw8cfIe6Cc7b
+PuobwOU//PuyPeuEA1weFn4weTS+w5wZnjMfVqpiqIeGt8NwD28Ann1EWA==
+
+    "], {{
+      {Hue[0.67, 0.6, 0.6], InsetBox[
+        GraphicsBox[
+         {GrayLevel[0], Thickness[0.25], LineBox[{{0, 1}, {1, 0}}], 
+          LineBox[{{0, 0}, {1, 1}}]},
+         ImageSize->{8., Automatic}], 2], InsetBox[
+        GraphicsBox[
+         {GrayLevel[0], Thickness[0.25], LineBox[{{0, 1}, {1, 0}}], 
+          LineBox[{{0, 0}, {1, 1}}]},
+         ImageSize->{8., Automatic}], 3], InsetBox[
+        GraphicsBox[
+         {GrayLevel[0], Thickness[0.25], LineBox[{{0, 1}, {1, 0}}], 
+          LineBox[{{0, 0}, {1, 1}}]},
+         ImageSize->{8., Automatic}], 4], InsetBox[
+        GraphicsBox[
+         {GrayLevel[0], Thickness[0.25], LineBox[{{0, 1}, {1, 0}}], 
+          LineBox[{{0, 0}, {1, 1}}]},
+         ImageSize->{8., Automatic}], 5], InsetBox[
+        GraphicsBox[
+         {GrayLevel[0], Thickness[0.25], LineBox[{{0, 1}, {1, 0}}], 
+          LineBox[{{0, 0}, {1, 1}}]},
+         ImageSize->{8., Automatic}], 28], InsetBox[
+        GraphicsBox[
+         {GrayLevel[0], Thickness[0.25], LineBox[{{0, 1}, {1, 0}}], 
+          LineBox[{{0, 0}, {1, 1}}]},
+         ImageSize->{8., Automatic}], 29], InsetBox[
+        GraphicsBox[
+         {GrayLevel[0], Thickness[0.25], LineBox[{{0, 1}, {1, 0}}], 
+          LineBox[{{0, 0}, {1, 1}}]},
+         ImageSize->{8., Automatic}], 30], InsetBox[
+        GraphicsBox[
+         {GrayLevel[0], Thickness[0.25], LineBox[{{0, 1}, {1, 0}}], 
+          LineBox[{{0, 0}, {1, 1}}]},
+         ImageSize->{8., Automatic}], 31], InsetBox[
+        GraphicsBox[
+         {GrayLevel[0], Thickness[0.25], LineBox[{{0, 1}, {1, 0}}], 
+          LineBox[{{0, 0}, {1, 1}}]},
+         ImageSize->{8., Automatic}], 32], InsetBox[
+        GraphicsBox[
+         {GrayLevel[0], Thickness[0.25], LineBox[{{0, 1}, {1, 0}}], 
+          LineBox[{{0, 0}, {1, 1}}]},
+         ImageSize->{8., Automatic}], 33], InsetBox[
+        GraphicsBox[
+         {GrayLevel[0], Thickness[0.25], LineBox[{{0, 1}, {1, 0}}], 
+          LineBox[{{0, 0}, {1, 1}}]},
+         ImageSize->{8., Automatic}], 34], InsetBox[
+        GraphicsBox[
+         {GrayLevel[0], Thickness[0.25], LineBox[{{0, 1}, {1, 0}}], 
+          LineBox[{{0, 0}, {1, 1}}]},
+         ImageSize->{8., Automatic}], 35], InsetBox[
+        GraphicsBox[
+         {GrayLevel[0], Thickness[0.25], LineBox[{{0, 1}, {1, 0}}], 
+          LineBox[{{0, 0}, {1, 1}}]},
+         ImageSize->{8., Automatic}], 36], InsetBox[
+        GraphicsBox[
+         {GrayLevel[0], Thickness[0.25], LineBox[{{0, 1}, {1, 0}}], 
+          LineBox[{{0, 0}, {1, 1}}]},
+         ImageSize->{8., Automatic}], 37], InsetBox[
+        GraphicsBox[
+         {GrayLevel[0], Thickness[0.25], LineBox[{{0, 1}, {1, 0}}], 
+          LineBox[{{0, 0}, {1, 1}}]},
+         ImageSize->{8., Automatic}], 38], InsetBox[
+        GraphicsBox[
+         {GrayLevel[0], Thickness[0.25], LineBox[{{0, 1}, {1, 0}}], 
+          LineBox[{{0, 0}, {1, 1}}]},
+         ImageSize->{8., Automatic}], 39], InsetBox[
+        GraphicsBox[
+         {GrayLevel[0], Thickness[0.25], LineBox[{{0, 1}, {1, 0}}], 
+          LineBox[{{0, 0}, {1, 1}}]},
+         ImageSize->{8., Automatic}], 40], InsetBox[
+        GraphicsBox[
+         {GrayLevel[0], Thickness[0.25], LineBox[{{0, 1}, {1, 0}}], 
+          LineBox[{{0, 0}, {1, 1}}]},
+         ImageSize->{8., Automatic}], 41], InsetBox[
+        GraphicsBox[
+         {GrayLevel[0], Thickness[0.25], LineBox[{{0, 1}, {1, 0}}], 
+          LineBox[{{0, 0}, {1, 1}}]},
+         ImageSize->{8., Automatic}], 42]}, {}}, {
+      TagBox[
+       TooltipBox[
+        {Opacity[0.], PointBox[2]},
+        RowBox[{"k", "\[Equal]", 
+          RowBox[{"Interval", "[", 
+            RowBox[{"{", 
+              RowBox[{"0", ",", "1"}], "}"}], "]"}]}]],
+       Annotation[#, $CellContext`k == Interval[{0, 1}], "Tooltip"]& ], 
+      TagBox[
+       TooltipBox[
+        {Opacity[0.], PointBox[3]},
+        RowBox[{"k", "\[Equal]", 
+          RowBox[{"Interval", "[", 
+            RowBox[{"{", 
+              RowBox[{"0", ",", "1"}], "}"}], "]"}]}]],
+       Annotation[#, $CellContext`k == Interval[{0, 1}], "Tooltip"]& ], 
+      TagBox[
+       TooltipBox[
+        {Opacity[0.], PointBox[4]},
+        RowBox[{"k", "\[Equal]", 
+          RowBox[{"Interval", "[", 
+            RowBox[{"{", 
+              RowBox[{"0", ",", "1"}], "}"}], "]"}]}]],
+       Annotation[#, $CellContext`k == Interval[{0, 1}], "Tooltip"]& ], 
+      TagBox[
+       TooltipBox[
+        {Opacity[0.], PointBox[5]},
+        RowBox[{"k", "\[Equal]", 
+          RowBox[{"Interval", "[", 
+            RowBox[{"{", 
+              RowBox[{"0", ",", "1"}], "}"}], "]"}]}]],
+       Annotation[#, $CellContext`k == Interval[{0, 1}], "Tooltip"]& ], 
+      TagBox[
+       TooltipBox[
+        {Opacity[0.], PointBox[28]},
+        RowBox[{"k", "\[Equal]", 
+          RowBox[{"Interval", "[", 
+            RowBox[{"{", 
+              RowBox[{"0", ",", "1"}], "}"}], "]"}]}]],
+       Annotation[#, $CellContext`k == Interval[{0, 1}], "Tooltip"]& ], 
+      TagBox[
+       TooltipBox[
+        {Opacity[0.], PointBox[29]},
+        RowBox[{"k", "\[Equal]", 
+          RowBox[{"Interval", "[", 
+            RowBox[{"{", 
+              RowBox[{"0", ",", "1"}], "}"}], "]"}]}]],
+       Annotation[#, $CellContext`k == Interval[{0, 1}], "Tooltip"]& ], 
+      TagBox[
+       TooltipBox[
+        {Opacity[0.], PointBox[30]},
+        RowBox[{"k", "\[Equal]", 
+          RowBox[{"Interval", "[", 
+            RowBox[{"{", 
+              RowBox[{"0", ",", "1"}], "}"}], "]"}]}]],
+       Annotation[#, $CellContext`k == Interval[{0, 1}], "Tooltip"]& ], 
+      TagBox[
+       TooltipBox[
+        {Opacity[0.], PointBox[31]},
+        RowBox[{"k", "\[Equal]", 
+          RowBox[{"Interval", "[", 
+            RowBox[{"{", 
+              RowBox[{"0", ",", "1"}], "}"}], "]"}]}]],
+       Annotation[#, $CellContext`k == Interval[{0, 1}], "Tooltip"]& ], 
+      TagBox[
+       TooltipBox[
+        {Opacity[0.], PointBox[32]},
+        RowBox[{"k", "\[Equal]", 
+          RowBox[{"Interval", "[", 
+            RowBox[{"{", 
+              RowBox[{"0", ",", "1"}], "}"}], "]"}]}]],
+       Annotation[#, $CellContext`k == Interval[{0, 1}], "Tooltip"]& ], 
+      TagBox[
+       TooltipBox[
+        {Opacity[0.], PointBox[33]},
+        RowBox[{"k", "\[Equal]", 
+          RowBox[{"Interval", "[", 
+            RowBox[{"{", 
+              RowBox[{"0", ",", "1"}], "}"}], "]"}]}]],
+       Annotation[#, $CellContext`k == Interval[{0, 1}], "Tooltip"]& ], 
+      TagBox[
+       TooltipBox[
+        {Opacity[0.], PointBox[34]},
+        RowBox[{"k", "\[Equal]", 
+          RowBox[{"Interval", "[", 
+            RowBox[{"{", 
+              RowBox[{"0", ",", "1"}], "}"}], "]"}]}]],
+       Annotation[#, $CellContext`k == Interval[{0, 1}], "Tooltip"]& ], 
+      TagBox[
+       TooltipBox[
+        {Opacity[0.], PointBox[35]},
+        RowBox[{"k", "\[Equal]", 
+          RowBox[{"Interval", "[", 
+            RowBox[{"{", 
+              RowBox[{"0", ",", "1"}], "}"}], "]"}]}]],
+       Annotation[#, $CellContext`k == Interval[{0, 1}], "Tooltip"]& ], 
+      TagBox[
+       TooltipBox[
+        {Opacity[0.], PointBox[36]},
+        RowBox[{"k", "\[Equal]", 
+          RowBox[{"Interval", "[", 
+            RowBox[{"{", 
+              RowBox[{"0", ",", "1"}], "}"}], "]"}]}]],
+       Annotation[#, $CellContext`k == Interval[{0, 1}], "Tooltip"]& ], 
+      TagBox[
+       TooltipBox[
+        {Opacity[0.], PointBox[37]},
+        RowBox[{"k", "\[Equal]", 
+          RowBox[{"Interval", "[", 
+            RowBox[{"{", 
+              RowBox[{"0", ",", "1"}], "}"}], "]"}]}]],
+       Annotation[#, $CellContext`k == Interval[{0, 1}], "Tooltip"]& ], 
+      TagBox[
+       TooltipBox[
+        {Opacity[0.], PointBox[38]},
+        RowBox[{"k", "\[Equal]", 
+          RowBox[{"Interval", "[", 
+            RowBox[{"{", 
+              RowBox[{"0", ",", "1"}], "}"}], "]"}]}]],
+       Annotation[#, $CellContext`k == Interval[{0, 1}], "Tooltip"]& ], 
+      TagBox[
+       TooltipBox[
+        {Opacity[0.], PointBox[39]},
+        RowBox[{"k", "\[Equal]", 
+          RowBox[{"Interval", "[", 
+            RowBox[{"{", 
+              RowBox[{"0", ",", "1"}], "}"}], "]"}]}]],
+       Annotation[#, $CellContext`k == Interval[{0, 1}], "Tooltip"]& ], 
+      TagBox[
+       TooltipBox[
+        {Opacity[0.], PointBox[40]},
+        RowBox[{"k", "\[Equal]", 
+          RowBox[{"Interval", "[", 
+            RowBox[{"{", 
+              RowBox[{"0", ",", "1"}], "}"}], "]"}]}]],
+       Annotation[#, $CellContext`k == Interval[{0, 1}], "Tooltip"]& ], 
+      TagBox[
+       TooltipBox[
+        {Opacity[0.], PointBox[41]},
+        RowBox[{"k", "\[Equal]", 
+          RowBox[{"Interval", "[", 
+            RowBox[{"{", 
+              RowBox[{"0", ",", "1"}], "}"}], "]"}]}]],
+       Annotation[#, $CellContext`k == Interval[{0, 1}], "Tooltip"]& ], 
+      TagBox[
+       TooltipBox[
+        {Opacity[0.], PointBox[42]},
+        RowBox[{"k", "\[Equal]", 
+          RowBox[{"Interval", "[", 
+            RowBox[{"{", 
+              RowBox[{"0", ",", "1"}], "}"}], "]"}]}]],
+       Annotation[#, $CellContext`k == Interval[{0, 1}], "Tooltip"]& ]}}]},
+  Axes->True,
+  AxesOrigin->{0, 0},
+  ImageSize->{438.2792553300992, Automatic},
+  Method->{},
+  PlotRange->{{-37.889847813024474`, 3.546681154509662}, {-57.18523144366656, 
+   57.18523144366656}},
+  PlotRangeClipping->True,
+  PlotRangePadding->{
+    Scaled[0.02], 
+    Scaled[0.02]}]], "Output",
+ CellChangeTimes->{{3.594165984498096*^9, 3.594165998961923*^9}, {
+   3.5941661299884176`*^9, 3.5941661387729197`*^9}, {3.594166343893652*^9, 
+   3.594166345564748*^9}, {3.5941664465595245`*^9, 3.5941664497097044`*^9}, 
+   3.5941671045741606`*^9, 3.5941672337315483`*^9, 3.59416762853813*^9}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"(", 
+  RowBox[{"1", "-", 
+   RowBox[{"1", "/", 
+    RowBox[{"List", "@@", 
+     RowBox[{
+      RowBox[{"NRoots", "[", " ", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"P1h", "[", 
+          RowBox[{"530000", ",", "x"}], "]"}], "==", "0"}], ",", "x"}], "]"}],
+       "[", 
+      RowBox[{"[", 
+       RowBox[{"All", ",", "2"}], "]"}], "]"}]}]}]}], ")"}]], "Input",
+ CellChangeTimes->{{3.594166012331688*^9, 3.5941660177029953`*^9}, {
+  3.5941660585513315`*^9, 3.594166059523387*^9}, {3.5941660983196063`*^9, 
+  3.5941661445272493`*^9}, {3.5941664728630285`*^9, 3.594166476472235*^9}, {
+  3.5941665316623917`*^9, 3.5941665907957745`*^9}, {3.594167142719342*^9, 
+  3.5941671432263713`*^9}, {3.5941678441604624`*^9, 3.5941678448945045`*^9}, {
+  3.5941679238950233`*^9, 3.5941679246480665`*^9}, {3.5941680397496495`*^9, 
+  3.5941680406677017`*^9}}],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{"1.0078031416597246`", ",", 
+   RowBox[{"1.0003247505851343`", "\[VeryThinSpace]", "-", 
+    RowBox[{"0.0016657183765835094`", " ", "\[ImaginaryI]"}]}], ",", 
+   RowBox[{"1.0003247505851343`", "\[VeryThinSpace]", "+", 
+    RowBox[{"0.0016657183765835094`", " ", "\[ImaginaryI]"}]}], ",", 
+   RowBox[{"1.0024443965126626`", "\[VeryThinSpace]", "-", 
+    RowBox[{"0.013134412884922874`", " ", "\[ImaginaryI]"}]}], ",", 
+   RowBox[{"1.0024443965126626`", "\[VeryThinSpace]", "+", 
+    RowBox[{"0.013134412884922874`", " ", "\[ImaginaryI]"}]}], ",", 
+   "3.3334600953663607`", ",", 
+   RowBox[{"1.081560020940584`", "\[VeryThinSpace]", "-", 
+    RowBox[{"0.7296143061861732`", " ", "\[ImaginaryI]"}]}], ",", 
+   RowBox[{"1.081560020940584`", "\[VeryThinSpace]", "+", 
+    RowBox[{"0.7296143061861732`", " ", "\[ImaginaryI]"}]}], ",", 
+   "8826.479416270633`", ",", 
+   RowBox[{"0.9467850440044124`", "\[VeryThinSpace]", "-", 
+    RowBox[{"0.30857133714712837`", " ", "\[ImaginaryI]"}]}], ",", 
+   RowBox[{"0.9467850440044124`", "\[VeryThinSpace]", "+", 
+    RowBox[{"0.30857133714712837`", " ", "\[ImaginaryI]"}]}], ",", 
+   RowBox[{"0.9555638176329799`", "\[VeryThinSpace]", "-", 
+    RowBox[{"0.1630631085465551`", " ", "\[ImaginaryI]"}]}], ",", 
+   RowBox[{"0.9555638176329799`", "\[VeryThinSpace]", "+", 
+    RowBox[{"0.1630631085465551`", " ", "\[ImaginaryI]"}]}], ",", 
+   RowBox[{"0.9743876825393971`", "\[VeryThinSpace]", "-", 
+    RowBox[{"0.10201884006458813`", " ", "\[ImaginaryI]"}]}], ",", 
+   RowBox[{"0.9743876825393971`", "\[VeryThinSpace]", "+", 
+    RowBox[{"0.10201884006458813`", " ", "\[ImaginaryI]"}]}], ",", 
+   RowBox[{"0.9968522767020905`", "\[VeryThinSpace]", "-", 
+    RowBox[{"0.03581717800092043`", " ", "\[ImaginaryI]"}]}], ",", 
+   RowBox[{"0.9968522767020905`", "\[VeryThinSpace]", "+", 
+    RowBox[{"0.03581717800092043`", " ", "\[ImaginaryI]"}]}], ",", 
+   RowBox[{"0.9836530874987817`", "\[VeryThinSpace]", "-", 
+    RowBox[{"0.06589272717558217`", " ", "\[ImaginaryI]"}]}], ",", 
+   RowBox[{"0.9836530874987817`", "\[VeryThinSpace]", "+", 
+    RowBox[{"0.06589272717558217`", " ", "\[ImaginaryI]"}]}]}], 
+  "}"}]], "Output",
+ CellChangeTimes->{
+  3.5941660179480095`*^9, 3.594166059876407*^9, 3.5941660985886216`*^9, 
+   3.59416614524129*^9, 3.5941664771032715`*^9, {3.5941665332024803`*^9, 
+   3.5941665911477947`*^9}, 3.5941671436173935`*^9, 3.594167845375532*^9, 
+   3.594167925100092*^9, 3.5941680410537243`*^9}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"P1", "[", 
+  RowBox[{"100", ",", "z"}], "]"}]], "Input",
+ CellChangeTimes->{{3.5941660315477867`*^9, 3.5941660331428785`*^9}}],
+
+Cell[BoxData[
+ RowBox[{"1", "+", 
+  FractionBox[
+   RowBox[{"341", " ", "z"}], "72"], "+", 
+  FractionBox[
+   RowBox[{"6683", " ", 
+    SuperscriptBox["z", "2"]}], "360"], "+", 
+  FractionBox[
+   RowBox[{"45", " ", 
+    SuperscriptBox["z", "3"]}], "16"], "+", 
+  FractionBox[
+   RowBox[{"41", " ", 
+    SuperscriptBox["z", "4"]}], "18"], "+", 
+  FractionBox[
+   RowBox[{"2", " ", 
+    SuperscriptBox["z", "5"]}], "15"], "+", 
+  FractionBox[
+   RowBox[{"7", " ", 
+    SuperscriptBox["z", "6"]}], "720"]}]], "Output",
+ CellChangeTimes->{3.5941660333628907`*^9}]
+}, Open  ]],
+
+Cell[BoxData[
+ RowBox[{"vv", ":=", " ", 
+  RowBox[{"{", 
+   RowBox[{
+    RowBox[{"-", "999.8815576256916`"}], ",", 
+    RowBox[{"-", "182.67217231000708`"}], ",", 
+    RowBox[{
+     RowBox[{"-", "1.4793791531870175`"}], "-", 
+     RowBox[{"27.308662724086556`", " ", "\[ImaginaryI]"}]}], ",", 
+    RowBox[{
+     RowBox[{"-", "1.4793791531870175`"}], "+", 
+     RowBox[{"27.308662724086556`", " ", "\[ImaginaryI]"}]}], ",", 
+    RowBox[{
+     RowBox[{"-", "0.6706279346947679`"}], "-", 
+     RowBox[{"0.5389419630736445`", " ", "\[ImaginaryI]"}]}], ",", 
+    RowBox[{
+     RowBox[{"-", "0.6706279346947679`"}], "+", 
+     RowBox[{"0.5389419630736445`", " ", "\[ImaginaryI]"}]}], ",", 
+    RowBox[{"-", "0.0031680220240090963`"}], ",", 
+    RowBox[{"0.10809074763072718`", "\[VeryThinSpace]", "-", 
+     RowBox[{"2.5030341283517754`", " ", "\[ImaginaryI]"}]}], ",", 
+    RowBox[{"0.10809074763072718`", "\[VeryThinSpace]", "+", 
+     RowBox[{"2.5030341283517754`", " ", "\[ImaginaryI]"}]}], ",", 
+    RowBox[{"0.7555329045665851`", "\[VeryThinSpace]", "-", 
+     RowBox[{"5.580324806796909`", " ", "\[ImaginaryI]"}]}], ",", 
+    RowBox[{"0.7555329045665851`", "\[VeryThinSpace]", "+", 
+     RowBox[{"5.580324806796909`", " ", "\[ImaginaryI]"}]}], ",", 
+    RowBox[{"1.0648324145458472`", "\[VeryThinSpace]", "-", 
+     RowBox[{"9.82455476742625`", " ", "\[ImaginaryI]"}]}], ",", 
+    RowBox[{"1.0648324145458472`", "\[VeryThinSpace]", "+", 
+     RowBox[{"9.82455476742625`", " ", "\[ImaginaryI]"}]}]}], 
+   "}"}]}]], "Input",
+ CellChangeTimes->{{3.5941660727641444`*^9, 3.594166103583907*^9}, 
+   3.5941664870498405`*^9}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"Product", "[", " ", 
+  RowBox[{
+   RowBox[{"1", "-", 
+    RowBox[{"1", "/", "j"}]}], ",", 
+   RowBox[{"{", 
+    RowBox[{"j", ",", "vv"}], "}"}]}], "]"}]], "Input",
+ CellChangeTimes->{{3.594166076905381*^9, 3.594166082931726*^9}, {
+  3.594166625635767*^9, 3.594166637891468*^9}}],
+
+Cell[BoxData[
+ RowBox[{"1459.0979908979905`", "\[VeryThinSpace]", "+", 
+  RowBox[{"0.`", " ", "\[ImaginaryI]"}]}]], "Output",
+ CellChangeTimes->{{3.5941660830617332`*^9, 3.594166104801977*^9}, 
+   3.594166489949006*^9, {3.594166629518989*^9, 3.5941666382814903`*^9}}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"N", "[", 
+  RowBox[{"P1h", "[", 
+   RowBox[{"530000", ",", "1"}], "]"}], "]"}]], "Input",
+ CellChangeTimes->{{3.594166492273139*^9, 3.5941665128163137`*^9}, {
+  3.594167155895096*^9, 3.594167156330121*^9}, {3.594167853955023*^9, 
+  3.5941678544890532`*^9}}],
+
+Cell[BoxData["43903.88547414488`"], "Output",
+ CellChangeTimes->{{3.5941665026927347`*^9, 3.5941665133653455`*^9}, 
+   3.594167156733144*^9, 3.5941678553000994`*^9}]
+}, Open  ]],
+
+Cell[BoxData[""], "Input",
+ CellChangeTimes->{{3.5941678923972216`*^9, 3.5941679074490824`*^9}}],
+
+Cell[BoxData[""], "Input",
+ CellChangeTimes->{{3.5941679068210464`*^9, 3.594167906847048*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"RootLocusPlot", "[", 
+  RowBox[{
+   RowBox[{"1", "/", 
+    RowBox[{"Expand", "[", 
+     RowBox[{"P1h", "[", 
+      RowBox[{"100", ",", "x"}], "]"}], "]"}]}], ",", 
+   RowBox[{"{", 
+    RowBox[{"k", ",", "0", ",", "1"}], "}"}], ",", 
+   RowBox[{"FeedbackType", "\[Rule]", "None"}]}], "]"}]], "Input",
+ CellChangeTimes->{3.5941755892264547`*^9}],
+
+Cell[BoxData[
+ GraphicsBox[{{{}, {}, 
+    {Hue[0.67, 0.6, 0.6], Thickness[Large], LineBox[CompressedData["
+1:eJxTTMoPSmViYGAwAWIQvYq3TPb1OckD508d+O8ernVglD/KH+UTzwcAy1DI
+IQ==
+      "]]}, 
+    {Hue[0.9060679774997897, 0.6, 0.6], Thickness[Large], 
+     LineBox[CompressedData["
+1:eJxTTMoPSmViYGAwAWIQvYq3TPb1OckD508d+O8eruUwyh/lj/KJ5wMAPumu
+IQ==
+      "]]}, 
+    {Hue[0.1421359549995791, 0.6, 0.6], Thickness[Large], 
+     LineBox[CompressedData["
+1:eJxTTMoPSmViYGAwAWIQbc1klPVj5cX9k79NL+J2Zz8wyh/lj/KJ5wMANfKS
+tQ==
+      "]]}, 
+    {Hue[0.37820393249936934`, 0.6, 0.6], Thickness[Large], 
+     LineBox[CompressedData["
+1:eJxTTMoPSmViYGAwAWIQbc1klPVj5cX9k79NL+J2Z3cY5Y/yR/nE8wGpfHi1
+
+      "]]}, 
+    {Hue[0.6142719099991583, 0.6, 0.6], Thickness[Large], 
+     LineBox[CompressedData["
+1:eJxTTMoPSmViYGAwAWIQ7aQ48VVb64H9izTfasxIPLl/lD/KH+UTzwcAxMzK
+xQ==
+      "]]}, 
+    {Hue[0.8503398874989481, 0.6, 0.6], Thickness[Large], 
+     LineBox[CompressedData["
+1:eJxTTMoPSmViYGAwAWIQ7aQ48VVb64H9izTfasxIPGk/yh/lj/KJ5wMAOGWw
+xQ==
+      "]]}}, 
+   GraphicsComplexBox[{{-6.452068767862707, -13.170471184047896`}, \
+{-6.452068767862707, 
+    13.170471184047896`}, {-0.27599916811599073`, -2.9096898033738596`}, \
+{-0.27599916811599073`, 
+    2.9096898033738596`}, {-0.1290749211641558, -0.19829084394798452`}, \
+{-0.1290749211641558, 
+    0.19829084394798452`}, {-6.452068767862707, -13.170471184047896`}, \
+{-6.452068767862707, 
+    13.170471184047896`}, {-0.27599916811599073`, -2.9096898033738596`}, \
+{-0.27599916811599073`, 
+    2.9096898033738596`}, {-0.1290749211641558, -0.19829084394798452`}, \
+{-0.1290749211641558, 0.19829084394798452`}}, {{
+      {Hue[0.67, 0.6, 0.6], InsetBox[
+        GraphicsBox[CircleBox[{0, 0}],
+         ImageSize->{7, Automatic}], 7], InsetBox[
+        GraphicsBox[CircleBox[{0, 0}],
+         ImageSize->{7, Automatic}], 8], InsetBox[
+        GraphicsBox[CircleBox[{0, 0}],
+         ImageSize->{7, Automatic}], 9], InsetBox[
+        GraphicsBox[CircleBox[{0, 0}],
+         ImageSize->{7, Automatic}], 10], InsetBox[
+        GraphicsBox[CircleBox[{0, 0}],
+         ImageSize->{7, Automatic}], 11], InsetBox[
+        GraphicsBox[CircleBox[{0, 0}],
+         ImageSize->{7, Automatic}], 12]}, {}}, {
+      TagBox[
+       TooltipBox[
+        {Opacity[0.], PointBox[7]},
+        RowBox[{"k", "\[Equal]", 
+          RowBox[{"Interval", "[", 
+            RowBox[{"{", 
+              RowBox[{"0", ",", "1"}], "}"}], "]"}]}]],
+       Annotation[#, $CellContext`k == Interval[{0, 1}], "Tooltip"]& ], 
+      TagBox[
+       TooltipBox[
+        {Opacity[0.], PointBox[8]},
+        RowBox[{"k", "\[Equal]", 
+          RowBox[{"Interval", "[", 
+            RowBox[{"{", 
+              RowBox[{"0", ",", "1"}], "}"}], "]"}]}]],
+       Annotation[#, $CellContext`k == Interval[{0, 1}], "Tooltip"]& ], 
+      TagBox[
+       TooltipBox[
+        {Opacity[0.], PointBox[9]},
+        RowBox[{"k", "\[Equal]", 
+          RowBox[{"Interval", "[", 
+            RowBox[{"{", 
+              RowBox[{"0", ",", "1"}], "}"}], "]"}]}]],
+       Annotation[#, $CellContext`k == Interval[{0, 1}], "Tooltip"]& ], 
+      TagBox[
+       TooltipBox[
+        {Opacity[0.], PointBox[10]},
+        RowBox[{"k", "\[Equal]", 
+          RowBox[{"Interval", "[", 
+            RowBox[{"{", 
+              RowBox[{"0", ",", "1"}], "}"}], "]"}]}]],
+       Annotation[#, $CellContext`k == Interval[{0, 1}], "Tooltip"]& ], 
+      TagBox[
+       TooltipBox[
+        {Opacity[0.], PointBox[11]},
+        RowBox[{"k", "\[Equal]", 
+          RowBox[{"Interval", "[", 
+            RowBox[{"{", 
+              RowBox[{"0", ",", "1"}], "}"}], "]"}]}]],
+       Annotation[#, $CellContext`k == Interval[{0, 1}], "Tooltip"]& ], 
+      TagBox[
+       TooltipBox[
+        {Opacity[0.], PointBox[12]},
+        RowBox[{"k", "\[Equal]", 
+          RowBox[{"Interval", "[", 
+            RowBox[{"{", 
+              RowBox[{"0", ",", "1"}], "}"}], "]"}]}]],
+       Annotation[#, $CellContext`k == Interval[{0, 1}], "Tooltip"]& ]}}], 
+   GraphicsComplexBox[{{-6.452068767862707, -13.170471184047896`}, \
+{-6.452068767862707, 
+    13.170471184047896`}, {-0.27599916811599073`, -2.9096898033738596`}, \
+{-0.27599916811599073`, 
+    2.9096898033738596`}, {-0.1290749211641558, -0.19829084394798452`}, \
+{-0.1290749211641558, 
+    0.19829084394798452`}, {-6.452068767862707, -13.170471184047896`}, \
+{-6.452068767862707, 
+    13.170471184047896`}, {-0.27599916811599073`, -2.9096898033738596`}, \
+{-0.27599916811599073`, 
+    2.9096898033738596`}, {-0.1290749211641558, -0.19829084394798452`}, \
+{-0.1290749211641558, 0.19829084394798452`}}, {{
+      {Hue[0.67, 0.6, 0.6], InsetBox[
+        GraphicsBox[DiskBox[{0, 0}],
+         ImageSize->{7, Automatic}], 7], InsetBox[
+        GraphicsBox[DiskBox[{0, 0}],
+         ImageSize->{7, Automatic}], 8], InsetBox[
+        GraphicsBox[DiskBox[{0, 0}],
+         ImageSize->{7, Automatic}], 9], InsetBox[
+        GraphicsBox[DiskBox[{0, 0}],
+         ImageSize->{7, Automatic}], 10], InsetBox[
+        GraphicsBox[DiskBox[{0, 0}],
+         ImageSize->{7, Automatic}], 11], InsetBox[
+        GraphicsBox[DiskBox[{0, 0}],
+         ImageSize->{7, Automatic}], 12]}, {}}, {
+      TagBox[
+       TooltipBox[
+        {Opacity[0.], PointBox[7]},
+        RowBox[{"k", "\[Equal]", 
+          RowBox[{"Interval", "[", 
+            RowBox[{"{", 
+              RowBox[{"0", ",", "1"}], "}"}], "]"}]}]],
+       Annotation[#, $CellContext`k == Interval[{0, 1}], "Tooltip"]& ], 
+      TagBox[
+       TooltipBox[
+        {Opacity[0.], PointBox[8]},
+        RowBox[{"k", "\[Equal]", 
+          RowBox[{"Interval", "[", 
+            RowBox[{"{", 
+              RowBox[{"0", ",", "1"}], "}"}], "]"}]}]],
+       Annotation[#, $CellContext`k == Interval[{0, 1}], "Tooltip"]& ], 
+      TagBox[
+       TooltipBox[
+        {Opacity[0.], PointBox[9]},
+        RowBox[{"k", "\[Equal]", 
+          RowBox[{"Interval", "[", 
+            RowBox[{"{", 
+              RowBox[{"0", ",", "1"}], "}"}], "]"}]}]],
+       Annotation[#, $CellContext`k == Interval[{0, 1}], "Tooltip"]& ], 
+      TagBox[
+       TooltipBox[
+        {Opacity[0.], PointBox[10]},
+        RowBox[{"k", "\[Equal]", 
+          RowBox[{"Interval", "[", 
+            RowBox[{"{", 
+              RowBox[{"0", ",", "1"}], "}"}], "]"}]}]],
+       Annotation[#, $CellContext`k == Interval[{0, 1}], "Tooltip"]& ], 
+      TagBox[
+       TooltipBox[
+        {Opacity[0.], PointBox[11]},
+        RowBox[{"k", "\[Equal]", 
+          RowBox[{"Interval", "[", 
+            RowBox[{"{", 
+              RowBox[{"0", ",", "1"}], "}"}], "]"}]}]],
+       Annotation[#, $CellContext`k == Interval[{0, 1}], "Tooltip"]& ], 
+      TagBox[
+       TooltipBox[
+        {Opacity[0.], PointBox[12]},
+        RowBox[{"k", "\[Equal]", 
+          RowBox[{"Interval", "[", 
+            RowBox[{"{", 
+              RowBox[{"0", ",", "1"}], "}"}], "]"}]}]],
+       Annotation[#, $CellContext`k == Interval[{0, 1}], "Tooltip"]& ]}}], 
+   GraphicsComplexBox[{{-6.452068767862707, -13.170471184047896`}, \
+{-6.452068767862707, 
+    13.170471184047896`}, {-0.27599916811599073`, -2.9096898033738596`}, \
+{-0.27599916811599073`, 
+    2.9096898033738596`}, {-0.1290749211641558, -0.19829084394798452`}, \
+{-0.1290749211641558, 
+    0.19829084394798452`}, {-6.452068767862707, -13.170471184047896`}, \
+{-6.452068767862707, 
+    13.170471184047896`}, {-0.27599916811599073`, -2.9096898033738596`}, \
+{-0.27599916811599073`, 
+    2.9096898033738596`}, {-0.1290749211641558, -0.19829084394798452`}, \
+{-0.1290749211641558, 0.19829084394798452`}}, {{
+      {Hue[0.67, 0.6, 0.6], InsetBox[
+        GraphicsBox[
+         {GrayLevel[0], Thickness[0.25], LineBox[{{0, 1}, {1, 0}}], 
+          LineBox[{{0, 0}, {1, 1}}]},
+         ImageSize->{8., Automatic}], 7], InsetBox[
+        GraphicsBox[
+         {GrayLevel[0], Thickness[0.25], LineBox[{{0, 1}, {1, 0}}], 
+          LineBox[{{0, 0}, {1, 1}}]},
+         ImageSize->{8., Automatic}], 8], InsetBox[
+        GraphicsBox[
+         {GrayLevel[0], Thickness[0.25], LineBox[{{0, 1}, {1, 0}}], 
+          LineBox[{{0, 0}, {1, 1}}]},
+         ImageSize->{8., Automatic}], 9], InsetBox[
+        GraphicsBox[
+         {GrayLevel[0], Thickness[0.25], LineBox[{{0, 1}, {1, 0}}], 
+          LineBox[{{0, 0}, {1, 1}}]},
+         ImageSize->{8., Automatic}], 10], InsetBox[
+        GraphicsBox[
+         {GrayLevel[0], Thickness[0.25], LineBox[{{0, 1}, {1, 0}}], 
+          LineBox[{{0, 0}, {1, 1}}]},
+         ImageSize->{8., Automatic}], 11], InsetBox[
+        GraphicsBox[
+         {GrayLevel[0], Thickness[0.25], LineBox[{{0, 1}, {1, 0}}], 
+          LineBox[{{0, 0}, {1, 1}}]},
+         ImageSize->{8., Automatic}], 12]}, {}}, {
+      TagBox[
+       TooltipBox[
+        {Opacity[0.], PointBox[7]},
+        RowBox[{"k", "\[Equal]", 
+          RowBox[{"Interval", "[", 
+            RowBox[{"{", 
+              RowBox[{"0", ",", "1"}], "}"}], "]"}]}]],
+       Annotation[#, $CellContext`k == Interval[{0, 1}], "Tooltip"]& ], 
+      TagBox[
+       TooltipBox[
+        {Opacity[0.], PointBox[8]},
+        RowBox[{"k", "\[Equal]", 
+          RowBox[{"Interval", "[", 
+            RowBox[{"{", 
+              RowBox[{"0", ",", "1"}], "}"}], "]"}]}]],
+       Annotation[#, $CellContext`k == Interval[{0, 1}], "Tooltip"]& ], 
+      TagBox[
+       TooltipBox[
+        {Opacity[0.], PointBox[9]},
+        RowBox[{"k", "\[Equal]", 
+          RowBox[{"Interval", "[", 
+            RowBox[{"{", 
+              RowBox[{"0", ",", "1"}], "}"}], "]"}]}]],
+       Annotation[#, $CellContext`k == Interval[{0, 1}], "Tooltip"]& ], 
+      TagBox[
+       TooltipBox[
+        {Opacity[0.], PointBox[10]},
+        RowBox[{"k", "\[Equal]", 
+          RowBox[{"Interval", "[", 
+            RowBox[{"{", 
+              RowBox[{"0", ",", "1"}], "}"}], "]"}]}]],
+       Annotation[#, $CellContext`k == Interval[{0, 1}], "Tooltip"]& ], 
+      TagBox[
+       TooltipBox[
+        {Opacity[0.], PointBox[11]},
+        RowBox[{"k", "\[Equal]", 
+          RowBox[{"Interval", "[", 
+            RowBox[{"{", 
+              RowBox[{"0", ",", "1"}], "}"}], "]"}]}]],
+       Annotation[#, $CellContext`k == Interval[{0, 1}], "Tooltip"]& ], 
+      TagBox[
+       TooltipBox[
+        {Opacity[0.], PointBox[12]},
+        RowBox[{"k", "\[Equal]", 
+          RowBox[{"Interval", "[", 
+            RowBox[{"{", 
+              RowBox[{"0", ",", "1"}], "}"}], "]"}]}]],
+       Annotation[#, $CellContext`k == Interval[{0, 1}], "Tooltip"]& ]}}]},
+  Axes->True,
+  AxesOrigin->{0, 0},
+  Method->{},
+  PlotRange->{{-6.452068767862707, 0.}, {-13.170471184047896`, 
+   13.170471184047896`}},
+  PlotRangeClipping->True,
+  PlotRangePadding->{
+    Scaled[0.02], 
+    Scaled[0.02]}]], "Output",
+ CellChangeTimes->{3.594175589623478*^9}]
+}, Open  ]]
+},
+WindowSize->{1472, 695},
+WindowMargins->{{16, Automatic}, {Automatic, 16}},
+FrontEndVersion->"8.0 for Microsoft Windows (64-bit) (February 23, 2011)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[557, 20, 4673, 145, 192, "Input"],
+Cell[5233, 167, 217, 3, 52, "Input"],
+Cell[CellGroupData[{
+Cell[5475, 174, 669, 14, 31, InheritFromParent],
+Cell[6147, 190, 28796, 743, 1223, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[34980, 938, 873, 20, 31, "Input"],
+Cell[35856, 960, 2487, 42, 50, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[38380, 1007, 150, 3, 31, "Input"],
+Cell[38533, 1012, 559, 19, 50, "Output"]
+}, Open  ]],
+Cell[39107, 1034, 1619, 33, 72, "Input"],
+Cell[CellGroupData[{
+Cell[40751, 1071, 302, 8, 31, "Input"],
+Cell[41056, 1081, 267, 4, 30, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[41360, 1090, 281, 6, 31, "Input"],
+Cell[41644, 1098, 165, 2, 30, "Output"]
+}, Open  ]],
+Cell[41824, 1103, 96, 1, 31, "Input"],
+Cell[41923, 1106, 94, 1, 31, InheritFromParent],
+Cell[CellGroupData[{
+Cell[42042, 1111, 367, 10, 31, "Input"],
+Cell[42412, 1123, 10710, 271, 447, "Output"]
+}, Open  ]]
+}
+]
+*)
+
+(* End of internal cache information *)

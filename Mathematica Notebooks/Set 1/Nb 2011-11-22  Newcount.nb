@@ -1,0 +1,286 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 8.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       157,          7]
+NotebookDataLength[      9390,        277]
+NotebookOptionsPosition[      8816,        252]
+NotebookOutlinePosition[      9160,        267]
+CellTagsIndexPosition[      9117,        264]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"StrictDivisors", "[", 
+   RowBox[{"A_", ",", " ", "n_", ",", " ", "k_"}], " ", "]"}], ":=", " ", 
+  RowBox[{"Sum", "[", " ", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"j", "^", "A"}], " ", 
+     RowBox[{"StrictDivisors", "[", 
+      RowBox[{"A", ",", " ", 
+       RowBox[{"n", "/", "j"}], ",", " ", 
+       RowBox[{"k", "-", "1"}]}], "]"}]}], ",", " ", 
+    RowBox[{"{", 
+     RowBox[{"j", ",", " ", "2", ",", " ", "n"}], "}"}]}], 
+   "]"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"StrictDivisors", "[", 
+   RowBox[{"A_", ",", " ", "n_", ",", " ", "1"}], " ", "]"}], " ", ":=", " ", 
+  RowBox[{"Sum", "[", " ", 
+   RowBox[{
+    RowBox[{"j", "^", "A"}], ",", " ", 
+    RowBox[{"{", 
+     RowBox[{"j", ",", "2", ",", "n"}], "}"}]}], 
+   "]"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"CountPrimes", "[", 
+   RowBox[{"A_", ",", " ", "n_"}], " ", "]"}], " ", ":=", " ", 
+  RowBox[{"Sum", "[", " ", 
+   RowBox[{
+    RowBox[{
+     RowBox[{
+      RowBox[{
+       RowBox[{"(", 
+        RowBox[{"-", "1"}], ")"}], "^", 
+       RowBox[{"(", 
+        RowBox[{"k", "+", "1"}], ")"}]}], "/", 
+      RowBox[{"(", 
+       RowBox[{"j", " ", "k"}], ")"}]}], " ", 
+     RowBox[{"MoebiusMu", "[", " ", "j", " ", "]"}], 
+     RowBox[{"StrictDivisors", "[", " ", 
+      RowBox[{
+       RowBox[{"j", " ", "A"}], ",", " ", 
+       RowBox[{"n", "^", 
+        RowBox[{"(", 
+         RowBox[{"1", "/", "j"}], ")"}]}], ",", " ", "k"}], "]"}]}], ",", " ", 
+    RowBox[{"{", 
+     RowBox[{"j", ",", "1", ",", " ", 
+      RowBox[{"Log", "[", 
+       RowBox[{"2", ",", "n"}], "]"}]}], "}"}], ",", " ", 
+    RowBox[{"{", 
+     RowBox[{"k", ",", "1", ",", 
+      RowBox[{"Log", "[", 
+       RowBox[{"2", ",", 
+        RowBox[{"(", 
+         RowBox[{"n", "^", 
+          RowBox[{"(", 
+           RowBox[{"1", "/", "j"}], ")"}]}], ")"}]}], "]"}]}], "}"}]}], " ", 
+   "]"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"RecurseCount", "[", " ", 
+   RowBox[{"A_", ",", " ", "n_", ",", " ", "k_"}], " ", "]"}], " ", ":=", " ", 
+  RowBox[{"Sum", "[", " ", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"j", "^", "A"}], 
+     RowBox[{"(", " ", 
+      RowBox[{
+       RowBox[{"1", "/", "k"}], " ", "-", " ", 
+       RowBox[{"RecurseCount", "[", " ", 
+        RowBox[{"A", ",", " ", 
+         RowBox[{"n", "/", "j"}], ",", " ", 
+         RowBox[{"k", "+", "1"}]}], "]"}]}], ")"}]}], ",", " ", 
+    RowBox[{"{", 
+     RowBox[{"j", ",", "2", ",", "n"}], "}"}]}], 
+   "]"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"CountPrimeSumsRecurse", "[", 
+   RowBox[{"A_", ",", " ", "n_"}], "]"}], " ", ":=", " ", 
+  RowBox[{"Sum", "[", " ", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"1", "/", 
+      RowBox[{"(", "j", ")"}]}], " ", 
+     RowBox[{"MoebiusMu", "[", " ", "j", " ", "]"}], 
+     RowBox[{"RecurseCount", "[", " ", 
+      RowBox[{
+       RowBox[{"j", " ", "A"}], ",", " ", 
+       RowBox[{"n", "^", 
+        RowBox[{"(", 
+         RowBox[{"1", "/", "j"}], ")"}]}], ",", " ", "1"}], "]"}]}], ",", " ", 
+    RowBox[{"{", 
+     RowBox[{"j", ",", "1", ",", " ", 
+      RowBox[{"Log", "[", 
+       RowBox[{"2", ",", "n"}], "]"}]}], "}"}]}], " ", 
+   "]"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"DivisorsHyperbola", "[", " ", 
+   RowBox[{"A_", ",", " ", "k_", ",", " ", "n_", ",", " ", "s_"}], "]"}], " ",
+   ":=", " ", 
+  RowBox[{"Sum", "[", " ", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"(", 
+      RowBox[{
+       RowBox[{"(", 
+        RowBox[{"m", "^", "A"}], ")"}], "^", 
+       RowBox[{"(", 
+        RowBox[{"k", "-", "j"}], ")"}]}], ")"}], " ", 
+     RowBox[{"Binomial", "[", " ", 
+      RowBox[{"k", ",", " ", "j"}], "]"}], " ", 
+     RowBox[{"DivisorsHyperbola", "[", " ", 
+      RowBox[{"A", ",", " ", "j", ",", " ", 
+       RowBox[{"n", "/", 
+        RowBox[{"(", 
+         RowBox[{"m", "^", 
+          RowBox[{"(", 
+           RowBox[{"k", "-", "j"}], ")"}]}], ")"}]}], ",", " ", 
+       RowBox[{"m", "+", "1"}]}], "]"}]}], ",", " ", 
+    RowBox[{"{", 
+     RowBox[{"m", ",", "s", ",", 
+      RowBox[{"n", "^", 
+       RowBox[{"(", 
+        RowBox[{"1", "/", "k"}], ")"}]}]}], "}"}], ",", " ", 
+    RowBox[{"{", 
+     RowBox[{"j", ",", "0", ",", 
+      RowBox[{"k", "-", "1"}]}], "}"}]}], "]"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"DivisorsHyperbola", "[", 
+   RowBox[{"A_", ",", "1", ",", " ", "n_", ",", "s_"}], "]"}], " ", ":=", " ", 
+  RowBox[{"Sum", "[", " ", 
+   RowBox[{
+    RowBox[{"j", "^", "A"}], ",", " ", 
+    RowBox[{"{", " ", 
+     RowBox[{"j", ",", " ", "s", ",", " ", "n"}], "}"}]}], 
+   "]"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"DivisorsHyperbola", "[", 
+   RowBox[{"A_", ",", "0", ",", " ", "n_", ",", "s_"}], "]"}], " ", ":=", " ",
+   "1"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"CountPrimes2", "[", 
+   RowBox[{"n_", ",", " ", "a_"}], "]"}], " ", ":=", " ", 
+  RowBox[{"Sum", "[", " ", 
+   RowBox[{
+    RowBox[{
+     RowBox[{
+      RowBox[{
+       RowBox[{"(", 
+        RowBox[{"-", "1"}], ")"}], "^", 
+       RowBox[{"(", 
+        RowBox[{"k", "+", "1"}], ")"}]}], "/", 
+      RowBox[{"(", 
+       RowBox[{"j", " ", "k"}], ")"}]}], " ", 
+     RowBox[{"MoebiusMu", "[", " ", "j", " ", "]"}], 
+     RowBox[{"DivisorsHyperbola", "[", " ", 
+      RowBox[{
+       RowBox[{"j", " ", "a"}], ",", "k", ",", " ", 
+       RowBox[{"n", "^", 
+        RowBox[{"(", 
+         RowBox[{"1", "/", "j"}], ")"}]}], ",", " ", "2"}], "]"}]}], ",", " ", 
+    RowBox[{"{", 
+     RowBox[{"j", ",", "1", ",", " ", 
+      RowBox[{"Log", "[", 
+       RowBox[{"2", ",", "n"}], "]"}]}], "}"}], ",", " ", 
+    RowBox[{"{", 
+     RowBox[{"k", ",", "1", ",", 
+      RowBox[{"Log", "[", 
+       RowBox[{"2", ",", 
+        RowBox[{"(", 
+         RowBox[{"n", "^", 
+          RowBox[{"(", 
+           RowBox[{"1", "/", "j"}], ")"}]}], ")"}]}], "]"}]}], "}"}]}], " ", 
+   "]"}]}]}], "Input",
+ CellChangeTimes->{{3.5308318947050877`*^9, 3.530831944154916*^9}, {
+  3.530832297498126*^9, 3.5308323148191166`*^9}, {3.530834857534552*^9, 
+  3.5308348905384398`*^9}, {3.530834956655221*^9, 3.5308349600704165`*^9}, {
+  3.530835008966213*^9, 3.5308350182017417`*^9}, {3.531000291374067*^9, 
+  3.53100036608034*^9}, {3.5310004416516623`*^9, 3.5310004562824993`*^9}, {
+  3.531000491631521*^9, 3.531000495229727*^9}, {3.531000537228129*^9, 
+  3.5310005884020557`*^9}, {3.5310006213769417`*^9, 3.53100064214213*^9}, {
+  3.5310006976193027`*^9, 3.531000701626532*^9}, {3.5310007462400837`*^9, 
+  3.531000828048763*^9}, {3.5310008682770643`*^9, 3.5310008707892075`*^9}, {
+  3.5310009116225433`*^9, 3.5310009275544543`*^9}, {3.5310010028907633`*^9, 
+  3.5310010070900035`*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"\[IndentingNewLine]", 
+  RowBox[{"CountPrimes2", "[", " ", 
+   RowBox[{"100", ",", "1"}], "]"}]}]], "Input",
+ CellChangeTimes->{{3.5310003747308345`*^9, 3.531000423097601*^9}, {
+   3.53100046084276*^9, 3.531000463923936*^9}, {3.531000593670357*^9, 
+   3.5310005957684774`*^9}, {3.531000659749137*^9, 3.53100070771988*^9}, 
+   3.531000940679205*^9}],
+
+Cell[BoxData["1060"], "Output",
+ CellChangeTimes->{{3.5310004011973486`*^9, 3.5310004233266144`*^9}, {
+   3.531000458846646*^9, 3.5310004656890373`*^9}, {3.531000592372283*^9, 
+   3.5310005962595053`*^9}, {3.531000644326255*^9, 3.531000708026898*^9}, 
+   3.5310008308769245`*^9, {3.531000929634573*^9, 3.53100094093822*^9}}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"CountPrimes", "[", " ", 
+  RowBox[{"1", ",", " ", "100"}], "]"}]], "Input",
+ CellChangeTimes->{
+  3.531000427717865*^9, {3.531000500338019*^9, 3.5310005029541683`*^9}, {
+   3.5310008516221113`*^9, 3.531000890149315*^9}, 3.531000937989051*^9}],
+
+Cell[BoxData["1060"], "Output",
+ CellChangeTimes->{
+  3.5310004291629477`*^9, {3.5310004994789696`*^9, 3.5310005031901817`*^9}, {
+   3.5310008318719816`*^9, 3.5310008916334*^9}, {3.531000931430676*^9, 
+   3.5310009382760677`*^9}}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"CountPrimeSumsRecurse", "[", " ", 
+  RowBox[{"1", ",", " ", "100"}], "]"}]], "Input",
+ CellChangeTimes->{{3.531000833523076*^9, 3.531000848505933*^9}, 
+   3.5310009351078863`*^9}],
+
+Cell[BoxData["1060"], "Output",
+ CellChangeTimes->{{3.531000841369525*^9, 3.531000848750947*^9}, {
+  3.5310009314516773`*^9, 3.531000936168947*^9}}]
+}, Open  ]]
+},
+WindowSize->{1584, 805},
+WindowMargins->{{0, Automatic}, {Automatic, 0}},
+FrontEndVersion->"8.0 for Microsoft Windows (64-bit) (February 23, 2011)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[557, 20, 6592, 183, 192, "Input"],
+Cell[CellGroupData[{
+Cell[7174, 207, 372, 7, 52, "Input"],
+Cell[7549, 216, 324, 4, 30, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[7910, 225, 266, 5, 31, "Input"],
+Cell[8179, 232, 230, 4, 30, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[8446, 241, 203, 4, 31, "Input"],
+Cell[8652, 247, 148, 2, 30, "Output"]
+}, Open  ]]
+}
+]
+*)
+
+(* End of internal cache information *)
