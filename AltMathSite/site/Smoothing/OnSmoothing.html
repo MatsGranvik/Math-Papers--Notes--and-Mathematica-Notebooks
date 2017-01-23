@@ -1,0 +1,152 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html onclick="keepFocusInTextbox(event)">
+	
+<head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>Prime Counting</title>
+<link rel="stylesheet" href="../css/IceCream.css" type="text/css" />
+<script type="text/javascript"src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script type="text/x-mathjax-config">MathJax.Hub.Config({TeX: {extensions: ["color.js"]}, tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]}});</script>
+<script type="text/javascript"src="../js/mathcore.js"></script>
+<script type="text/javascript"src="../js/plot.js"></script>
+<script type="text/javascript"src="../js/tables.js"></script>
+<script type="text/javascript"src="../js/inputbox.js"></script>
+<script type="text/javascript" src="chrome://extensiondev/content/rdfhistory.js"></script>
+<script type="text/javascript" src="chrome://extensiondev/content/chromeShellExtras.js"></script>
+</head>
+
+<body onload="setup()">
+<div id="pageouter">
+<div id="page2"><div id="content2"><img src="../art/edgea.png"/></div></div>
+<div id="page"><br/><br/>
+<div id="content5">
+$
+\definecolor{chg}{RGB}{192,0,0}
+\definecolor{bs}{RGB}{20,20,20}
+$
+<h1><center>On Smoothing the Count of Primes</center></h1><br/><br/>
+
+<p>I'm going to show, as simply as I know how, one way the count of prime numbers is connected to an approximation by a certain special function.  That function is the logarithmic integral.
+</br><p>As best as I can tell, this particular way of showing the connection is not at all well-known.
+
+<br/><br/><br/><center><HR WIDTH="60%"></center><br/><br/>
+
+<p>To begin, I start with this recursive definition for the Riemann prime counting function.
+
+
+	$$P_k(n,j) = 
+	\left\{\begin{aligned}
+	&{1 \over k}-P_{k+1}({n \over j},2)-P_k(n,j+1) &&: n \ge j\\
+	&0 &&: n < j
+	\end{aligned}\right.$$
+</br><script type="text/javascript">var equation1Function="function P(n, j, k){ \n\tif( n < j )return 0;\n\treturn 1/k - P( n/j, 2, k+1 ) + P( n, j+1, k );\n}\nP(100,2,1);";</script>
+<P ALIGN=RIGHT><button id="equation1button" onclick="toggleDiv('equation1', 'equation1button', equation1Function);">Hide</button></p>
+<div id="equation1"></div>
+<script type="text/javascript">hideDiv( 'equation1','equation1button' );</script></br>
+
+<p>Evaluate this with $j = 2$ and $k = 1$ and $n$ a positive whole number, and it computes the <a href='http://mathworld.wolfram.com/RiemannPrimeCountingFunction.html'>Riemann Prime Counting Function</a>, exactly as advertised.  Pretty magical, isn't it?
+
+<br/><br/><br/><center><HR WIDTH="60%"></center><br/><br/>
+
+<p>Now I'll introduce what might casually be called a sample scaling factor.  I'll call it $d$.  Here it is:
+
+
+	$$
+	P_k(n,j) = \left\{\begin{aligned}
+	&\color{chg}d\cdot\color{bs}({1 \over k}-P_{k+1}({n \over j},\color{chg}1+d\color{bs}))-P_k(n,j+\color{chg}d\color{bs}) &&: n > j\\
+	&0 &&: n \le j
+	\end{aligned}\right.$$
+</br><script type="text/javascript">var equation2Function="function P(n, d, j, k){ \n\tif ( n<j ) return 0;\n\treturn d*(1/k - P( n/j, d, 1+d, k+1 )) + P( n, d, j+d, k );\n}\nP(100,1,2,1);";</script>
+<P ALIGN=RIGHT><button id="equation2button" onclick="toggleDiv('equation2', 'equation2button', equation2Function);">Hide</button></p>
+<div id="equation2"></div>
+<script type="text/javascript">hideDiv( 'equation2','equation2button' );</script></br>
+
+<p>This is evaluated with $j=1+d$, $k = 1$, and $d$ a real number $ > 0 $.
+
+</br><p>Notice it simplifies to the original equation when $d = 1$.
+
+<br/><br/><br/><center><HR WIDTH="60%"></center><br/><br/>
+
+<p>Now, here's a quesiton: what happens as $d$ gets close to $0$?  Let's take a look at an animation of that, with $d$ going from $1$ to $0$:
+
+  
+</br><script type="text/javascript">var equation3Function="function P(n, d, j, k){ \n\tif ( n<j ) return 0;\n\treturn d*(1/k - P( n/j, d, 1+d, k+1 )) + P( n, d, j+d, k );\n}\nplotfn( function( k ){ return P(k,1,2,1); } );";</script>
+<P ALIGN=RIGHT><button id="equation3button" onclick="toggleDiv('equation3', 'equation3button', equation3Function);">Hide</button></p>
+<div id="equation3"></div>
+<script type="text/javascript">hideDiv( 'equation3','equation3button' );</script></br>
+	
+</br><p>It sure looks like the function gets smoother as $d$ gets smaller, right?  You might well wonder if it converges to some easier-to-reason-about-and-compute function.
+
+</br><p>And it does.  In fact, as $d$ approaches $0$, the function approaches a very specific function, the <a href='http://mathworld.wolfram.com/LogarithmicIntegral.html'>Logarithmic Integral</a> $-\log \log n - .577215...$
+
+<br/><br/><br/><center><HR WIDTH="60%"></center><br/><br/>
+
+
+
+
+
+
+<P ALIGN=CENTER><button id="fold4button" onclick="toggleFold('fold4', 'fold4button');">Hide</button></p>
+<div id="fold4">
+
+<p>If I apply the function P(n,1,2,1) recursively to itself, it transforms into these sums:
+
+$$P(n,1,2,1) = 
+\sum_{j=2}^{\lfloor n \rfloor} 1
+- {1 \over 2} \sum_{j = 2}^{\lfloor n \rfloor} \sum_{k = 2}^{\lfloor {n \over j} \rfloor} 1 
++ {1 \over 3} \sum_{j = 2}^{\lfloor n \rfloor} \sum_{k = 2}^{\lfloor {n \over j} \rfloor} \sum_{l=2}^{\lfloor {n \over {j \dot k}} \rfloor} 1 
+- { 1 \over 4 } ...	$$
+
+<p>On the other hand, if I do likewise with its limit as $d$ approaches $0$, it transforms into these integrals:
+
+$$ \lim_{d \rightarrow 0}{} P(n,d,1+d,1) =
+\int_{1}^{ n } \,dj
+- {1 \over 2} \int_{1}^{ n } \int_{1}^{ {n \over j} }  \,dk \,dj
++ {1 \over 3} \int_{1}^{ n } \int_{1}^{ {n \over j} } \int_{1}^{ {n \over {j \dot k}} } \,dl \,dk \,dj
+- { 1 \over 4 } ...	$$
+
+<p>...
+	
+$$ \lim_{d \rightarrow 0}{} P(n,d,1+d,1) =-\sum_{k = 1}^{\infty} {1 \over k} \cdot {{\gamma(k,-\log n)} \over {\Gamma(k)}}$$
+
+<p>...
+
+$$ \lim_ { d \rightarrow 0 } { } P(n, d, 1 + d, 1) = li(n) - \log \log n - \gamma$$
+
+
+</div>
+<script type="text/javascript">hideFold( 'fold4','fold4button' );</script><br/>
+<br/>
+<br/>
+
+<div id="coderunner"  style = "border:3px solid #884444; padding: .857em;">
+	
+<center><h4>INTERACTIVE JAVASCRIPT INTERPRETER</h4></center>
+
+<div id="thegraph"><div class="wrap"><canvas id="Canvas2D" width="700" height="700"></canvas></div></div>
+
+</br></br>
+<center><h6>Type javascript code in the box.  Shift+enter to run it. Up+down for command history.</h6></center>
+<div ><textarea  class="jscriptcode" id="input" class="input" wrap="off" onkeydown="inputKeydown(event)" rows="1"></textarea></div>
+<script type="text/javascript">fillbox();</script>
+<P ALIGN=RIGHT>
+<INPUT TYPE="BUTTON" NAME="red" VALUE="Run This Code" ONCLICK='runcode();'></P>
+
+
+
+<div id="outputframe">
+	<br/><br/>
+	<center><h6>Output</h6></center>
+	<div id="output" style = "border:1px solid #cccccc; padding: .857em;"></div>
+</div>
+
+
+</div>
+<script type="text/javascript">baseHide( 'thegraph' ); baseHide( 'outputframe' ); baseHide( 'coderunner' ); </script>
+
+</center>
+
+
+</div>
+<img src="../art/edgeb.png"/>
+</div>
+</body></html>
