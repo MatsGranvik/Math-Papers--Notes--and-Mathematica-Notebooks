@@ -1,0 +1,91 @@
+{Title}Alternating Series and the Count of Primes{TitleEnd}
+
+{SB}I'm going to show, as simply as I know how, one way the count of prime numbers is connected to an approximation by a certain special function.  That function is the logarithmic integral.
+{LB}As best as I can tell, this particular way of showing the connection is not at all well-known.
+
+{Section}
+
+{SB}To begin, I'll start with the familiar (for this website) recursive definition for the Riemann prime counting function.
+
+{Math}
+{Latex}
+	$$P_k(n,j) = 
+	\left\{\begin{aligned}
+	&{1 \over k}-P_{k+1}({n \over j},2)-P_k(n,j+1) &&: n \ge j\\
+	&0 &&: n < j
+	\end{aligned}\right.$$
+{JS}
+function P(n, j, k){ 
+	if( n < j )return 0;
+	return 1/k - P( n/j, 2, k+1 ) + P( n, j+1, k );
+}
+P(100,2,1);
+{MathEnd}
+
+{SB}Evaluate this with $j = 2$ and $k = 1$ and $n$ a positive whole number, and it computes the {RiemannPrimeCounting}.
+
+{Section}
+
+{SB}Now I'll make a simple change to the function.  I'll add a term, $(-1)^{j+1}$, to the definition of the function.  That will turn the function into something rather like an alternating series.
+
+{Math}
+{Latex}
+	$$
+	E_k(n,j) = \left\{\begin{aligned}
+	&{CH}(-1)^{j+1}\cdot{BS}({1 \over k}-E_{k+1}({n \over j},2))-E_k(n,j+1) &&: n > j\\
+	&0 &&: n \le j
+	\end{aligned}\right.$$
+{JS}
+function E(n, j, k){ 
+	if ( n<j ) return 0;
+	return Math.pow( -1, j+1) * (1/k - E( n/j, 2, k+1 )) + E( n, j+1, k );
+}
+plotfn( function( n ){ return E(n,2,1); } );
+{MathEnd}
+
+{SB}This is evaluated with $j=2$ and $k = 1$.
+
+{Section}
+
+{SB}Now, here's a quesiton: what is the difference between these two functions?
+
+{Math}
+{Latex}
+$$ P_k(n,j) - E_k(n,j) $$
+{JS}
+function P(n, j, k){ 
+	if( n < j )return 0;
+	return 1/k - P( n/j, 2, k+1 ) + P( n, j+1, k );
+}
+function E(n, j, k){ 
+	if ( n<j ) return 0;
+	return Math.pow( -1, j+1) * (1/k - E( n/j, 2, k+1 )) + E( n, j+1, k );
+}
+plotfn( function( n ){ return P(n,2,1) - E(n,2,1); } );
+{MathEnd}
+	
+{Section}
+
+
+
+{Questions}
+
+{Fold}
+
+{SB}If I apply the function $P_1(n,2)$ recursively to itself, it transforms into these sums:
+
+$$P_1(n,2) = 
+\sum_{j=2}^{\lfloor n \rfloor} 1
+- {1 \over 2} \sum_{j = 2}^{\lfloor n \rfloor} \sum_{k = 2}^{\lfloor {n \over j} \rfloor} 1 
++ {1 \over 3} \sum_{j = 2}^{\lfloor n \rfloor} \sum_{k = 2}^{\lfloor {n \over j} \rfloor} \sum_{l=2}^{\lfloor {n \over {j \dot k}} \rfloor} 1 
+- { 1 \over 4 } ...	$$
+
+{SB}If I apply the function $E_1(n,2)$ recursively to itself, it transforms into these sums:
+
+$$E_1(n,2) = 
+\sum_{j=2}^{\lfloor n \rfloor} (-1)^{j+1}
+- {1 \over 2} \sum_{j = 2}^{\lfloor n \rfloor} \sum_{k = 2}^{\lfloor {n \over j} \rfloor} (-1)^{j+k}
++ {1 \over 3} \sum_{j = 2}^{\lfloor n \rfloor} \sum_{k = 2}^{\lfloor {n \over j} \rfloor} \sum_{l=2}^{\lfloor {n \over {j \dot k}} \rfloor} (-1)^{j+k+l+1}
+- { 1 \over 4 } ...	$$
+
+{FoldEnd}

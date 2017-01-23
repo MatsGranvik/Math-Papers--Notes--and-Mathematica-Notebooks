@@ -1,0 +1,101 @@
+{Title}On Smoothing the Count of Primes{TitleEnd}
+
+{SB}I'm going to show, as simply as I know how, one way the count of prime numbers is connected to an approximation by a certain special function.  That function is the logarithmic integral.
+{LB}As best as I can tell, this particular way of showing the connection is not at all well-known.
+
+{Section}
+
+{SB}To begin, I start with this recursive definition for the Riemann prime counting function.
+
+{Math}
+{Latex}
+	$$P_k(n,j) = 
+	\left\{\begin{aligned}
+	&{1 \over k}-P_{k+1}({n \over j},2)-P_k(n,j+1) &&: n \ge j\\
+	&0 &&: n < j
+	\end{aligned}\right.$$
+{JS}
+function P(n, j, k){ 
+	if( n < j )return 0;
+	return 1/k - P( n/j, 2, k+1 ) + P( n, j+1, k );
+}
+P(100,2,1);
+{MathEnd}
+
+{SB}Evaluate this with $j = 2$ and $k = 1$ and $n$ a positive whole number, and it computes the {RiemannPrimeCounting}, exactly as advertised.  Pretty magical, isn't it?
+
+{Section}
+
+{SB}Now I'll introduce what might casually be called a sample scaling factor.  I'll call it $d$.  Here it is:
+
+{Math}
+{Latex}
+	$$
+	P_k(n,j) = \left\{\begin{aligned}
+	&{CH}d\cdot{BS}({1 \over k}-P_{k+1}({n \over j},{CH}1+d{BS}))-P_k(n,j+{CH}d{BS}) &&: n > j\\
+	&0 &&: n \le j
+	\end{aligned}\right.$$
+{JS}
+function P(n, d, j, k){ 
+	if ( n<j ) return 0;
+	return d*(1/k - P( n/j, d, 1+d, k+1 )) + P( n, d, j+d, k );
+}
+P(100,1,2,1);
+{MathEnd}
+
+{SB}This is evaluated with $j=1+d$, $k = 1$, and $d$ a real number $ > 0 $.
+
+{LB}Notice it simplifies to the original equation when $d = 1$.
+
+{Section}
+
+{SB}Now, here's a quesiton: what happens as $d$ gets close to $0$?  Let's take a look at an animation of that, with $d$ going from $1$ to $0$:
+
+{Math}
+{Latex}  
+{JS}
+function P(n, d, j, k){ 
+	if ( n<j ) return 0;
+	return d*(1/k - P( n/j, d, 1+d, k+1 )) + P( n, d, j+d, k );
+}
+plotfn( function( k ){ return P(k,1,2,1); } );
+{MathEnd}
+	
+{LB}It sure looks like the function gets smoother as $d$ gets smaller, right?  You might well wonder if it converges to some easier-to-reason-about-and-compute function.
+
+{LB}And it does.  In fact, as $d$ approaches $0$, the function approaches a very specific function, the {LogIntegral} $-\log \log n - .577215...$
+
+{Section}
+
+
+
+{Questions}
+
+{Fold}
+
+{SB}If I apply the function P(n,1,2,1) recursively to itself, it transforms into these sums:
+
+$$P(n,1,2,1) = 
+\sum_{j=2}^{\lfloor n \rfloor} 1
+- {1 \over 2} \sum_{j = 2}^{\lfloor n \rfloor} \sum_{k = 2}^{\lfloor {n \over j} \rfloor} 1 
++ {1 \over 3} \sum_{j = 2}^{\lfloor n \rfloor} \sum_{k = 2}^{\lfloor {n \over j} \rfloor} \sum_{l=2}^{\lfloor {n \over {j \dot k}} \rfloor} 1 
+- { 1 \over 4 } ...	$$
+
+{SB}On the other hand, if I do likewise with its limit as $d$ approaches $0$, it transforms into these integrals:
+
+$$ \lim_{d \rightarrow 0}{} P(n,d,1+d,1) =
+\int_{1}^{ n } \,dj
+- {1 \over 2} \int_{1}^{ n } \int_{1}^{ {n \over j} }  \,dk \,dj
++ {1 \over 3} \int_{1}^{ n } \int_{1}^{ {n \over j} } \int_{1}^{ {n \over {j \dot k}} } \,dl \,dk \,dj
+- { 1 \over 4 } ...	$$
+
+{SB}...
+	
+$$ \lim_{d \rightarrow 0}{} P(n,d,1+d,1) =-\sum_{k = 1}^{\infty} {1 \over k} \cdot {{\gamma(k,-\log n)} \over {\Gamma(k)}}$$
+
+{SB}...
+
+$$ \lim_ { d \rightarrow 0 } { } P(n, d, 1 + d, 1) = li(n) - \log \log n - \gamma$$
+
+
+{FoldEnd}
