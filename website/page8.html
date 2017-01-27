@@ -98,7 +98,7 @@ H_1(n) = & H_0(n) -  \sum_\rho \frac{n^\rho}{\rho} & - \log( 2 \pi )-\frac{1}{2}
 
   
 	<div id="mathouter"><div id='mathbox2'>
-		<h4>$$y=\sum_{t=1}^{\lfloor x \rfloor} t^{100 i} \,\,\,\,\,\,\,\,\textrm{vs}\,\,\,\,\,\,\,\, y=\int_0^x t^{100 i}\,dt + \zeta( 100 i )$$</h4>
+		<h4>$$y=\sum_{t=1}^{\lfloor x \rfloor} t^{100 i} \,\,\,\,\,\,\,\,\textrm{vs}\,\,\,\,\,\,\,\, y=\int_0^{\lfloor x \rfloor} t^{100 i}\,dt + \zeta( 100 i )$$</h4>
 		<div id='demox_'></div>
 		<h6>Click and drag graph to recenter.  Use mousewheel to zoom in and out (or pinch on mobile). Graph code from <a href='http://maurizzzio.github.io/function-plot/'>here</a>.</h6>
 	</div></div>
@@ -108,6 +108,12 @@ H_1(n) = & H_0(n) -  \sum_\rho \frac{n^\rho}{\rho} & - \log( 2 \pi )-\frac{1}{2}
 		<h6>Click and drag graph to recenter.  Use mousewheel to zoom in and out (or pinch on mobile). Graph code from <a href="http://maurizzzio.github.io/function-plot/">here</a>.</h6>
 	</div></div>
 
+</div>
+	
+<div id="section2a">
+
+	<div id="title"><h2>$$1^{ 10000 i }+2^{ 10000 i }+3^{ 10000 i }+4^{ 10000 i }+5^{ 10000 i }+...$$</h2></div>
+	<div id='underouter'><div id='under'></div></div>
 	
 	
   
@@ -131,6 +137,8 @@ H_1(n) = & H_0(n) -  \sum_\rho \frac{n^\rho}{\rho} & - \log( 2 \pi )-\frac{1}{2}
 		<h6>Click and drag graph to recenter.  Use mousewheel to zoom in and out (or pinch on mobile). Graph code from <a href="http://maurizzzio.github.io/function-plot/">here</a>.</h6>
 	</div></div>
 </div>
+	
+	
 
 <!-- ---------------------------------------------------------------------------------------------------------- -->	
 
@@ -165,7 +173,7 @@ H_1(n) = & H_0(n) -  \sum_\rho \frac{n^\rho}{\rho} & - \log( 2 \pi )-\frac{1}{2}
 	
 <!-- ---------------------------------------------------------------------------------------------------------- -->	
 
-	<h6><a href="http://www.icecreambreakfast.com/contact.html">(c) Nathan McKenzie 2016</a></h6>
+	<h6><a href="http://www.icecreambreakfast.com/contact.html">(c) Nathan McKenzie 2017</a></h6>
 	
 </center>
 	
@@ -220,8 +228,8 @@ H_1(n) = & H_0(n) -  \sum_\rho \frac{n^\rho}{\rho} & - \log( 2 \pi )-\frac{1}{2}
 	
 	var sieveSize = 10000000;
 	
-	var prscratch = []; var riecache = []; var psicache = []; var summ = []; isumm = [];
-	for( var rr = 0; rr < sieveSize; rr++ ){ prscratch.push( 1 ); riecache.push( 0 ); psicache.push( 0 ); summ.push( 0 ); isumm.push( 0 ); }
+	var prscratch = []; var riecache = []; var psicache = []; //var summ = []; isumm = [];
+	for( var rr = 0; rr < sieveSize; rr++ ){ prscratch.push( 1 ); riecache.push( 0 ); psicache.push( 0 ); /*summ.push( 0 ); isumm.push( 0 );*/ }
 	for( var j = 0; j < primes.length; j++ ){
 		var pr = primes[j];
 		pa = 2*pr;
@@ -238,28 +246,20 @@ H_1(n) = & H_0(n) -  \sum_\rho \frac{n^\rho}{\rho} & - \log( 2 \pi )-\frac{1}{2}
 		riecache[k] += riecache[k-1];
 		psicache[k] += psicache[k-1];}
 	
-	var A = 0; var f = 10;
-		
-	for( var k = 1; k < sieveSize; k++ ){
+	/*for( var k = 1; k < sieveSize; k++ ){
 		summ[k] = (riecache[k]-riecache[k-1]) * Power( k, A ) * Cos( f*Log(k));
 		isumm[k] = (riecache[k]-riecache[k-1]) * Power( k, A ) * Sin( f*Log(k));}
 	
 	for( var k = 1; k < sieveSize; k++ ){ 
 		summ[k] += summ[k-1];
-		isumm[k] += isumm[k-1];}
+		isumm[k] += isumm[k-1];}*/
 		
 	function line( fn, isClosed=false ){return { closed:isClosed, graphType: 'polyline', fn: fn };}
 	
 	function mk(divName, id ){
 		if( id == -3){
-			functionPlot({ target: '#'+divName, xAxis: {domain: [0, 100]}, yAxis: {domain: [-10, 10]}, annotations: [], width:800, data: [ line( function (v) { return summ[fl(v.x)];}), line( function (v) { return isumm[fl(v.x)];})]});
-			functionPlot({target: '#'+divName+'3',xAxis: {domain: [0, 100]}, yAxis: {domain: [-10, 10]}, annotations: [], width:800,data: [line( function (v) { 
-				var v1 = summ[fl(v.x)];
-				var v2 = isumm[fl(v.x)];
-				return Math.sqrt( v1*v1 + v2*v2 );
-			})]});}
-			//functionPlot({ target: '#'+divName, xAxis: {domain: [0, 100]}, yAxis: {domain: [0, 40]}, annotations: [], width:800, data: [ line( function (v) { return sumg(v.x);}), line( function (v) { return fullintg(v.x)+zeta100i;})]});
-			//functionPlot({target: '#'+divName+'3',xAxis: {domain: [0, 100]}, yAxis: {domain: [-6, 6]}, annotations: [], width:800,data: [line( function (v) { return sumg(v.x)-fullintg(v.x)-zeta100i;})]});}
+			functionPlot({ target: '#'+divName, xAxis: {domain: [0, 100]}, yAxis: {domain: [0, 40]}, annotations: [], width:800, data: [ line( function (v) { return sumg(v.x);}), line( function (v) { return fullintg(v.x)+zeta100i;})]});
+			functionPlot({target: '#'+divName+'3',xAxis: {domain: [0, 100]}, yAxis: {domain: [-6, 6]}, annotations: [], width:800,data: [line( function (v) { return sumg(v.x)-fullintg(v.x)-zeta100i;})]});}
 			
 		if( id == 1){
 			functionPlot({ target: '#'+divName, xAxis: {domain: [0, 100]}, yAxis: {domain: [0, 40]}, annotations: [], width:800, data: [ line( function (v) { return riecache[fl(v.x)];}), line( function (v) { return li(v.x,30);})]});
