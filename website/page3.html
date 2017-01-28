@@ -251,7 +251,7 @@
 	function ints(x,A,f){ return pow(x,A)*cos(f*log(x)); }
 	function line( fn, isClosed=false ){return { closed:isClosed, graphType: 'polyline', fn: fn };}
 	
-	function mk(divName, A, f, val, vali, range ){
+	function mk(divName, A, f, val, vali, range, range2 ){
 		vali *= -1;
 		var sm=[];
 		var ism = [];
@@ -269,16 +269,16 @@
 		for( var k = 1; k < 300000; k++ ){sumg(k, A, f, sm ); isumg(k, A, f, ism );}
 		
 		functionPlot({ target: '#'+divName, xAxis: {domain: [0, 200]}, yAxis: {domain: range}, annotations: ans2, width:800, data: [ line( function (v) { return intg(v.x,A,f);}), line( function (v) { return sumg(fl(v.x),A,f,sm);})]});
-		functionPlot({ target: '#'+divName+'2', xAxis: {domain: [0, 200]}, yAxis: {domain: range}, annotations: ans, width:800, data: [ line( function (v) { return ints(v.x,A,f);}, true), line( function (v) { return ints(fl(v.x),A,f);}, true)]});
+		functionPlot({ target: '#'+divName+'2', xAxis: {domain: [0, 200]}, yAxis: {domain: range2}, annotations: ans, width:800, data: [ line( function (v) { return ints(v.x,A,f);}, true), line( function (v) { return ints(fl(v.x),A,f);}, true)]});
 		functionPlot({target: '#'+divName+'3',xAxis: {domain: [0, 200]}, yAxis: {domain: range}, annotations: ans2, width:800,data: [line( function (v) { return sumg(fl(v.x),A,f,sm)-intg(v.x,A,f);})]});
 		}
 	
-	mk('demof_',1,1000,-1575.360186805219, -1109.537965641057, [-3000,3000] );
-	mk('demo10000_',.5,1000,-123.541, -90.0000774946647, [-200,200]);
-	mk('demo1000_',.25,1000,-33.61469020757686, -26.75552974311933, [-60,60]);
-	mk('demo',0,1000,-8.46309098852087, -8.34334485626739, [-20,20] );
-	mk('demo2_',-.5,1000,0.356334, -0.931998, [-2,2]);
-	mk('demo0_',-1,1000,0.9409368682928779, -0.0452267, [.8,1.15]);
+	mk('demof_',1,1000,-1575.360186805219, -1109.537965641057, [-3000,3000], [-200,200] );
+	mk('demo10000_',.5,1000,-123.541, -90.0000774946647, [-200,200], [-20,20]);
+	mk('demo1000_',.25,1000,-33.61469020757686, -26.75552974311933, [-60,60], [-20,20]);
+	mk('demo',0,1000,-8.46309098852087, -8.34334485626739, [-20,20], [-20,20] );
+	mk('demo2_',-.5,1000,0.356334, -0.931998, [-2,2], [-2,2]);
+	mk('demo0_',-1,1000,0.9409368682928779, -0.0452267, [.8,1.15], [-2,2]);
 </script>
 
 </div>
