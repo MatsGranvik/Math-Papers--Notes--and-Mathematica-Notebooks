@@ -46,7 +46,7 @@
 	<center><div id="title"><h2>aa</h2></div></center>
 	<div id='underouter'><div id='under'></div></div>
 	
-<div id="para">In fact, here it is.  What do you suppose this sum equals?</div>
+	<div id="para">Unlike the previous sections, here I'll show several variations at once, and comment on them en masse.  Let's look at the first two.</div>
 
 	<div id="mathouter"><div id='mathbox2'>
 		<h4>$$y=\sum_{t=1}^{\lfloor x \rfloor} t\cos( 1000 \log t ) \,\,\,\,\,\,\,\,\textrm{vs}\,\,\,\,\,\,\,\, y=\int_0^x t\cos( 1000 \log t ) \,dt$$</h4>
@@ -58,6 +58,15 @@
 		<div id='demo10000_'></div>
 		<h6>Click and drag graph to recenter.  Use mousewheel to zoom in and out (or pinch on mobile). Graph code from <a href='http://maurizzzio.github.io/function-plot/'>here</a>.</h6>
 	</div></div>
+		
+	<div id="para">So here are a few things worth noticing.</div>
+
+	<div id="para">The effect of amplitude changes is more straightforward compared to frequency changes.  The erratic vertical movement of the sampling error is clearly introduced by the frequency; changing the amplitude just alters the relative weight of different samples.</div>
+
+	<div id="para">Also notice that these graphs don't all share the same vertical scale.  Larger amplitude values make our graph cover a much larger range of values.</div>
+
+	<div id="para">Let's look at a few more.</div>
+		
 	<div id="mathouter"><div id='mathbox2'>
 		<h4>$$y=\sum_{t=1}^{\lfloor x \rfloor} t^\frac{1}{4}\cos( 1000 \log t ) \,\,\,\,\,\,\,\,\textrm{vs}\,\,\,\,\,\,\,\, y=\int_0^x t^\frac{1}{4}\cos( 1000 \log t ) \,dt$$</h4>
 		<div id='demo1000_'></div>
@@ -73,11 +82,40 @@
 		<div id='demo2_'></div>
 		<h6>Click and drag graph to recenter.  Use mousewheel to zoom in and out (or pinch on mobile). Graph code from <a href='http://maurizzzio.github.io/function-plot/'>here</a>.</h6>
 	</div></div>
+		
+	<div id="para">The main thing to notice here is that, proportionally, the more the amplitude A tends in the direction of negative infinity, the more samples further left on the x axis contribute to the ultimate sampling error relative to samples further down the x axis.</div>
+
+	<div id="para">So, in our first graph, when A is 1, the Lions share of the sampling error is contributed in the ranges _______.</div>
+
+	<div id="para">Conversely, when A is -1, almost all of the sampling error is contributed by the earliest samples, in the range of ______.  Later samples, in the range of ______, are scaled so small that they barely contribute anything at all.</div>
+
+	<div id="para">Let me suggest two questions.</div>
+
+	<div id="para">First, is there some value of A that balances early contributions with later contributions?</div>
+
+	<div id="para">And second, given a fixed frequency like we are investigating here, do the sampling errors for various values of A have anything to do with each other?</div>
+
+	<div id="para">These are leading questions, and important (and related) ones, too.  We will explore them both in subsequent articles.</div>
+
+	<div id="para">Changing the value of A seems, on its surface, to have much easier-to-predict consequences than changing the frequency.  It just rescales the samples.  Nevertheless, because the samples it's scaling are themselves so hard to predict, it's actually not easy to reason about the connection between altering A and the ultimate change in sampling error.</div>
+		
 	<div id="mathouter"><div id='mathbox2'>
-		<h4>$$y=\sum_{t=1}^{\lfloor x \rfloor} \frac{1}{t} \cos( 1000 \log t ) \,\,\,\,\,\,\,\,\textrm{vs}\,\,\,\,\,\,\,\, y=\int_0^x  \frac{1}{t} \cos( 1000 \log t ) \,dt$$</h4>
+		<h4>$$y=\sum_{t=1}^{\lfloor x \rfloor} \frac{1}{t^\frac{5}{4}} \cos( 1000 \log t ) \,\,\,\,\,\,\,\,\textrm{vs}\,\,\,\,\,\,\,\, y=\int_0^x  \frac{1}{t^\frac{5}{4}} \cos( 1000 \log t ) \,dt$$</h4>
 		<div id='demo0_'></div>
 		<h6>Click and drag graph to recenter.  Use mousewheel to zoom in and out (or pinch on mobile). Graph code from <a href='http://maurizzzio.github.io/function-plot/'>here</a>.</h6>
 	</div></div>
+		
+	<div id="para">One other thing to notice here.  In our very last graph, when A is -1.25, notice the wave grows smaller until it disappears.  So the graph eventually converges to ______.  In the first article, I suggested we could think of our sums, at their limits, as being special wave numbers, with both oscillating parts that often didn't converge, and centers around which the waves oscillated, which almost always did converge.  Well, here's something new.  Here, the wave part actually grows smaller until it converges to 0, leaving us with a straight line at the waves center or, as I've been calling it, the sampling error.</div>
+
+	<div id="para">And so we are justified in unambiguously writing THIS SUM.</div>
+
+	<div id="para">If you'd wondered, up to this point, why anyone would write SUM WITH 1/12 to begin with, this is the actual source of the confusion. Every sum of the form BLAH is a wave number with an oscillating part and a center part / sampling error part.  Many of the oscillating parts don't converge, but the sampling error parts almost always do.  In the cases where the oscillating part DOES converge - namely, cases where A < -1, it converges to 0, just leaving the sampling error part, and so the sum literally equals the sampling error part.  You could see where it would be tempting to just say all these sums equal their sampling error parts.  But they don't, not really, and hence the confusion and flamewars.</div>
+
+	<div id="para">So, to draw out and restate a point I just made: if A is < -1, the oscillating part of the wave number shrinks to 0, and so the sum actually converges on its own to the sampling error.  Otherwise it doesn't.</div>
+
+	<div id="para">Now let's look at what is being sampled.</div>
+
+		
 </div>
 	
 <!-- ---------------------------------------------------------------------------------------------------------- -->	
@@ -115,7 +153,7 @@
 		<h6>Click and drag graph to recenter.  Use mousewheel to zoom in and out (or pinch on mobile). Graph code from <a href="http://maurizzzio.github.io/function-plot/">here</a>.</h6>
 	</div></div>
 	<div id="mathouter"><div id='mathbox2'>
-		<h4>$$y= \frac{1}{x} \cos( 1000 \log \lfloor x \rfloor ) \,\,\,\,\,\,\,\,\textrm{vs}\,\,\,\,\,\,\,\, y= \frac{1}{x} \cos( 1000 \log x )$$</h4>
+		<h4>$$y= \frac{1}{x^\frac{5}{4}} \cos( 1000 \log \lfloor x \rfloor ) \,\,\,\,\,\,\,\,\textrm{vs}\,\,\,\,\,\,\,\, y= \frac{1}{x^\frac{5}{4}} \cos( 1000 \log x )$$</h4>
 		<div id="demo0_2"></div>
 		<h6>Click and drag graph to recenter.  Use mousewheel to zoom in and out (or pinch on mobile). Graph code from <a href="http://maurizzzio.github.io/function-plot/">here</a>.</h6>
 	</div></div>
@@ -156,7 +194,7 @@
 		<h6>Click and drag graph to recenter.  Use mousewheel to zoom in and out (or pinch on mobile). Graph code from <a href="http://maurizzzio.github.io/function-plot/">here</a>.</h6>
 	</div></div>
 	<div id="mathouter"><div id='mathbox2'>
-		<h4>$$y=\sum_{t=1}^{\lfloor x \rfloor} \frac{1}{t} \cos( 1000 \log t ) - \int_0^x  \frac{1}{t} \cos( 1000 \log t ) \,dt$$</h4>
+		<h4>$$y=\sum_{t=1}^{\lfloor x \rfloor} \frac{1}{t^\frac{5}{4}} \cos( 1000 \log t ) - \int_0^x  \frac{1}{t^\frac{5}{4}} \cos( 1000 \log t ) \,dt$$</h4>
 		<div id="demo0_3"></div>
 		<h6>Click and drag graph to recenter.  Use mousewheel to zoom in and out (or pinch on mobile). Graph code from <a href="http://maurizzzio.github.io/function-plot/">here</a>.</h6>
 	</div></div>
@@ -278,7 +316,7 @@
 	mk('demo1000_',.25,1000,-33.61469020757686, -26.75552974311933, [-60,60], [-20,20]);
 	mk('demo',0,1000,-8.46309098852087, -8.34334485626739, [-20,20], [-20,20] );
 	mk('demo2_',-.5,1000,0.356334, -0.931998, [-2,2], [-2,2]);
-	mk('demo0_',-1,1000,0.9409368682928779, -0.0452267, [.8,1.15], [-2,2]);
+	mk('demo0_',-1.25,1000,0.957197, -0.0554102, [.8,1.15], [-2,2]);
 </script>
 
 </div>
