@@ -1,0 +1,664 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.css" integrity="sha384-wITovz90syo1dJWVh32uuETPVEtGigN07tkttEqPv+uR2SE/mbQcG7ATL28aI9H0" crossorigin="anonymous">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.js" integrity="sha384-/y1Nn9+QQAipbNQWU65krzJralCnuOasHncUFXGkdwntGeSvQicrYkiUBwsgUqc1" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/contrib/auto-render.min.js" integrity="sha384-dq1/gEHSxPZQ7DdrM82ID4YVol9BYyU7GbWlIwnwyPzotpoc57wDw/guX8EaYGPx" crossorigin="anonymous"></script>
+    <script src="http://d3js.org/d3.v3.min.js"></script>
+    <script src="http://maurizzzio.github.io/function-plot/js/function-plot.js"></script>
+    <script src="page.js"></script>
+    <link rel="stylesheet" href="css/IceCream.css" type="text/css" />
+    <meta charset="utf-8">
+</head>
+<body>
+    <div id="pageouter">
+        <div id="page2"><div id="content2"><img src="art/edgea.png" /></div></div>
+        <div id="page">
+            <div id="content7">
+
+                <!-- ---------------------------------------------------------------------------------------------------------- -->
+
+                <div id='title'>
+                    <h2>
+                        <center>
+                            Visual Intuition about the Riemann Zeta Function<br />
+                            1-2: Consequences of Changing the Amplitude
+                        </center>
+                    </h2>
+                </div><br />
+                <center><h4><a href="page2.html">Back to 1-1!</a></h4></center><br /><br />
+                <div id="para">
+                    Okay.  In the introduction, we looked at $\sum_{t = 1}^x t^{100 i}$ and saw that, while not having a limit as
+                    $x$ approaches infinity, it did have a converging sampling error, which equaled the Riemann Zeta function at $-100 i$.  In the
+                    second article, we investigated how increasing or decreasing the value of $100 i$ changed that sampling error.
+                </div>
+                <div id="para">
+                    So, we explored raising our samples to imaginary powers.  Now let's add a real component to those powers,
+                    making them complex.  Thus, instead of merely looking at $\sum_{t = 1}^x t^{1000 i}$, we'll investigate
+                    $\sum_{t = 1}^x t^{1+1000 i}$, and $\sum_{t = 1}^x t^{-\frac{1}{2}+1000 i}$, and $\sum_{t = 1}^x t^{-2+1000 i}$, and so
+                    on.  More generally, we'll explore $\sum_{t = 1}^x t^{A+f i}$, with $A$ our amplitude and $f$ our frequency.
+                </div>
+                <div id="para">Connecting back to trigonometry, we'll start with the general sum</div>
+                <div id='eq'>$$1^{ A+f i }+2^{ A+f i  }+3^{ A+f i  }+4^{ A+f i  }+...=$$</div>
+                <div id="para">and then, using a sequence of transformations</div>
+                <div id='eq'>
+                    $$\sum_{t=1}^x t^{ A+f i  }=$$
+                    $$\sum_{t=1}^x t^{ A } \cdot t^{ f i }=$$
+                    $$\sum_{t=1}^x t^A \cdot e^{ f (\log t) \cdot i }=$$
+                </div>
+                <div id="para">arrive, finally, at the form we'll use.</div>
+                <div id='eqboxouter'>
+                    <div id='eqbox'>
+                        <div id='eq'>$$\sum_{t=1}^x t^A \cdot \cos( f \log t ) + i \cdot \sum_{t=1}^x t^A \cdot \sin( f \log t)$$</div>
+                    </div>
+                </div>
+                <div id="para">
+                    So that's the form we will rely on.  For simplicity, we'll only look at real sums,
+                    but I promise the imaginary sums behave the same, which you're welcome to verify for yourself.
+                </div>
+                <div id="para">
+                    To get a sense of how this new, extended definition works, we'll pick one value of $f$ - $f = 1000$ - and examine several values of
+                    $A$.  So the sum we'll look at will be$\sum_{t=1}^x t^{ A+1000 i  }$.
+                </div>
+                <div id="para">So let's do it!  We'll start with larger values of $A$ and then work our way to smaller values.</div>
+
+                <!-- ---------------------------------------------------------------------------------------------------------- -->
+
+                <div id="section1">
+                    <script>makeBasicTitle('$$\\sum_{t = 1}^x t^{A+1000 i}, A > 0$$', 'section1');</script>
+
+                    <div id="para">
+                        The effect of amplitude changes is honestly not nearly as visually striking as the effect of frequency changes.  But it's very,
+                        very important in its own right, as we will see.  So, let's work through a few examples to build some intuition.
+                    </div>
+                    <div id="para">Here's our first two examples, with the largest amplitudes we'll look at, $A=1$ and $A=\frac{1}{2}$.</div>
+                    <div id="para">
+                        So first, $A=1$.  For reference, you can use Wolfram Alpha to
+                        <a href="https://www.wolframalpha.com/input/?i=zeta(-1-1000i)">see</a> that
+                        $$\zeta(-(1+1000 i))=-1575.360186805219... - 1109.537965641057... i$$.
+                    </div>
+                    <div id="para">So, if we set $A=1$, here's the real part of $\sum_{t = 1}^x t^{1+1000 i}$,</div>
+                    <script>makeVersus('section1', 'demof_', '\\sum_{t=1}^{\\lfloor x \\rfloor} t \\cos( 1000 \\log t )', '\\int_0^x t \\cos( 1000 \\log t )')</script>
+                    <div id="para">
+                        Notice that the vertical drop centered around the 1hz line utterly dwarfs, in magnitude, the earlier random walk
+                        in the range of $0 < x < 40$.  If we wanted to think about where the sampling error for $\sum_{t = 1}^x t^{1+1000 i}$
+                        came from, clearly the lion's share is coming from the samples at larger values of $x$.
+                    </div>
+                    <div id="para">
+                        And here's the difference between $\sum_{t = 1}^x t^{1+1000 i}$ and $\int_{0}^x t^{1+1000 i} dt$, with
+                        the real part red and the imaginary part blue:
+                    </div>
+                    <div id="mathouter">
+                        <div id='mathbox2'>
+                            <h4>
+                                $$y_{red}=\sum_{t=1}^{\lfloor x \rfloor} t\cos( 1000 \log t ) - \int_0^x t\cos( 1000 \log t ) \,dt$$
+                                $$y_{blue}=\sum_{t=1}^{\lfloor x \rfloor} t\sin( 1000 \log t ) - \int_0^x t\sin( 1000 \log t ) \,dt$$
+                            </h4>
+                            <div id="demof_3"></div>
+                            <h6>RECENTER GRAPH: Click and drag.  ZOOM IN / OUT: mousewheel, double tap / shift+double tap, or pinch on mobile.  Graph code from <a href="http://maurizzzio.github.io/function-plot/">here</a>.</h6>
+                        </div>
+                    </div>
+                    <div id="para">
+                        Note that as you go further right down the x-axis, even though the sampling error stays clearly visible for both the real and
+                        imaginary parts, both of these differences still diverge sharply.
+                    </div>
+                    <div id="para">
+                        Now let's look at $A=\frac{1}{2}$.
+                    </div>
+                    <div id="para">
+                        For $A=\frac{1}{2}$,  Wolfram Alpha let's us
+                        <a href="https://www.wolframalpha.com/input/?i=zeta(-1%2F2-1000+i)">see</a> that
+                        $$\zeta(-(\frac{1}{2}+1000 i)) =-123.541... - 90.0001... i$$.
+                    </div>
+                    <div id="para">And so, if we set $A=\frac{1}{2}$, the real part of $\sum_{t = 1}^x t^{\frac{1}{2}+1000 i}$ looks like this:</div>
+                    <script>makeVersus('section1', 'demo10000_', '\\sum_{t=1}^{\\lfloor x \\rfloor} t^\\frac{1}{2} \\cos( 1000 \\log t )', '\\int_0^x t^\\frac{1}{2} \\cos( 1000 \\log t )')</script>
+                    <div id="para">
+                        Once again, note the vertical descent at the 1hz line.   It's still contributing most of the sampling error for this sum, compared
+                        to the samples in the $0 < x < 60$ range, although not to the same degree as the case of $A=1$.
+                    </div>
+                    <div id="para">And the difference between $\sum_{t = 1}^x t^{\frac{1}{2}+1000 i}$ and $\int_{0}^x t^{\frac{1}{2}+1000 i} dt$ is</div>
+                    <div id="mathouter">
+                        <div id='mathbox2'>
+                            <h4>
+                                $$y_{red}=\sum_{t=1}^{\lfloor x \rfloor} \sqrt{t}\cos( 1000 \log t ) - \int_0^x \sqrt{t}\cos( 1000 \log t ) \,dt$$
+                                $$y_{blue}=\sum_{t=1}^{\lfloor x \rfloor} \sqrt{t}\sin( 1000 \log t ) - \int_0^x \sqrt{t}\sin( 1000 \log t ) \,dt$$
+                            </h4>
+                            <div id="demo10000_3"></div>
+                            <h6>RECENTER GRAPH: Click and drag.  ZOOM IN / OUT: mousewheel, double tap / shift+double tap, or pinch on mobile.  Graph code from <a href="http://maurizzzio.github.io/function-plot/">here</a>.</h6>
+                        </div>
+                    </div>
+                    <div id="para">
+                        And further down the x-axis, this difference also grows without bound, though not as dramatically as the case of $A=1$.
+                    </div>
+                    <div id="para">So, here's a few things worth noticing, now that we can compare these first two examples.</div>
+                    <div id="para">
+                        Amplitude changes are more straightforward, compared to the frequency changes we investigated in the previous article.
+                        Both the graph for $A=1$ and for $A=\frac{1}{2}$ have the same general shape.  They both have aliasing
+                        artifacts centered around the same $x$ values - look around the 1hz line at about $x=160$, for example - and they both
+                        rise and fall in the same direction at the same time.  Really, the major difference between the two is that
+                        samples at larger values of $x$ have more weight in the total sampling error in the case of $A=1$, exactly as we'd expect.
+                    </div>
+                    <div id="para">
+                        Also note these graphs don't share a vertical scale.  For $t^{A+f i}$, as $A$ gets larger, our graphs cover a
+                        much larger range of values.  So, our first graph ran from $-3000 < y < 3000$, where the second only covered
+                        $ -200 < y < 200$.
+                    </div>
+                    <div id="para">
+                        Let's look at one more case in this section, $A=\frac{1}{4}$.  Take a second to predict what you expect
+                        to see.
+                    </div>
+                    <div id="para">
+                        If we check with Wolfram Alpha, we'll
+                        <a href="https://www.wolframalpha.com/input/?i=zeta(-1%2F4-1000i)">see</a> that
+                        $$\zeta(-(\frac{1}{4}+1000 i))=-33.6147... - 26.7555... i$$
+                    </div>
+                    <div id="para">If we set $A=\frac{1}{4}$, the real part of $\sum_{t = 1}^x t^{\frac{1}{4}+1000 i}$ looks like this:</div>
+                    <script>makeVersus('section1', 'demo1000_', '\\sum_{t=1}^{\\lfloor x \\rfloor} t^\\frac{1}{4} \\cos( 1000 \\log t )', '\\int_0^x t^\\frac{1}{4} \\cos( 1000 \\log t )')</script>
+                    <div id="para">
+                        Yet again, samples for larger values of $x$ are contributing more to the eventual sampling error than samples from smaller
+                        values of $x$.  But the ratio of the contributions continues to get closer.
+                    </div>
+                    <div id="para">And the difference between $\sum_{t = 1}^x t^{\frac{1}{4}+1000 i}$ and $\int_{0}^x t^{\frac{1}{4}+1000 i} dt$ in turn is</div>
+                    <div id="mathouter">
+                        <div id='mathbox2'>
+                            <h4>
+                                $$y_{red}=\sum_{t=1}^{\lfloor x \rfloor} t^\frac{1}{4}\cos( 1000 \log t ) - \int_0^x t^\frac{1}{4}\cos( 1000 \log t ) \,dt$$
+                                $$y_{blue}=\sum_{t=1}^{\lfloor x \rfloor} t^\frac{1}{4}\sin( 1000 \log t ) - \int_0^x t^\frac{1}{4}\sin( 1000 \log t ) \,dt$$
+                            </h4>
+                            <div id="demo1000_3"></div>
+                            <h6>RECENTER GRAPH: Click and drag.  ZOOM IN / OUT: mousewheel, double tap / shift+double tap, or pinch on mobile.  Graph code from <a href="http://maurizzzio.github.io/function-plot/">here</a>.</h6>
+                        </div>
+                    </div>
+                    <div id="para">
+                        Once again, if we look further down the x-axis, this difference grows without bound, though now that's harder to see
+                        with a cursory glance.
+                    </div>
+                    <div id="para">
+                        In fact, it turns out that if $A > 0$, for any value of $f$, $\lim_{x \to \infty} \sum_{t = 1}^x t^{A+f i} - \int_{0}^x t^{A+f i} dt$ always
+                        grows without bounds, like we've seen here. It can get pretty slow as $A$ gets close to $0$, but it grows nonetheless.
+                    </div>
+                    <div id="para">
+                        So those are a few examples of larger values of $A$.  Now let's turn our attention to a special value of $A$...
+                    </div>
+                </div>
+                <!-- ---------------------------------------------------------------------------------------------------------- -->
+
+                <div id="section1b">
+                    <script>makeBasicTitle('$$\\sum_{t = 1}^x t^{A+1000 i}, A=0$$', 'section1b');</script>
+                    <div id="para">
+                        $A=0$ is special for reasons we'll see momentarily.  I just want to assert, upfront, that it's important.
+                        This is, of course, the value of $A$ we used when we explored all the different frequencies in the
+                        previous article, so this example should look familiar.
+                    </div>
+                    <div id="para">
+                        So first, let's check with Wolfram Alpha to
+                        <a href="https://www.wolframalpha.com/input/?i=zeta(-1000+i)">see</a> that
+                        $$\zeta(-(1000 i)) =-8.46309098852087... - 8.34334485626739... i$$
+                    </div>
+                    <div id="para">If we set $A=0$, the real part of $\sum_{t = 1}^x t^{1000 i}$ looks like this:</div>
+                    <script>makeVersus('section1b', 'demo', '\\sum_{t=1}^{\\lfloor x \\rfloor} t^0 \\cos( 1000 \\log t )', '\\int_0^x t^0 \\cos( 1000 \\log t )')</script>
+                    <div id="para">
+                        Although the sampling error is still more heavily weighted to later samples, specifically around $x=160$, we're reaching
+                        a point where that's a slightly fuzzy assertion, visually.
+                    </div>
+                    <div id="para">And the difference between $\sum_{t = 1}^x t^{1000 i}$ and $\int_{0}^x t^{1000 i} dt$ in turn is</div>
+                    <div id="mathouter">
+                        <div id='mathbox2'>
+                            <h4>
+                                $$y_{red}=\sum_{t=1}^{\lfloor x \rfloor} \cos( 1000 \log t ) - \int_0^x \cos( 1000 \log t ) \,dt$$
+                                $$y_{blue}=\sum_{t=1}^{\lfloor x \rfloor} \sin( 1000 \log t ) - \int_0^x \sin( 1000 \log t ) \,dt$$
+                            </h4>
+                            <div id="demo3"></div>
+                            <h6>RECENTER GRAPH: Click and drag.  ZOOM IN / OUT: mousewheel, double tap / shift+double tap, or pinch on mobile.  Graph code from <a href="http://maurizzzio.github.io/function-plot/">here</a>.</h6>
+                        </div>
+                    </div>
+                    <div id="para">
+                        So what is noteworthy about this value of $A$?  Well, notice that in this last graph, unlike for all the larger values of $A$ we
+                        looked at, the difference between $\sum_{t = 1}^x t^{1000 i}$ and $\int_{0}^x t^{1000 i} dt$
+                        remains bounded.  This is both new and significant; although this difference doesn't converge to the sampling error,
+                        it also isn't growing.  So this marks a significant transition point.
+                    </div>
+                    <div id="para">
+                        But it's also significant because it stands as one edge of a very important region of values for $A$.  So let's turn to that region now.
+                    </div>
+                </div>
+
+                <!-- ---------------------------------------------------------------------------------------------------------- -->
+
+                <div id="section1a">
+                    <script>makeBasicTitle('$$\\sum_{t = 1}^x t^{A+1000 i}, -1 < A < 0$$', 'section1a');</script>
+
+                    <div id="para">So let's look at values of $A$ in the range from $-1$ to $0$.</div>
+                    <div id="para">
+                        To hint at the significance of this range, I'll mention that it is
+                        commonly referred to as the <i>critical strip</i>.  In fact, when we talk about the Riemann Hypothesis later,
+                        for all intents and purposes, this range contains the only values of $A$ anyone cares about.
+                    </div>
+                    <div id="para">Sounds pretty weighty, doesn't it?  So let's look at 3 values of $A$ in this range.</div>
+                    <div id="para">We'll start with $A=-\frac{1}{4}$.</div>
+                    <div id="para">
+                        First, we can go to Wolfram Alpha to
+                        <a href="https://www.wolframalpha.com/input/?i=zeta(1%2F4-1000i)">see</a> that
+                        $$\zeta(-(-\frac{1}{4}+1000 i))=-1.51495... - 2.74712... i$$
+                    </div>
+                    <div id="para">Then, if we set $A=-\frac{1}{4}$, the real part of $\sum_{t = 1}^x t^{-\frac{1}{4}+1000 i}$ looks like this:</div>
+                    <script>makeVersus('section1a', 'demoa', '\\sum_{t=1}^{\\lfloor x \\rfloor} t^{-\\frac{1}{4}} \\cos( 1000 \\log t )', '\\int_0^x t^{-\\frac{1}{4}} \\cos( 1000 \\log t )')</script>
+                    <div id="para">
+                        At this point, it's getting much harder to claim, even in a purely visual, hand-wavy sense, that samples for larger values of $x$ are
+                        contributing more to the total sampling error than samples for smaller values of $x$, though I'm going to claim they are,
+                        though only by a bit.
+                    </div>
+                    <div id="para">And, in turn, the difference between $\sum_{t = 1}^x t^{-\frac{1}{4}+1000 i}$ and $\int_{0}^x t^{-\frac{1}{4}+1000 i} dt$ is</div>
+                    <div id="mathouter">
+                        <div id='mathbox2'>
+                            <h4>
+                                $$y_{red}=\sum_{t=1}^{\lfloor x \rfloor} t^{-\frac{1}{4}} \cos( 1000 \log t ) - \int_0^x t^{-\frac{1}{4}} \cos( 1000 \log t ) \,dt$$
+                                $$y_{blue}=\sum_{t=1}^{\lfloor x \rfloor} t^{-\frac{1}{4}} \sin( 1000 \log t ) - \int_0^x t^{-\frac{1}{4}} \sin( 1000 \log t ) \,dt$$
+                            </h4>
+                            <div id="demoa3"></div>
+                            <h6>RECENTER GRAPH: Click and drag.  ZOOM IN / OUT: mousewheel, double tap / shift+double tap, or pinch on mobile.  Graph code from <a href="http://maurizzzio.github.io/function-plot/">here</a>.</h6>
+                        </div>
+                    </div>
+                    <div id="para">
+                        It's worth your while to scroll down the x-axis to watch the behavior of
+                        $\sum_{t = 1}^x t^{-\frac{1}{4}+1000 i} - \int_{0}^x t^{-\frac{1}{4}+1000 i} dt$ in this last graph.  This is the first value of $A$ that we've looked
+                        at where this difference converges as $x$ gets larger.  We'll talk more about this in a second, but just note it for now.
+                    </div>
+                    <div id="para">
+                        Ok.  Let's look at another example, $A=-\frac{1}{2}$, which is right smack dab in the middle of the critical strip, which might
+                        suggest there's something <i>very</i> special about it.
+                    </div>
+                    <div id="para">
+                        And let's check with Wolfram Alpha to
+                        <a href="https://www.wolframalpha.com/input/?i=zeta(1%2F2-1000i)">see</a> that
+                        $$\zeta(-(-\frac{1}{2}+1000 i))=0.356334... - 0.931998... i$$
+                    </div>
+                    <div id="para">So, if we set $A=-\frac{1}{2}$, the real part of $\sum_{t = 1}^x t^{-\frac{1}{2}+1000 i}$ looks like this:</div>
+                    <script>makeVersus('section1a', 'demo2_', '\\sum_{t=1}^{\\lfloor x \\rfloor} t^{-\\frac{1}{2}} \\cos( 1000 \\log t )', '\\int_0^x t^{-\\frac{1}{2}} \\cos( 1000 \\log t )')</script>
+                    <div id="para">
+                        In previous examples, we've noted the relative contributions of samples for larger values of $x$ to the eventual
+                        sampling error of $\sum_{t = 1}^x t^{A+1000 i}$, compared to the samples for smaller values of $x$.  Up until now,
+                        the samples at larger values of $x$ have dominated the eventual sampling error.
+                    </div>
+                    <div id="para">
+                        Looking at this last graph, I want to suggest - and this is an awfully vague assertion, I know - that $A=-\frac{1}{2}$ is
+                        in some sense the cross-over point at which the sampling error contributed by the samples with larger values of
+                        $x$ carry the exact same weight as the contributions of samples for smaller values of $x$.  That we've crossed some
+                        threshold will be more apparent as we look at smaller values of $A$, and that $A=-\frac{1}{2}$ represents some sort of balance
+                        will likewise be more apparent as we look at more values of $f$ when $A=-\frac{1}{2}$, which we will do in a later article.
+                    </div>
+                    <div id="para">Meanwhile, the difference between $\sum_{t = 1}^x t^{-\frac{1}{2}+1000 i}$ and $\int_{0}^x t^{-\frac{1}{2}+1000 i} dt$ is</div>
+                    <div id="mathouter">
+                        <div id='mathbox2'>
+                            <h4>
+                                $$y_{red}=\sum_{t=1}^{\lfloor x \rfloor} t^{-\frac{1}{2}} \cos( 1000 \log t ) - \int_0^x t^{-\frac{1}{2}} \cos( 1000 \log t ) \,dt$$
+                                $$y_{blue}=\sum_{t=1}^{\lfloor x \rfloor} t^{-\frac{1}{2}} \sin( 1000 \log t ) - \int_0^x t^{-\frac{1}{2}} \sin( 1000 \log t ) \,dt$$
+                            </h4>
+                            <div id="demo2_3"></div>
+                            <h6>RECENTER GRAPH: Click and drag.  ZOOM IN / OUT: mousewheel, double tap / shift+double tap, or pinch on mobile.  Graph code from <a href="http://maurizzzio.github.io/function-plot/">here</a>.</h6>
+                        </div>
+                    </div>
+                    <div id="para">
+                        And once again, if we scroll down the x-axis of this last graph, we'll see that this difference converges as $x$ gets larger.
+                    </div>
+                    <div id="para">
+                        Let's look at one last example from this region, $A=-\frac{3}{4}$.
+                    </div>
+                    <div id="para">
+                        According to Wolfram Alpha,  this
+                        <a href="https://www.wolframalpha.com/input/?i=zeta(3%2F4-1000i)">is</a>
+                        $$\zeta(-(-\frac{3}{4}+1000 i))=0.833713... - 0.291623... i$$
+                    </div>
+                    <div id="para">If we set $A=-\frac{3}{4}$, the real part of $\sum_{t = 1}^x t^{-\frac{3}{4}+1000 i}$ looks like this:</div>
+                    <script>makeVersus('section1a', 'demob', '\\sum_{t=1}^{\\lfloor x \\rfloor} t^{-\\frac{3}{4}} \\cos( 1000 \\log t )', '\\int_0^x t^{-\\frac{3}{4}} \\cos( 1000 \\log t )')</script>
+                    <div id="para">
+                        And for the first time, visually, it appears that our samples for smaller values of $x$, say $0 < x < 50$, are dominating our
+                        eventual sampling error, relative to the later samples.  The contribution at the 1hz line, around $x=160$ is much smaller now.
+                    </div>
+                    <div id="para">And the difference between $\sum_{t = 1}^x t^{-\frac{3}{4}+1000 i}$ and $\int_{0}^x t^{-\frac{3}{4}+1000 i} dt$ is</div>
+                    <div id="mathouter">
+                        <div id='mathbox2'>
+                            <h4>
+                                $$y_{red}=\sum_{t=1}^{\lfloor x \rfloor} t^{-\frac{3}{4}} \cos( 1000 \log t ) - \int_0^x t^{-\frac{3}{4}} \cos( 1000 \log t ) \,dt$$
+                                $$y_{blue}=\sum_{t=1}^{\lfloor x \rfloor} t^{-\frac{3}{4}} \sin( 1000 \log t ) - \int_0^x t^{-\frac{3}{4}} \sin( 1000 \log t ) \,dt$$
+                            </h4>
+                            <div id="demob3"></div>
+                            <h6>RECENTER GRAPH: Click and drag.  ZOOM IN / OUT: mousewheel, double tap / shift+double tap, or pinch on mobile.  Graph code from <a href="http://maurizzzio.github.io/function-plot/">here</a>.</h6>
+                        </div>
+                    </div>
+                    <div id="para">
+                        And yet again, if we scroll down the x-axis of this last graph a ways, we'll see that this difference converges as $x$ gets
+                        larger.  In fact, it seems to be converging much faster.
+                    </div>
+                    <div id="para">
+                        Okay.  That's enough examples from the critical strip.  So what did we see here?
+                    </div>
+                    <div id="para">
+                        Well, one thing we noticed is that we definitely crossed some point where samples for smaller values of $x$ are contributing
+                        more, proportionally, to the eventual sampling error, than samples for larger values of $x$.  I suggested, vaguely, that the
+                        cross over point was $A=-\frac{1}{2}$.
+                    </div>
+                    <div id="para">
+                        But we also noticed that, for all three
+                        examples, our difference $\sum_{t = 1}^x t^{A+1000 i} - \int_{0}^x t^{A+1000 i} dt$ converged.  And, in fact, the
+                        difference converged to $\zeta(-(A + 1000 i))$, if Wolfram Alpha is to be trusted.
+                    </div>
+                    <div id="para">
+                        What does this mean?
+                    </div>
+                    <div id="para">
+                        Well, it actually gives us, finally, something I've been really putting off: a way to define the Riemann Zeta function,
+                        which is no small thing.  For right now, I will only claim that this particular definition is valid for $-1 < A < 0$.
+                    </div>
+                    <div id='eqboxouter'>
+                        <div id='eqbox'>
+                            <div id='eq'>$$\zeta(-(A + f i)) = \lim_{x \to \infty} \sum_{t = 1}^x t^{A+f i} - \int_{0}^x t^{A+f i} dt$$</div>
+                        </div>
+                    </div>
+                    <div id="para">
+                        As an extremely important, extremely unpredictable, extremely well-studied function, there really isn't any one
+                        definition of the the Riemann Zeta function you can point to and say, "Here is what the Riemann Zeta function <i>is</i>."
+                        It's like the parable of the blind men and the elephant; depending on where you blindly grab the elephant, you might think
+                        it is a tree branch or a rope or a wall.  So it is, I think, here.
+                    </div>
+                    <div id="para">
+                        There really are a <i>lot</i> of
+                        <a href="https://en.wikipedia.org/wiki/Riemann_zeta_function#Representations">representations</a> of the Riemann
+                        Zeta function.
+                    </div>
+                    <div id="para">
+                        I won't try to justify why I'm stressing this particular definition and conceptual way of thinking about the Riemann Zeta function
+                        just yet.  Hopefully, once we get to later articles about the connection between the zeta function and prime numbers,
+                        the motivation will be self-evident.
+                    </div>
+                    <div id="para">
+                        Now let's turn to smaller values of $A$.
+                    </div>
+                </div>
+
+                <!-- ---------------------------------------------------------------------------------------------------------- -->
+
+                <div id="section2ab">
+                    <script>makeBasicTitle('A Brief Aside Regarding $A \\le -1$', 'section2ab');</script>
+
+                    <div id="para">
+                        Okay.  Let's take a little breather from our sequence of examples and deal with a slight problem.
+                    </div>
+                    <div id="para">
+                        Namely, we are now forced to make a slight adjustment to our approach.
+                    </div>
+                    <div id="para">
+                        I've insisted the sampling error we're measuing is most usefully thought of, conceptually,
+                        as the difference between $\sum_{t=1}^x t^{A+f i}$ and $\int_{0}^x t^{A+f i} dt$.  And I have my reasons for this.
+                        I'm willing to be a broken record about it.
+                    </div>
+                    <div id="para">
+                        But now, we immediately hit a snag: this approach doesn't work if $A \le -1$, because  $\int_{0}^x t^{A+f i} dt$
+                        stops converging.
+                    </div>
+                    <div id="para">
+                        Specifically, we've been computing the definite integral $\int_{0}^x t^{A+f i} dt$ as
+                        $\frac{x^{1+A+f i}}{1+A+f i} - \frac{0^{1+A+f i}}{1+A+f i}$.
+                    </div>
+                    <div id="para">
+                        But now the lower bound, $\frac{0^{1+A+f i}}{1+A+f i}$, is ruining everything, because it amounts to dividing by $0$
+                        if $A < -1$.
+                    </div>
+                    <div id="para">
+                        So now what?
+                    </div>
+                    <div id="para">
+                        Well, here's what we'll do.  In practice, with $A>-1$, that lower bound has always equaled $0$, and so we've been evaluating
+                        $$\sum_{t=1}^x t^{A+f i} - \int_{0}^x t^{A+f i} dt = \sum_{t=1}^x t^{A+f i} - \frac{x^{1+A+f i}}{1+A+f i}$$
+                        This last expression actually converges just fine when $A \le -1$.  So let's just try cross our fingers and hope that $\frac{x^{1+A+f i}}{1+A+f i}$
+                        somehow describes the wave part of $\sum_{t=1}^x t^{A+f i}$ when $A \le -1$.
+                    </div>
+                    <div id="para">
+                        This turns out to be a justified hope.
+                    </div>
+                    <div id="para">
+                        As usual, we'll split our term $\frac{x^{1+A+f i}}{1+A+f i}$ into a real expression, as
+                        $$\frac{x^{1+A}}{(1+A)^2+f^2} \cdot ((1+A) \cos(f \log(x)) + f \sin( f \log(x)))$$
+                        and an imaginary expression, as
+                        $$\cdot \frac{x^{1+A}}{(1+A)^2+f^2} \cdot ((1+A) \sin(f \log(x)) - f \cos( f \log(x)))$$
+                    </div>
+                    <div id="para">
+                        Visually, this justification for all this will be <i>much</i> easier to see with a smaller value of $f$.
+                        So, for example, if we take $A=-1$ and $f=10$, then the real part will be
+                    </div>
+                    <script>makeVersus('section2ab', 'demo2xx_', '\\sum_{t=1}^{\\lfloor x \\rfloor} t^{-1} \\cos( 10 \\log t )', '\\frac{1}{10} \\cdot \\sin( 10 \\log(x))')</script>
+                    <div id="para">
+                        which is doing exactly what we'd hope.  $\frac{1}{10} \cdot \sin( 10 \log(x))$ certainly does seem to coincide with the wave part of
+                        $\sum_{t=1}^{\lfloor x \rfloor} t^{-1} \cos( 10 \log t )$.  So this lets us procede with smallers values of $A$.
+                    </div>
+                    <div id="para">
+                        But while we're here, notice something else very important about the graph of $A=-1$ we just looked at.
+                        If you wander down the x-axis, you
+                        should see that, while both the sum and its smooth approximation don't converge, they don't
+                        grow wihtout limit either - they remain bounded.  This is new; for every single example with a larger value of $A$ we've looked at,
+                        both of these terms have diverged.  This suggests that $A=-1$ marks an important transition.
+                    </div>
+                    <div id="para">
+                        To get a better sense of this transition, let's look at two other nearby values of $A$ for $f=10$, a larger one,
+                        $A=-\frac{4}{5}$, and a smaller one, $A=-\frac{6}{5}$.
+                    </div>
+                    <div id="para">
+                        If we look at a slight larger value of $A$, $A=-\frac{4}{5}$, we'll see that our two expressions both slowly diverge, like so:
+                    </div>
+                    <script>makeVersus('section2ab', 'demo2xy_', '\\sum_{t=1}^{\\lfloor x \\rfloor} t^{-\\frac{4}{5}} \\cos( 10 \\log t )', '\\int_{0}^x t^{-\\frac{4}{5}} \\cos( 10 \\log t )')</script>
+                    <div id="para">
+                        And if we look, instead, at a slight smaller value of $A$, $A=-\frac{6}{5}$, we'll see that our two expressions both converge, like so:
+                    </div>
+                    <script>makeVersus('section2ab', 'demo2xz_', '\\sum_{t=1}^{\\lfloor x \\rfloor} t^{-\\frac{6}{5}} \\cos( 10 \\log t )', '\\frac{x^{-\\frac{1}{5}}}{(-\\frac{1}{5})^2+10^2} \\cdot (-\\frac{1}{5} \\cos(10 \\log(x)) + 10 \\sin( 10 \\log(x)))')</script>
+                    <div id="para">
+                        We can generalize this:
+                    </div>
+                    <div id="para">
+                        If $A > -1$, both $\sum_{x} x^{A+f}$ and $\int_{0}^x t^{A+f} dt$ diverge, for any values of $f$.  This is what we've seen in
+                        the examples prior to this section.
+                    </div>
+                    <div id="para">
+                        If $A = -1$, both $\sum_{x} x^{A+f}$ and $\frac{x^{1+A+f i}}{1+A+f i}$ never converge, but they also don't diverge.  They remain bounded.
+                    </div>
+                    <div id="para">
+                        And finally, if $A < -1$, both $\sum_{x} x^{A+f}$ and $\frac{x^{1+A+f i}}{1+A+f i}$ converge, for any values of $f$.
+                        And more, $\lim_{x \to \infty} \frac{x^{1+A+f i}}{1+A+f i} = 0$, a fact that will be important momentarily.
+                    </div>
+                    <div id='eqboxouter'>
+                        <div id='eqbox'>
+                            <div id='eq'>$$\zeta(-(A + f i)) = \lim_{x \to \infty} \sum_{t = 1}^x t^{A+f i} - \frac{x^{1+A+f i}}{1+A+f i}$$</div>
+                        </div>
+                    </div>
+                    <div id="para">
+                        Okay, enough of this aside.  Let's get back to our main sequence of examples.
+                    </div>
+                </div>
+
+                <!-- ---------------------------------------------------------------------------------------------------------- -->
+
+                <div id="section2aa">
+                    <script>makeBasicTitle('$$\\sum_{t = 1}^x t^{A+1000 i}, A = -1$$', 'section2aa');</script>
+
+                    <div id="para">So now let's return to our  main line of examples using $f=1000$, and look at the case of $A=-1$.</div>
+                    <div id="para">
+                        According to Wolfram Alpha,  this
+                        <a href="https://www.wolframalpha.com/input/?i=zeta(-1-1000i)">is</a>
+                        $$\zeta(-(-1+1000 i))=0.940937... - 0.0452267... i$$
+                    </div>
+                    <div id="para">If we set $A=-1$, the real part of $\sum_{t = 1}^x t^{-1+1000 i}$ looks like this:</div>
+                    <script>makeVersus('section2aa', 'demo2x_', '\\sum_{t=1}^{\\lfloor x \\rfloor} t^{-1} \\cos( 1000 \\log t )', '\\int x^{-1} \\cos( 1000 \\log x )')</script>
+                    <div id="para">
+                        In this example, it is even clearer that our samples for smaller values of $x$, say $0 < x < 50$, are contributing the most to our
+                        eventual sampling error, relative to the later samples.  The descent around $x=160$ is now quite gentle.
+                    </div>
+                    <div id="para">And the difference between $\sum_{t = 1}^x t^{-1+1000 i}$ and $\int x^{-1+1000 i} dx$ is</div>
+                    <div id="mathouter">
+                        <div id='mathbox2'>
+                            <h4>
+                                $$y_{red}=\sum_{t=1}^{\lfloor x \rfloor} t^{-1} \cos( 1000 \log t ) - \int x^{-1} \cos( 1000 \log x ) \,dx$$
+                                $$y_{blue}=\sum_{t=1}^{\lfloor x \rfloor} t^{-1} \sin( 1000 \log t ) - \int x^{-1} \sin( 1000 \log x ) \,dx$$
+                            </h4>
+                            <div id="demo2x_3"></div>
+                            <h6>RECENTER GRAPH: Click and drag.  ZOOM IN / OUT: mousewheel, double tap / shift+double tap, or pinch on mobile.  Graph code from <a href="http://maurizzzio.github.io/function-plot/">here</a>.</h6>
+                        </div>
+                    </div>
+                    <div id="para">
+                        And, we should be pleased to note, the difference between $\sum_{t=1}^x t^{-1+1000 i}$ and $\int x^{-1+1000 i} dx$
+                        indeed converges to $\zeta(-(-1 + 1000 i))$.
+                    </div>
+                </div>
+
+                <!-- ---------------------------------------------------------------------------------------------------------- -->
+
+                <div id="section2a">
+                    <script>makeBasicTitle('$$\\sum_{t = 1}^x t^{A+1000 i}, A < -1$$', 'section2a');</script>
+
+                    <div id="para">So let's look at one last region, where $A < -1$.</div>
+                    <div id="para">Finally, let's look at the case of $A=-\frac{5}{4}$.</div>
+                    <div id="para">
+                        According to Wolfram Alpha,  this
+                        <a href="https://www.wolframalpha.com/input/?i=zeta(5%2F4-1000i)">is</a>
+                        $$\zeta(-(-\frac{5}{4}+1000 i))=0.957197... + 0.0554102... i$$
+                    </div>
+                    <div id="para">If we set $A=-\frac{5}{4}$, the real part of $\sum_{t = 1}^x t^{-\frac{5}{4}+1000 i}$ looks like this:</div>
+                    <script>makeVersus('section2a', 'demo0_', '\\sum_{t=1}^{\\lfloor x \\rfloor} t^{-\\frac{5}{4}} \\cos( 1000 \\log t )', '\\int x^{-\\frac{5}{4}} \\cos( 1000 \\log x ) dx')</script>
+                    <div id="para">
+                        And now we've reached the point where the contributions of samples for larger values of $x$ are essentially
+                        neglible for the eventual sampling error.  The slope around the 1hz line at $x=160$ is now barely discernable.
+                    </div>
+                    <div id="para">And the difference between $\sum_{t = 1}^x t^{-\frac{5}{4}+1000 i}$ and $\int x^{-\frac{4}{4}+1000 i} dx$ is</div>
+                    <div id="mathouter">
+                        <div id='mathbox2'>
+                            <h4>
+                                $$y_{red}=\sum_{t=1}^{\lfloor x \rfloor} \frac{1}{t^\frac{5}{4}} \cos( 1000 \log t ) - \int  \frac{1}{x^\frac{5}{4}} \cos( 1000 \log x ) \,xt$$
+                                $$y_{blue}=\sum_{t=1}^{\lfloor x \rfloor} \frac{1}{t^\frac{5}{4}} \sin( 1000 \log t ) - \int  \frac{1}{x^\frac{5}{4}} \sin( 1000 \log x ) \,xt$$
+                            </h4>
+                            <div id="demo0_3"></div>
+                            <h6>RECENTER GRAPH: Click and drag.  ZOOM IN / OUT: mousewheel, double tap / shift+double tap, or pinch on mobile.  Graph code from <a href="http://maurizzzio.github.io/function-plot/">here</a>.</h6>
+                        </div>
+                    </div>
+                    <div id="para">both of which converge exactly as promised.</div>
+                </div>
+
+                <div id="sectionE">
+                    <script>makeBasicTitle('Euler Maclaurin Summation', 'sectionE');</script>
+                    <a href="https://en.wikipedia.org/wiki/Euler%E2%80%93Maclaurin_formula">here</a>
+
+                    $$f(x,z) = x^z$$
+
+                    $$\zeta(-z) = \lim_{x \to \infty} \sum_{t=1}^x f(t,{z}) - \int_{0}^x f(t,{z}) dt - \frac{1}{2}f(x,{z}) + \frac{1}{12}f'(x,z)- \frac{1}{720}f'''(x,z)+...$$
+
+                    $$\zeta(-z) = \lim_{x \to \infty} \sum_{t=1}^x t^{z} - \frac{x^{z+1}}{z+1} - \frac{x^z}{2} + \frac{z x^{z-1}}{12}-\frac{z(z-1)(z-2) x^{z-3}}{720}$$
+
+                </div>
+
+                <div id="sectionR">
+                    <script>makeBasicTitle('$$\\sum_{t = 1}^x t^{A+1000 i}, A < -1$$', 'sectionR');</script>
+
+                    <div id="para">
+                        Here's one reason that's important.  In my first article, I said you could imagine sums of the form
+                        $\lim_{x \to \infty} \sum_1^x t^{A+f i}$ as being represented by a special wave number, with a center part and an
+                        oscillating part.  And for nearly all such limits, the center part (which I started calling a sampling error) converged, even
+                        when the oscillating part didn't.
+                    </div>
+                    <div id="para">
+                        Well, in this case, the case of $A=-\frac{5}{4}$, the oscillating part does, in fact, converge to 0.  And so
+                        here, we don't have to invoke any mythical wave numbers; we can legitimately say the sum converges to the center
+                        part / sampling error, and we're justified using an equals sign and saying
+                    </div>
+                    <div id='eq'>$$1^{ -\frac{5}{4}+1000 i }+2^{ -\frac{5}{4}+1000 i  }+3^{ -\frac{5}{4}+1000 i  }+4^{ -\frac{5}{4}+1000 i  }+...=0.957197... + 0.0554102... i$$</div>
+                    <div id="para">No asterisks.  No equivocation.  That's trivially the value that sum converges to, justifying the "$=$".</div>
+                    <div id="para">
+                        And this isn't some quirk of ${-\frac{5}{4}+1000 i}$.  It turns out that for any $A < -1$, for any $f$, the
+                        oscillating part of my mythical wave number converges to 0, and the sum as a whole converges to the a sampling error,
+                        leaving us totally justified in using an "$=$".
+                    </div>
+                    <div id="para">This fact leads, finally, to the standard basic definition of the zeta function, which, IF $A<-1$, is</div>
+                    <div id='eqboxouter'>
+                        <div id='eqbox'>
+                            $$1^{ A+f i }+2^{ A+f i }+3^{ A+f i  }+4^{ A+f i }+...=\zeta(-A-f i)$$
+                        </div>
+                    </div>
+                    <div id="para">
+                        And this, I hope, sheds a little light on the mystery of the "$=$" in the statement
+                        $1+2+3+4+5+...=-\frac{1}{12}$, which, in the notation here, is $\lim_{x \to \infty} \sum_1^x t^{A+f i}$ with $A=1$
+                        and $f=0$.  It's certainly not to justify it, as clearly it's caused no end of drama and confusion.  But it does explain why
+                        people would be tempted to use the notation.  It's not out of left field.
+                    </div>
+                    <div id="para">Right.  One last observation.  In fact, it turns out that $A=-1$ is a very, very special value.</div>
+                    <div id="para">Actually, for any value $A < -1$ here, the blue line </div>
+                </div>
+
+                <!-- ---------------------------------------------------------------------------------------------------------- -->
+
+                <div id="section4">
+
+                    <script>makeBasicTitle('Animating the Amplitude', 'section4');</script>
+
+                    <div id="para">In fact, here it is.  What do you suppose this sum equals?</div>
+                    <center>
+                        <a href="waveAnimate0.htm?freqStart=1000&ampStart=1">See</a><br />
+                        <a href="waveAnimate0.htm?freqStart=1000&ampStart=.5">See</a><br />
+                        <a href="waveAnimate0.htm?freqStart=1000&ampStart=.25">See</a><br />
+                        <a href="waveAnimate0.htm?freqStart=1000&ampStart=0">See</a><br />
+                        <a href="waveAnimate0.htm?freqStart=1000&ampStart=-.5">See</a><br />
+                        <a href="waveAnimate0.htm?freqStart=1000&ampStart=-1">See</a>
+                    </center>
+                    <div id="para">In fact, here it is.  What do you suppose this sum equals?</div>
+                    <center>
+                        <a href="waveAnimate0.htm?freqStart=1000&ampStart=1&isAbs=1">See</a><br />
+                        <a href="waveAnimate0.htm?freqStart=1000&ampStart=.5&isAbs=1">See</a><br />
+                        <a href="waveAnimate0.htm?freqStart=1000&ampStart=.25&isAbs=1">See</a><br />
+                        <a href="waveAnimate0.htm?freqStart=1000&ampStart=0&isAbs=1">See</a><br />
+                        <a href="waveAnimate0.htm?freqStart=1000&ampStart=-.5&isAbs=1">See</a><br />
+                        <a href="waveAnimate0.htm?freqStart=1000&ampStart=-1&isAbs=1">See</a>
+                    </center>
+
+                </div>
+                <br />
+                <br />
+                <br />
+
+                <center><h3><a href="page4.html">On to 1-3!</a></h3></center><br /><br />
+
+                <h6><a href="http://www.icecreambreakfast.com/contact.html">(c) Nathan McKenzie 2017</a></h6>
+
+                <!-- ---------------------------------------------------------------------------------------------------------- -->
+                <script id="jsbin-javascript">
+
+                    function mk(divName, A, f, val, val2, range, edge) {
+                        if (edge == undefined) edge = 200;
+                        var sm = []; var ism = [];
+
+                        var ans = addFrequencyMarkers(f);
+                        var ans2 = []; for (var k in ans) ans2.push(ans[k]); ans2.push({ y: val, text: 'y = ' + val });
+                        var ans3 = []; for (var k in ans) ans3.push(ans[k]); ans3.push({ y: val, text: 'y = ' + val }); ans3.push({ y: val2, text: 'y = ' + val2 });
+
+                        for (var k = 1; k < 300000; k++) { sumReal(k, A, f, sm); sumImag(k, A, f, ism); }
+
+                        functionPlot({ target: '#' + divName, xAxis: { domain: [0, edge] }, yAxis: { domain: range }, annotations: ans2, width: 800, data: [line(function (v) { return integralReal(v.x, A, f); }), line(function (v) { return sumReal(fl(v.x), A, f, sm); })] });
+                        functionPlot({ target: '#' + divName + '3', xAxis: { domain: [0, edge] }, yAxis: { domain: range }, annotations: ans3, width: 800, data: [line(function (v) { return sumImag(fl(v.x), A, f, ism) - integralImag(v.x, A, f); }), line(function (v) { return sumReal(fl(v.x), A, f, sm) - integralReal(v.x, A, f); })] });
+                    }
+
+                    // '\\frac{x^{1+A}}{(1+A)^2+f^2} \\cdot ((1+A) \\cos(f \\log(x)) + f \\sin( f \\log(x)))'
+
+                    mk('demof_', 1, 1000, -1575.360186805219, -1109.537965641057, [-3000, 3000]);
+                    mk('demo10000_', .5, 1000, -123.541, -90.0001, [-200, 200]);
+                    mk('demo1000_', .25, 1000, -33.61469020757686, -26.7555, [-60, 60]);
+                    mk('demo', 0, 1000, -8.46309098852087, -8.34334485626739, [-20, 20]);
+                    mk('demoa', -.25, 1000, -1.51495, -2.74712, [-4, 4]);
+                    mk('demo2_', -.5, 1000, 0.356334, -0.931998, [-2, 2]);
+                    mk('demob', -.75, 1000, 0.833713, -0.291623, [-.5, 1.5]);
+                    mk('demo2xx_', -1, 10, 1.39029, 0, [-.1, 1.5], 200);
+                    mk('demo2xy_', -.8, 10, 1.44628, 0, [-.25, 1.68], 200);
+                    mk('demo2xz_', -1.2, 10, 1.3411, 0, [-.05, 1.39], 200);
+                    mk('demo2x_', -1, 1000, 0.940937, -0.0452267, [-.1, 1.5]);
+                    mk('demo0_', -1.25, 1000, 0.957197, 0.0554102, [-.1, 1.1]);
+                </script>
+            </div>
+        </div>
+        <img src="art/edgeb.png" />
+    </div>
+    <script>renderMathInElement(document.body, { delimiters: [{ left: "$$", right: "$$", display: true }, { left: "$", right: "$", display: false }] });</script>
+</body>
+</html>

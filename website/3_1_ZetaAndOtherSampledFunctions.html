@@ -1,0 +1,490 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.css" integrity="sha384-wITovz90syo1dJWVh32uuETPVEtGigN07tkttEqPv+uR2SE/mbQcG7ATL28aI9H0" crossorigin="anonymous">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.js" integrity="sha384-/y1Nn9+QQAipbNQWU65krzJralCnuOasHncUFXGkdwntGeSvQicrYkiUBwsgUqc1" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/contrib/auto-render.min.js" integrity="sha384-dq1/gEHSxPZQ7DdrM82ID4YVol9BYyU7GbWlIwnwyPzotpoc57wDw/guX8EaYGPx" crossorigin="anonymous"></script>
+    <script src="http://d3js.org/d3.v3.min.js"></script>
+    <script src="http://maurizzzio.github.io/function-plot/js/function-plot.js"></script>
+    <script src="page.js"></script>
+    <link rel="stylesheet" href="css/IceCream.css" type="text/css" />
+    <meta charset="utf-8">
+</head>
+<body>
+    <div id="pageouter">
+        <div id="page2"><div id="content2"><img src="art/edgea.png" /></div></div>
+        <div id="page">
+            <div id="content7">
+
+                <!-- ---------------------------------------------------------------------------------------------------------- -->
+
+                <div id='title'>
+                    <h2>
+                        <center>
+                            Visual Intuition about the Riemann Zeta Function<br />
+                            3-1: The Prime Number Theorem
+                        </center>
+                    </h2>
+                </div><br />
+
+                <center><h4><a href="page1.html">Back to Part 1!</a></h4></center><br /><br />
+
+                <div id="para">
+                    Okay, we've examined, extensively, a sampling error visually coinciding with the Riemann
+                    Zeta function.
+                </div>
+                <div id="para">
+                    And we've noted special amplitude/frequency pairs where the sampling error disappears, which are the fabled non-trivial Riemann
+                    Zeta Zeros.  All the ones we looked at had an amplitude $A=-\frac{1}{2}$.
+                </div>
+                <div id="para">And we've even seen that we can express the Riemann Zeta function as a product of those zeros.</div>
+                <div id="para">
+                    Thus far, we've seen that the sampling error is interesting and unpredictable, so maybe I've aroused your curiousity about it.
+                    Nevertheless, I don't think anything we've seen so far suggests why people care so very much about it
+                    (other than the <a href="http://www.claymath.org/millennium-problems/riemann-hypothesis">cash prizes</a>, of course).
+                </div>
+                <div id="para">My aim in this section is to change that.  Let's finally broach the subject of prime numbers.</div>
+
+                <!-- ---------------------------------------------------------------------------------------------------------- -->
+
+                <div id="section2">
+                    <script>makeBasicTitle( 'Unifying $\\sum_{t=1}^x t^{A+f i}$ and $\\int_{0}^x t^{A+f i} dt$', 'section2' );</script>
+
+                    <div id="para">But there's one last concept we need to lead into broaching prime numbers.</div>
+                    <div id="para">
+                        Over the arc of these articles, I've repeatedly compared the sum $\sum_{t=1}^x t^{A+f i}$ to the integral
+                        $\int_{0}^x t^{A+f i} dt$.  I've encouraged thinking of their difference as a sampling error.
+                    </div>
+                    <div id="para">Let's get more explicit with this sampling idea.</div>
+                    <div id="para">
+                        With just a touch of parameterization, we can unify both expressions as a single
+                        one.  Suppose we introduce a sampling parameter $d$ and write the following equation:
+                    </div>
+                    $$F_d(x) = d \cdot \sum_{t=1}^{\lfloor \frac{x}{d} \rfloor } (d \cdot t)^{A+f i}$$
+                    <div id="para">If $d=1$, this immediately yields our original sum as</div>
+                    $$F_1(x) = \sum_{t=1}^x t^{A+f i}$$
+                    <div id="para">
+                        Meanwhile, if we interpret $d=0$ as a limit and notice that $F_d(x)$ is just a
+                        <a href="http://mathworld.wolfram.com/RiemannSum.html">Riemann Sum</a>, we get our integral as
+                    </div>
+                    $$F_0(x) = \int_{0}^x t^{A+f i} dt$$
+                    <div id="para">
+                        So $F_d(x)$ generalizes both expressions.  In fact, going down this road immediately
+                        raises questions about sampling errors at other values of $d$, such as $d=\frac{1}{2}$.  I won't
+                        cover it here, but it's not much work to find that <i>any</i> positive real value of $d$ has the same non-trivial
+                        zeros, which is pretty striking.
+                    </div>
+                    <div id="para">
+                        Anyway, really take a second to ensure you follow this, becuase we're going to push this idea
+                        pretty hard in just a second.
+                    </div>
+                    <div id="para">
+                        Now let's rewrite $F_d(x)$ in a more compact form, which will seem arbitrarily complicated in the short term...
+                        but I have my reasons!  We can remove the sum in $F_d(x)$ and rewrite the idea in a purely recursive form as
+                    </div>
+                    $$f_d(x,t) = f_d(x,t+d) + d \cdot ( t^{A+f i} )$$
+                    <div id="para">with the terminating condition</div>
+                    $$ \text{if } t > x, f_d(x,t) = 0$$
+                    <div id="para">
+                        With this, our original sum and integral are expressed as,
+                        respectively,
+                    </div>
+                    $$\sum_{t=1}^x t^{A+f i} = f_1(x,1)$$
+                    <div id="para">and (interpretting $d=0$ as a limit)</div>
+                    $$\int_{0}^x t^{A+f i} dt = f_0(x,0)$$
+                    <div id="para">Again, make sure you follow this.</div>
+                    <div id="para">Consequently, if $-1 < A < 0$, we can express the zeta function with $f(x,t)$ as this limit:</div>
+                    $$\zeta(-(A+f i)) = \lim_{x \to \infty} f_1(x,1) - f_0(x,0)$$
+                    <div id="para">Up to this point, this is just restatements of familiar ideas with a new coat of notation.</div>
+                    <div id="para">
+                        But now let's use this notation to do something genuinely different.  Let's take the general recursive form we just wrote for
+                        $f(x,t)$,
+                    </div>
+                    $$f(x,t) = f(x,t+d) + d \cdot ( \text{ stuff } )$$
+                    <div id="para">with the terminating condition</div>
+                    $$ \text{if } t > x, f(x,t) = 0$$
+                    <div id="para">and put other terms in that last parenthesis, where I've suggestively written "stuff".</div>
+                    <div id="para">I think you're going to be pretty surprised by what happens when we do.</div>
+                </div>
+
+                <!-- ---------------------------------------------------------------------------------------------------------- -->
+
+                <div id="section3">
+                    <script>makeBasicTitle( 'Two Important Variations of $f(x,t)$', 'section3' );</script>
+
+                    <div id="para">So here are two variations to examine (with $f(x,t)$ for reference first):</div>
+                    $$f(x,t) = \color{gray}{f(x,t+d) + d \cdot } ( \bold{t^{A+f i}} )$$
+                    $$g_k(x,t)  =  \color{gray}{g_k(x,t+d) + d \cdot } ( \bold{\frac{1}{k} - g_{k+1}(\frac{x}{t}, 1+d )} )$$
+                    $$h(x,t)  =  \color{gray}{h(x,t+d) + d \cdot } ( \bold{ \log t - h(\frac{x}{t}, 1+d )} )$$
+                    <div id="para">All three have the same terminating condition,</div>
+                    $$ \text{ If } t > x, \text{ then } f(x,t) = g_k(x,t) = h(x,t) = 0$$
+                    <div id="para">
+                        Really look at these definitions and notice how they differ.  Don't skip this!  Really make sure you see how they
+                        are structurally similar, and also how they aren't.
+                    </div>
+                    <div id="para">
+                        The main difference, of course, is that $g_k(x,t)$ and $h(x,t)$ have a second recursive term, which is
+                        no small thing.
+                    </div>
+                    <div id="para">
+                        For what follows, let's define extra functions to set initial conditions for
+                        these recursive functions.  I'll use uppercase letters to show which function goes with which.  Those
+                        functions are
+                    </div>
+                    $$F_d(x,A+f i) =  f(x,d)$$
+                    $$G_d(x)  =  g_1(x,1+d)$$
+                    $$H_d(x)  = h(x,1+d)$$
+                    <div id="para">
+                        So these functions set initial values for $t$.  $g_k$ also starts with $k=1$.  That's all that's happening here.
+                        There's nothing tricky going on.
+                    </div>
+                    <div id="para">
+                        In case you don't have a good head for reasoning about very compact recursive functions like $g_k$
+                        when applied repeatedly to themselves, let's look at $F$, $G$, and $H$ in a more spawling
+                        form, which is actually immediately implied by these compact previous definitions.
+                    </div>
+                    <div id="para">If $d=1$, our three functions resolve to these sums:</div>
+                    $$F_1(x,A+f i) =  \sum_{t=1}^{\lfloor x \rfloor} t^{A+f i}$$
+                    $$G_1(x)  =  \sum_{t=2}^{\lfloor x \rfloor} 1 - \frac{1}{2}\sum_{t=2}^{\lfloor x \rfloor}\sum_{u=2}^{\lfloor \frac{x}{t} \rfloor} 1 + \frac{1}{3}\sum_{t=2}^{\lfloor x \rfloor}\sum_{u=2}^{\lfloor \frac{x}{t} \rfloor}\sum_{v=2}^{\lfloor \frac{x}{t \cdot u} \rfloor} 1 - ...$$
+                    $$H_1(x)  = \sum_{t=2}^{\lfloor x \rfloor} \log t - \sum_{t=2}^{\lfloor x \rfloor}\sum_{u=2}^{\lfloor \frac{x}{t} \rfloor} \log t + \sum_{t=2}^{\lfloor x \rfloor}\sum_{u=2}^{\lfloor \frac{x}{t} \rfloor}\sum_{v=2}^{\lfloor \frac{x}{t \cdot u} \rfloor} \log t - ...$$
+                    <div id="para">And if $d=0$ (as a limit), we likewise are left with these integrals:</div>
+                    $$F_0(x,A+f i) =  \int_0^x t^{A+f i}\,dt$$
+                    $$G_0(x)  =  \int_1^x \,dt - \frac{1}{2}\int_1^x \int_1^\frac{x}{t} \,du \,dt + \frac{1}{3} \int_1^x \int_1^\frac{x}{t} \int_1^\frac{x}{t \cdot u} \,dv \,du \,dt - ... $$
+                    $$H_0(x)  = \int_1^x \log t \,dt - \int_1^x \int_1^\frac{x}{t} \log t \,du \,dt + \int_1^x \int_1^\frac{x}{t} \int_1^\frac{x}{t \cdot u} \log t \,dv \,du \,dt - ...$$
+                    <div id="para">
+                        It's fair to say, in this form, that $G$ and $H$ look <i>much</i> more complicated
+                        than $F$, which I'll readily concede.
+                    </div>
+                    <div id="para">
+                        Nevertheless, if you compare $G_1(x)$ to $G_0(x)$, and $H_1(x)$ to $H_0(x)$,
+                        I hope you agree they do have a striking resemblance to the problem
+                        of the difference between $F_1(x, A+f i)$ and $F_0(x, A+f i)$.
+                        They can all be viewed fundamentally as discrete sampling error problems.
+                    </div>
+
+                    <!-- ---------------------------------------------------------------------------------------------------------- -->
+
+                    <div id="section3x">
+                        <script>makeBasicTitle( 'The Central Question', 'section3x' );</script>
+
+                        <div id="para">
+                            So now let's turn to a seemingly simple question.
+                        </div>
+                        <div id="para">
+                            We've already spent <i>a lot</i> of digital ink looking at
+                            $\sum_{t=1}^x t^{A+f i}$ and $\int_{0}^x t^{A+f i} dt$, renamed here as
+                            $F_1(x,A+f i)$ and $ F_0(x,A+f i)$.  Notably, if $-1 < A < 0$ and $x$ is sufficiently
+                            large, then
+                        </div>
+                        $$F_1(x,A+f i) - F_0(x,A+f i) \approx \zeta(-(A+f i))$$
+                        <div id="para">
+                            the Riemann Zeta function.  So, a question - what does a similar difference look like for
+                            $G$ and $H$?  What is the sampling error like for
+                        </div>
+                        $$G_1(x) - G_0(x) =  ???$$
+                        <div id="para">and for</div>
+                        $$H_1(x) - H_0(x) =  ???$$
+                        <div id="para">Okay - I think I'm dragging this out too long and playing far too coy.</div>
+                        <div id="para">
+                            It turns out, as we'll see visually in a second, $G_1(x)$ and $H_1(x)$ are two major prime number counting
+                            functions.  And $G_0(x)$ and $H_0(x)$ are nice smooth approximations of those functions... all <i>exactly</i>
+                            as we've seen with $F_1(x,A+f i)$ and $F_0(x,A+f i)$.
+                        </div>
+                        <div id="para">So that's interesting.</div>
+                        <div id="para">
+                            Proving $G_1(x)$ and $G_0(x)$ (or the $H$ equivalents) can't differ by "too much" is essentially what is
+                            called the <a href="https://en.wikipedia.org/wiki/Prime_number_theorem">Prime Number Theorem</a>, the name
+                            of which might suggest to you its importance.
+                        </div>
+                        <div id="para">
+                            In Riemann's original paper on what we now know as the Riemann Zeta function, its
+                            zeros were originally introduced for use in a formula explicitly describing the difference
+                            between $G_1(x)$ and $G_0(x)$.  So, zeta zeros can describe the difference between this prime number
+                            counting function and its smooth approximation.  $H_1(x)$ and $H_0(x)$ have a comparable formula using zeta zeros.
+                        </div>
+                        <div id="para">
+                            A specific, immediate consequence of the Riemann Hypthoesis being proven true (in the
+                            notation of the paper here, of all non-trivial zeros having $A=-\frac{1}{2}$) is that the difference between $G_1(x)$ and
+                            $G_0(x)$ is as small as it can possibly be (and likewise for $H_1(x)$ and $H_0(x)$).
+                        </div>
+                        <div id="para">So now let's look at these three sets of functions.</div>
+                    </div>
+
+                    <!-- ---------------------------------------------------------------------------------------------------------- -->
+
+                    <div id="section3a0">
+                        <script>makeBasicTitle( '$F_1(x,A+f i)$ vs $F_0(x,A+f i)$', 'section3a0' );</script>
+                        <div id="para">
+                            We've done this excercise more than enough times, but for the sake of emphasizing symmetry with what's to come, I want
+                            to have just one more example of$\sum_{t=1}^x t^{A+f i}$ and $\int_{0}^x t^{A+f i} dt$ here, which I'm calling
+                            $F_1(x,A+f i)$ and $F_0(x,A+f i)$ in this article.  We've seen this sort of thing enough times, I hope.
+                        </div>
+                        <div id="para">
+                            Don't spend much time on this, but please do play attention, once you scroll down, to how
+                            $G$ and $H$ parallel this.
+                        </div>
+                        <div id="para">I'll only be showing the real part in the following graphs.</div>
+                        <div id="mathouter">
+                            <div id='mathbox2'>
+                                <h4>$$y_{red}=\sum_{t=1}^{\lfloor x \rfloor} t^{1000 i} \,\,\,\,\,\,\,\,\textrm{vs}\,\,\,\,\,\,\,\, y_{blue}=\int_0^{x } t^{1000 i}\,dt$$</h4>
+                                <div id='demox_'></div>
+                                <h6>RECENTER GRAPH: Click and drag.  ZOOM IN / OUT: mousewheel, double tap / shift+double tap, or pinch on mobile.  Graph code from <a href='http://maurizzzio.github.io/function-plot/'>here</a>.</h6>
+                            </div>
+                        </div>
+                        <div id="mathouter">
+                            <div id='mathbox2'>
+                                <h4>$$y_{red}=\lfloor x \rfloor^{1000 i} \,\,\,\,\,\,\,\,\textrm{vs}\,\,\,\,\,\,\,\, y_{blue}=x^{1000 i}\,dt$$</h4>
+                                <div id='demox_2'></div>
+                                <h6>RECENTER GRAPH: Click and drag.  ZOOM IN / OUT: mousewheel, double tap / shift+double tap, or pinch on mobile.  Graph code from <a href='http://maurizzzio.github.io/function-plot/'>here</a>.</h6>
+                            </div>
+                        </div>
+                        <div id="mathouter">
+                            <div id='mathbox2'>
+                                <h4>$$y=\sum_{t=1}^{\lfloor x \rfloor} t^{1000 i}  - \int_0^x t^{1000 i}\,dt$$</h4>
+                                <center>
+                                    <div id="demox_3"></div>
+                                    <h6>RECENTER GRAPH: Click and drag.  ZOOM IN / OUT: mousewheel, double tap / shift+double tap, or pinch on mobile.  Graph code from <a href="http://maurizzzio.github.io/function-plot/">here</a>.</h6>
+                            </div>
+                        </div>
+                        <div id="para">Right!  So, moving on...</div>
+                    </div>
+
+                    <!-- ---------------------------------------------------------------------------------------------------------- -->
+
+                    <div id="section3a">
+                        <script>makeBasicTitle( '$G_1(x)$ vs $G_0(x)$ : Prime Number Theorem, Take 1', 'section3a' );</script>
+
+                        <div id="mathouter">
+                            <div id='mathbox2'>
+                                <h4>
+                                    $$y_{red}=\sum_{t=2}^{\lfloor x \rfloor} 1 - \frac{1}{2}\sum_{t=2}^{\lfloor x \rfloor}\sum_{u=2}^{\lfloor \frac{x}{t} \rfloor} 1 + \frac{1}{3}\sum_{t=2}^{\lfloor x \rfloor}\sum_{u=2}^{\lfloor \frac{x}{t} \rfloor}\sum_{v=2}^{\lfloor \frac{x}{t \cdot u} \rfloor} 1 - ... $$
+                                    $$ y_{blue}=\int_1^x \,dt - \frac{1}{2}\int_1^x \int_1^\frac{x}{t} \,du \,dt + \frac{1}{3} \int_1^x \int_1^\frac{x}{t} \int_1^\frac{x}{t \cdot u} \,dv \,du \,dt - ...$$
+                                </h4>
+                                <div id='demo1000_'></div>
+                                <h6>RECENTER GRAPH: Click and drag.  ZOOM IN / OUT: mousewheel, double tap / shift+double tap, or pinch on mobile.  Graph code from <a href='http://maurizzzio.github.io/function-plot/'>here</a>.</h6>
+                            </div>
+                        </div>
+                        <div id="mathouter">
+                            <div id='mathbox2'>
+                                <h4>$$y_{red}=\frac{\Lambda( \lfloor x \rfloor)}{\log(\lfloor x \rfloor)} \,\,\,\,\,\,\,\,\textrm{vs}\,\,\,\,\,\,\,\, y_{blue}=\frac{1}{\log x}-\frac{1}{x \log x}$$</h4>
+                                <div id="demo1000_2"></div>
+                                <h6>RECENTER GRAPH: Click and drag.  ZOOM IN / OUT: mousewheel, double tap / shift+double tap, or pinch on mobile.  Graph code from <a href="http://maurizzzio.github.io/function-plot/">here</a>.</h6>
+                            </div>
+                        </div>
+                        <div id="mathouter">
+                            <div id='mathbox2'>
+                                <h4>
+                                    $$ y_{blue}=
+                                    (\sum_{t=2}^{\lfloor x \rfloor} 1 - \int_1^x \,dt )
+                                    - \frac{1}{2}( \sum_{t=2}^{\lfloor x \rfloor}\sum_{u=2}^{\lfloor \frac{x}{t} \rfloor} 1 - \int_1^x \int_1^\frac{x}{t} \,du \,dt )
+                                    + \frac{1}{3}( \sum_{t=2}^{\lfloor x \rfloor}\sum_{u=2}^{\lfloor \frac{x}{t} \rfloor}\sum_{v=2}^{\lfloor \frac{x}{t \cdot u} \rfloor} 1 - \int_1^x \int_1^\frac{x}{t} \int_1^\frac{x}{t \cdot u} \,dv \,du \,dt  )
+                                    - ... $$
+                                </h4>
+                                <center>
+                                    <div id="demo1000_3"></div>
+                                    <h6>RECENTER GRAPH: Click and drag.  ZOOM IN / OUT: mousewheel, double tap / shift+double tap, or pinch on mobile.  Graph code from <a href="http://maurizzzio.github.io/function-plot/">here</a>.</h6>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ---------------------------------------------------------------------------------------------------------- -->
+
+                    <div id="section4">
+                        <script>makeBasicTitle( '$H_1(x)$ vs $H_0(x)$ : Prime Number Theorem, Take 2', 'section4' );</script>
+
+                        <div id="para">In fact, here it is.  What do you suppose this sum equals?</div>
+                        <div id="mathouter">
+                            <div id='mathbox2'>
+                                <h4>$$y_{red}=\sum_{t=2}^{\lfloor x \rfloor} \log t - \sum_{t=2}^{\lfloor x \rfloor}\sum_{u=2}^{\lfloor \frac{x}{t} \rfloor} \log t + \sum_{t=2}^{\lfloor x \rfloor}\sum_{u=2}^{\lfloor \frac{x}{t} \rfloor}\sum_{v=2}^{\lfloor \frac{x}{t \cdot u} \rfloor} \log t - ...$$ $$y_{blue}=\int_1^x \log t \,dt - \int_1^x \int_1^\frac{x}{t} \log t \,du \,dt + \int_1^x \int_1^\frac{x}{t} \int_1^\frac{x}{t \cdot u} \log t \,dv \,du \,dt - ...$$</h4>
+                                <div id='demo10000_'></div>
+                                <h6>RECENTER GRAPH: Click and drag.  ZOOM IN / OUT: mousewheel, double tap / shift+double tap, or pinch on mobile.  Graph code from <a href='http://maurizzzio.github.io/function-plot/'>here</a>.</h6>
+                            </div>
+                        </div>
+                        <div id="mathouter">
+                            <div id='mathbox2'>
+                                <h4>$$y_{red}=\Lambda( \lfloor x \rfloor) \,\,\,\,\,\,\,\,\textrm{vs}\,\,\,\,\,\,\,\, y_{blue}=1-\frac{1}{x}$$</h4>
+                                <div id="demo10000_2"></div>
+                                <h6>RECENTER GRAPH: Click and drag.  ZOOM IN / OUT: mousewheel, double tap / shift+double tap, or pinch on mobile.  Graph code from <a href="http://maurizzzio.github.io/function-plot/">here</a>.</h6>
+                            </div>
+                        </div>
+                        <div id="mathouter">
+                            <div id='mathbox2'>
+                                <h4>
+                                    $$ y_{blue}=
+                                    (\sum_{t=2}^{\lfloor x \rfloor} \log t - \int_1^x \log t \,dt )
+                                    - ( \sum_{t=2}^{\lfloor x \rfloor}\sum_{u=2}^{\lfloor \frac{x}{t} \rfloor} \log t - \int_1^x \int_1^\frac{x}{t} \log t \,du \,dt )
+                                    + ( \sum_{t=2}^{\lfloor x \rfloor}\sum_{u=2}^{\lfloor \frac{x}{t} \rfloor}\sum_{v=2}^{\lfloor \frac{x}{t \cdot u} \rfloor} \log t - \int_1^x \int_1^\frac{x}{t} \int_1^\frac{x}{t \cdot u} \log t \,dv \,du \,dt  )
+                                    - ... $$
+                                </h4>
+                                <center>
+                                    <div id="demo10000_3"></div>
+                                    <h6>RECENTER GRAPH: Click and drag.  ZOOM IN / OUT: mousewheel, double tap / shift+double tap, or pinch on mobile.  Graph code from <a href="http://maurizzzio.github.io/function-plot/">here</a>.</h6>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ---------------------------------------------------------------------------------------------------------- -->
+
+                    <div id="section5">
+                        <script>makeBasicTitle( 'Really and Truly Unifying Everything', 'section5' );</script>
+
+                        <div id="para">
+                            This article started by unifying $\sum_{t=1}^x t^{A+f i}$ and $\int_{0}^x t^{A+f i} dt$
+                            with the recursive function $f(x,t)$.  It then defined two
+                            other, structurally similar functions, $g_k(x)$ and $h(x)$, which turned out compute both prime number counting functions or
+                            their smooth approximations.
+                        </div>
+                        <div id="para">
+                            I chose these definitions to keep the descriptions of $g_k(x)$ and $h(x)$ as simple as
+                            possible (though by no means simple, still).
+                        </div>
+                        <div id="para">
+                            But coming up, we'll turn to something not, at all, very simple - explicit formulas for $G_1(x)-G_0(x)$,
+                            and for $H_1(x) - H_0(x)$, both expressed in terms of the non-trivial zeros of the zeta function (which are,
+                            <i>remember</i>, all values of $A+f i$ such that $\lim_{x \to \infty} F_1(x, A+ fi ) - F_0(x, A+ fi ) = 0$, if $-1 < A < 0$).
+                            This is one of the main reasons the Riemann Hypothesis is important in the first place.
+                        </div>
+                        <div id="para"></div>
+                        <div id="para">We can define this richer, unified function, $D_z(x,s,d)$, as</div>
+                        <div id="mathouter">
+                            <div id='mathbox2'>
+                                $$f_k(x,t)  =  \color{gray}{f_k(x,t+d) + d }\cdot \bold{t^{s} \cdot (\frac{1+z}{k}-1) \cdot ( 1 + f_{k+1}(\frac{x}{t}, 1+d ) )}$$
+                                $$ \text{ If } t > x, \text{ then } f_k(x,t) = 0$$
+                                $$\bold{D_z(x,s, d)}  =  1+f_1(x,1+d)$$
+                            </div>
+                        </div>
+
+                        $$\Delta_z(x,s) = D_z(x,s,1)-D_z(x,s,0)$$
+
+                        <div id="para">With this function, we can say that</div>
+                        $$F_1(x,s)-F_0(x,s) = \frac{s}{1+s}+\Delta_1(x,s)$$
+                        $$G_1(x)-G_0(x) = \lim_{ z \to 0 } \frac{\partial}{\partial z} \Delta_z(x,0)$$
+                        $$H_1(x)-H_0(x) = \lim_{ s \to 0 } \frac{\partial}{\partial s}\lim_{ z \to 0 } \frac{\partial}{\partial z} \Delta_z(x,s)$$
+
+                        <div id="para">And remainders?</div>
+
+                        $$-q \cdot  \Delta_1(\frac{p}{q},0)$$
+
+                        <div id="para"></div>
+
+                        <div id="para"></div>
+                        $$D_z(x,s,1)  =  1+\binom{z}{1} \cdot \sum_{t=2}^{\lfloor x \rfloor} t^{s} + \binom{z}{2} \cdot \sum_{t=2}^{\lfloor x \rfloor}\sum_{u=2}^{\lfloor \frac{x}{t} \rfloor} (t \cdot u)^{s} + \binom{z}{3} \cdot \sum_{t=2}^{\lfloor x \rfloor}\sum_{u=2}^{\lfloor \frac{x}{t} \rfloor}\sum_{v=2}^{\lfloor \frac{x}{t \cdot u} \rfloor} (t \cdot u \cdot v)^{s} + ...$$
+                        $$D_z(x,s,0)  =  1+\binom{z}{1} \cdot \int_1^x t^{s} \,dt + \binom{z}{2} \cdot \int_1^x \int_1^\frac{x}{t} (t \cdot u)^{s} \,du \,dt + \binom{z}{3} \cdot \int_1^x \int_1^\frac{x}{t} \int_1^\frac{x}{t \cdot u} (t \cdot u \cdot v)^{s} \,dv \,du \,dt + ...$$
+                        <div id="para"></div>
+
+                    </div>
+
+                    <!-- ---------------------------------------------------------------------------------------------------------- -->
+
+                    <h6><a href="http://www.icecreambreakfast.com/contact.html">(c) Nathan McKenzie 2017</a></h6>
+
+                    </center>
+
+                    <script id="jsbin-javascript">
+
+                        var fact = [1, 1, 2, 6, 24, 120, 720, 5040, 40320, 362880, 3628800, 39916800, 479001600, 6227020800, 87178291200, 1307674368000, 20922789888000, 355687428096000, 6402373705728000, 121645100408832000, 2432902008176640000];
+                        var eulerGamma = 0.5772156649015329;
+                        var nScale = [];
+                        for( var n = 0; n < 40; n++ ){
+                            var total = 0;
+                            for( var k = 0; k <= (n-1)/2; k++ )total += 1/(2*k+1);
+                            nScale[n] = total;
+                            for( var k = 1; k < n; k++ )nScale[n] *= (-1)/2/(k+1);}
+                        function li(x, samps){
+                            sum = 0;
+                            var lgx = log(x);
+                            var lmul = 1;
+                            for( n = 1; n < samps; n++ ){
+                                lmul *= lgx;
+                                sum += lmul * nScale[n];}
+                            return pow(x,.5) * sum;}
+
+                        var rie = [[], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], ];
+
+                        function riep(n,k){ n = Math.floor(n); if( n < 0 )n = 0; if( rie[k] == undefined )rie[k] = []; if(rie[k][n] != undefined)return rie[k][n]; var total = 0; for( var j = 2; j <= n; j++ )total += 1/k-riep(Math.floor( n/ j ),k+1); rie[k][n] = total; return total;}
+                        function driep(n){ return riep(n,1)-riep(n-1,1);}
+
+                        var psis = [];
+                        function psi(n){ n = Math.floor(n); if( n < 0 )n = 0; if(psis[n] != undefined )return psis[n]; var total = 0; for( var j = 2; j <= n; j++ )total += log( j )-psi(Math.floor( n/ j )); psis[n] = total; return total;}
+                        function dpsi(n){ return psi(n)-psi(n-1);}
+
+                        var A=0, f=1000;
+                        var samps=[];
+                        function intg(x){ return pow(x,(1+A)) / (pow((1+A),2)+pow(f,2)) *((1+A)*cos(f*log(x))+f*sin(f*log(x))); }
+                        function fullintg(x){ return intg( x );}
+                        function ints(x,A,f){ return pow(x,A)*cos(f*log(x)); }
+                        function sumg(x){ x=Math.floor(x); if( x < 1 )return 0; if( samps[x] != undefined )return samps[x]; samps[x]=pow(x,A)*cos(f*log(x))+sumg(x-1); return samps[x];}
+
+                        var primes= [ 2,3,5,7,11,13,17,19,23,29,31,37,41,43,47,53,59,61,67,71,73,79,83,89,97,101,103,107,109,113,127,131,137,139,149,151,157,163,167,173,179,181,191,193,197,199,211,223,227,229,233,239,241,251,257,263,269,271,277,281,283,
+                       293,307,311,313,317,331,337,347,349,353,359,367,373,379,383,389,397,401,409,419,421,431,433,439,443,449,457,461,463,467,479,487,491,499,503,509,521,523,541,547,557,563,569,571,577,587,593,599,601,607,613,617,619,631,
+                       641,643,647,653,659,661,673,677,683,691,701,709,719,727,733,739,743,751,757,761,769,773,787,797,809,811,821,823,827,829,839,853,857,859,863,877,881,883,887,907,911,919,929,937,941,947,953,967,971,977,983,991,997,1009,
+                       1013,1019,1021,1031,1033,1039,1049,1051,1061,1063,1069,1087,1091,1093,1097,1103,1109,1117,1123,1129,1151,1153,1163,1171,1181,1187,1193,1201,1213,1217,1223,1229,1231,1237,1249,1259,1277,1279,1283,1289,1291,1297,1301,
+                       1303,1307,1319,1321,1327,1361,1367,1373,1381,1399,1409,1423,1427,1429,1433,1439,1447,1451,1453,1459,1471,1481,1483,1487,1489,1493,1499,1511,1523,1531,1543,1549,1553,1559,1567,1571,1579,1583,1597,1601,1607,1609,1613,
+                       1619,1621,1627,1637,1657,1663,1667,1669,1693,1697,1699,1709,1721,1723,1733,1741,1747,1753,1759,1777,1783,1787,1789,1801,1811,1823,1831,1847,1861,1867,1871,1873,1877,1879,1889,1901,1907,1913,1931,1933,1949,1951,1973,
+                       1979,1987,1993,1997,1999,2003,2011,2017,2027,2029,2039,2053,2063,2069,2081,2083,2087,2089,2099,2111,2113,2129,2131,2137,2141,2143,2153,2161,2179,2203,2207,2213,2221,2237,2239,2243,2251,2267,2269,2273,2281,2287,2293,
+                       2297,2309,2311,2333,2339,2341,2347,2351,2357,2371,2377,2381,2383,2389,2393,2399,2411,2417,2423,2437,2441,2447,2459,2467,2473,2477,2503,2521,2531,2539,2543,2549,2551,2557,2579,2591,2593,2609,2617,2621,2633,2647,2657,
+                       2659,2663,2671,2677,2683,2687,2689,2693,2699,2707,2711,2713,2719,2729,2731,2741,2749,2753,2767,2777,2789,2791,2797,2801,2803,2819,2833,2837,2843,2851,2857,2861,2879,2887,2897,2903,2909,2917,2927,2939,2953,2957,2963,
+                       2969,2971,2999,3001,3011,3019,3023,3037,3041,3049,3061,3067,3079,3083,3089,3109,3119,3121,3137,3163 ];
+
+                        var sieveSize = 10000000;
+
+                        var prscratch = []; var riecache = []; var psicache = []; //var summ = []; isumm = [];
+                        for( var rr = 0; rr < sieveSize; rr++ ){ prscratch.push( 1 ); riecache.push( 0 ); psicache.push( 0 ); /*summ.push( 0 ); isumm.push( 0 );*/ }
+                        for( var j = 0; j < primes.length; j++ ){
+                            var pr = primes[j];
+                            pa = 2*pr;
+                            while( pa < sieveSize ){
+                                prscratch[pa] = 0;
+                                pa+=pr;}}
+                        for( var j = 1; j <= log( sieveSize ) / log ( 2 ); j++ ){
+                            for( var k = 1; k < pow( sieveSize, 1/j ); k++ ){
+                                var kk = pow( k,j );
+                                if( prscratch[k] > 0 ){
+                                    riecache[ kk ] = 1.0 / j;
+                                    psicache[ kk ] = log( k );}}}
+                        for( var k = 1; k < sieveSize; k++ ){
+                            riecache[k] += riecache[k-1];
+                            psicache[k] += psicache[k-1];}
+
+                        function line( fn, isClosed=false ){return { closed:isClosed, graphType: 'polyline', fn: fn };}
+
+                            //function f(k,n,t,s,d,z){ if(n<t)return 0; return f(k,n,t+d,s,d,z) + d*Math.pow(t,s) * ((1+z)/k-1) * (1+f(k+1,n/t,1+d,s,d,z));}
+                            //function D(z,n,s,d){return 1+f(1,n,1+d,s,d,z);}
+
+                            function D(z,n,s,d){
+                                function f(k,n,t){ if(n<t)return 0; return f(k,n,t+d) + d*Math.pow(t,s) * ((1+z)/k-1) * (1+f(k+1,n/t,1+d));}
+                                return 1+f(1,n,1+d);
+                            }
+
+                            /*
+                                ff[k_,n_,t_,s_,d_,z_] := If[ n < t, 0, ff[ k, n, t + d, s, d, z ] + d t^s ((z + 1)/k - 1)(1 + ff[ k + 1, n / t, 1 + d, s, d, z ]) ]
+                                Dd[ z_, n_, s_, d_ ] := 1 + ff[ n, 1, 1 + d, s, d, z ]
+                            */
+
+                            function mk(divName, id ){
+                                if( id == -3){
+                                    functionPlot({ target: '#'+divName, xAxis: {domain: [0, 100]}, yAxis: {domain: [-16, 16]}, annotations: [], width:800, data: [ line( function (v) { return fullintg(v.x);}), line( function (v) { return sumg(v.x);})]});
+                                    functionPlot({ target: '#'+divName+'2', xAxis: {domain: [0, 100]}, yAxis: {domain: [-4, 4]}, annotations: [], width:800, data: [ line( function (v) { return ints(v.x, A, f );}, true), line( function (v) { return ints(fl(v.x), A, f );}, true)]});
+                                    functionPlot({target: '#'+divName+'3',xAxis: {domain: [0, 100]}, yAxis: {domain: [-16, 16]}, annotations: [], width:800,data: [line( function (v) { return sumg(v.x)-fullintg(v.x);})]});}
+                                if( id == 1){
+                                    functionPlot({ target: '#'+divName, xAxis: {domain: [0, 100]}, yAxis: {domain: [0, 40]}, annotations: [], width:800, data: [ line( function (v) { return li(v.x,30);}), line( function (v) { return riecache[fl(v.x)];})]});
+                                    functionPlot({ target: '#'+divName+'2', xAxis: {domain: [0, 100]}, yAxis: {domain: [0, 2]}, annotations: [], width:800, data: [ line( function (v) { return 1/log(v.x)-1/(v.x*log(v.x));}, true), line( function (v) { return ( v.x < 1 ) ? 0: riecache[fl(v.x)]-riecache[fl(v.x-1)];}, true)]});
+                                    functionPlot({target: '#'+divName+'3',xAxis: {domain: [0, 100]}, yAxis: {domain: [-6, 6]}, annotations: [], width:800,data: [ line( function (v) { return riecache[fl(v.x)]-li(v.x,30);}), line( function (v) { return sqrt(v.x)*log(v.x)/8/Math.PI+log(log(v.x))+.577;}), line( function (v) { return -sqrt(v.x)*log(v.x)/8/Math.PI+log(log(v.x))+.577;})]});}
+                                if( id == 2){
+                                    functionPlot({ target: '#'+divName, xAxis: {domain: [0, 100]}, yAxis: {domain: [0, 50]}, annotations: [], width:800, data: [ line( function (v) {  return v.x - log(v.x) - 1;}), line( function (v) { return psicache[fl(v.x)];})]});
+                                    functionPlot({ target: '#'+divName+'2', xAxis: {domain: [0, 100]}, yAxis: {domain: [0, 10]}, annotations: [], width:800, data: [ line( function (v) { return 1-1/v.x;}, true), line( function (v) { return ( v.x < 1 ) ? 0: psicache[fl(v.x)]-psicache[fl(v.x-1)];}, true)]});
+                                    functionPlot({target: '#'+divName+'3',xAxis: {domain: [0, 100]}, yAxis: {domain: [-20, 20]}, annotations: [], width:800,data: [line( function (v) { return psicache[fl(v.x)]-(v.x-log(v.x)-1);}), line( function (v) { return sqrt(v.x)*log(v.x)*log(v.x)/8/Math.PI+log(v.x)+1;}), line( function (v) { return -sqrt(v.x)*log(v.x)*log(v.x)/8/Math.PI+log(v.x)+1;})]});}
+                            }
+
+                            mk('demox_', -3);
+
+                            mk('demo1000_', 1);
+                            mk('demo10000_', 2);
+                    </script>
+                </div>
+            </div>
+            <img src="art/edgeb.png" />
+        </div>
+        <script>renderMathInElement(document.body, { delimiters:[ {left: "$$", right: "$$", display: true}, {left: "$", right: "$", display: false} ] });</script>
+</body>
+</html>

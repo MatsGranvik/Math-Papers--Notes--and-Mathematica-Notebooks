@@ -1,0 +1,81 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.css" integrity="sha384-wITovz90syo1dJWVh32uuETPVEtGigN07tkttEqPv+uR2SE/mbQcG7ATL28aI9H0" crossorigin="anonymous">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.js" integrity="sha384-/y1Nn9+QQAipbNQWU65krzJralCnuOasHncUFXGkdwntGeSvQicrYkiUBwsgUqc1" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/contrib/auto-render.min.js" integrity="sha384-dq1/gEHSxPZQ7DdrM82ID4YVol9BYyU7GbWlIwnwyPzotpoc57wDw/guX8EaYGPx" crossorigin="anonymous"></script>
+    <script src="math.min.js"></script>
+    <script src="zetavals.js"></script>
+
+    <script src="http://d3js.org/d3.v3.min.js"></script>
+    <script src="http://maurizzzio.github.io/function-plot/js/function-plot.js"></script>
+    <script src="page.js"></script>
+    <script src="zetaValsLong.js"></script>
+    <link rel="stylesheet" href="css/IceCream.css" type="text/css" />
+    <meta charset="utf-8">
+</head>
+<body>
+    <div id="pageouter">
+        <div id="page2"><div id="content2"><img src="art/edgea.png" /></div></div>
+        <div id="page">
+            <div id="content7">
+                <div id="section1">
+                    <script>makeMathBox('section1', 'polynomial', '$$y=\\frac{1}{24} x^4 - \\frac{1}{6} x^3 - \\frac{7}{24}x^2 +\\frac{11}{12}x + 1$$')</script>
+                </div>
+                <script id="jsbin-javascript">
+
+                    var d, D; var p, P;
+                    var limit = 100000;
+                    var wid = Math.floor(Math.log(limit) / Math.log(2)) + 1 + 1;
+                    var fact = [1, 1, 2, 6, 24, 120, 720, 5040, 40320, 362880, 3628800, 39916800, 479001600, 6227020800, 87178291200, 1307674368000, 20922789888000, 355687428096000, 6402373705728000, 121645100408832000, 2432902008176640000];
+                    function pw(n, k) { return Math.pow(n, k); }
+                    function f(fn) { return function (n) { var t = 0; for (var k = 1; k < wid; k++) t += fn(n, k); return t; } }
+                    function dz(n, z) {
+                        if (n == 1) return 1;
+                        var t = 0;
+                        for (var k = 1; k < wid; k++) t += p(n, k) * pw(z,k) / fact[k];
+                        return t;
+                    }
+
+                    function DszReal(x, A, f, z, sm) { if (x < 1) return 0; x = fl(x); if (sm[x] != undefined) return sm[x]; sm[x] = pw(x, A) * cos(f * log(x)) * dz( x, z ) + DszReal(x - 1, A, f, z, sm); }
+                    function DszImag(x, A, f, z, sm) { if (x < 1) return 0; x = fl(x); if (sm[x] != undefined) return sm[x]; sm[x] = pw(x, A) * sin(f * log(x)) * dz( x, z ) + DszImag(x - 1, A, f, z, sm); }
+
+                    function bind(sets, build) {
+                        var j, k, m;
+                        var v = []; var V = [];
+                        for (j = 0; j < wid; j++) { v.push([]); V.push([]); }
+                        for (j = 0; j < limit; j++) { v[0][j] = 0; V[0][j] = 1; } v[0][1] = 1;
+                        for (j = 0; j < limit; j++) for (k = 1; k < wid; k++) { v[k][j] = V[k][j] = 0; }
+                        for (j = 2; j < limit; j++) v[1][j] = build(j);
+                        for (k = 2; k < wid; k++) for (j = 2; j < limit; j++) for (m = 2 * j; m < limit; m += j) v[k][m] += v[1][j] * v[k - 1][m / j];
+                        for (j = 1; j < limit; j++) for (k = 1; k < wid; k++) V[k][j] = v[k][j] + V[k][j - 1];
+                        sets(
+                            function (n, k) {
+                                if (k >= wid) { print("k out of range"); return 0; }
+                                if (n < 0 || n >= limit) { print("Only values of n for 1 through " + limit + " have been cached, sorry!"); return 0; }
+                                return v[k][Math.floor(n)];
+                            },
+                            function (n, k) {
+                                if (k >= wid) return 0;
+                                if (n < 0 || n >= limit) { print("Only values of n for 1 through " + limit + " have been cached, sorry!"); return 0; }
+                                return V[k][Math.floor(n)];
+                            });
+                    }
+                    bind(function (x, y) { d = x; D = y; }, function (n) { return 1; });
+                    bind(function (x, y) { p = x; P = y; }, f(function (n, k) { return d(n, k) * pw(-1, k + 1) / k; }));
+
+                    var sm = [], ism = [], z = 2, A = -.5, ff = 14.1347;
+
+                    for (var k = 1; k < 300000; k++) { DszReal(k, A, ff, z, sm); DszImag(k, A, ff, z, ism); }
+
+                    var ansbase = [{ y: 0.371364, text: 'y = 0.371364' }];
+
+                    functionPlot({ target: '#' + 'polynomial', xAxis: { domain: [0, 100] }, yAxis: { domain: [-25, 25] }, annotations: ansbase, width: 800, data: [line(function (v) { if (v.x < 1 || v.x > limit-1) return 0; return DszReal(fl(v.x), A, ff, z, sm); })] });
+                </script>
+            </div>
+        </div>
+        <img src="art/edgeb.png" />
+    </div>
+    <script>renderMathInElement(document.body, { delimiters: [{ left: "$$", right: "$$", display: true }, { left: "$", right: "$", display: false }] });</script>
+</body>
+</html>

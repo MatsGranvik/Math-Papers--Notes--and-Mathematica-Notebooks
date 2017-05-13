@@ -1,0 +1,342 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 8.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       157,          7]
+NotebookDataLength[     10371,        333]
+NotebookOptionsPosition[      9747,        308]
+NotebookOutlinePosition[     10091,        323]
+CellTagsIndexPosition[     10048,        320]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"binomial", "[", 
+   RowBox[{"z_", ",", "k_"}], "]"}], ":=", 
+  RowBox[{
+   RowBox[{"binomial", "[", 
+    RowBox[{"z", ",", "k"}], "]"}], "=", 
+   RowBox[{
+    RowBox[{"Product", "[", 
+     RowBox[{
+      RowBox[{"z", "-", "j"}], ",", 
+      RowBox[{"{", 
+       RowBox[{"j", ",", "0", ",", 
+        RowBox[{"k", "-", "1"}]}], "}"}]}], "]"}], "/", 
+    RowBox[{"k", "!"}]}]}]}], "\n", 
+ RowBox[{
+  RowBox[{"WheelEntries", "=", "7"}], ";"}], "\n", 
+ RowBox[{
+  RowBox[{"WheelSize", ":=", 
+   RowBox[{"WheelSize", "=", 
+    RowBox[{"Product", "[", 
+     RowBox[{
+      RowBox[{"Prime", "[", "j", "]"}], ",", 
+      RowBox[{"{", 
+       RowBox[{"j", ",", "1", ",", "WheelEntries"}], "}"}]}], "]"}]}]}], 
+  ";"}], "\n", 
+ RowBox[{"CoprimeCache", ":=", 
+  RowBox[{"CoprimeCache", "=", 
+   RowBox[{"Table", "[", 
+    RowBox[{
+     RowBox[{"If", "[", 
+      RowBox[{
+       RowBox[{"CoprimeQ", "[", 
+        RowBox[{"WheelSize", ",", "n"}], "]"}], ",", "1", ",", "0"}], "]"}], 
+     ",", 
+     RowBox[{"{", 
+      RowBox[{"n", ",", "1", ",", "WheelSize"}], "}"}]}], "]"}]}]}], "\n", 
+ RowBox[{"LegPhiCache", ":=", 
+  RowBox[{"LegPhiCache", "=", 
+   RowBox[{"Accumulate", "[", "CoprimeCache", "]"}]}]}], "\n", 
+ RowBox[{"FullWheel", ":=", 
+  RowBox[{"FullWheel", "=", 
+   RowBox[{"LegPhiCache", "[", 
+    RowBox[{"[", "WheelSize", "]"}], "]"}]}]}], "\n", 
+ RowBox[{"CoprimeOffsets", ":=", 
+  RowBox[{"CoprimeOffsets", "=", 
+   RowBox[{"Flatten", "[", 
+    RowBox[{"Position", "[", 
+     RowBox[{"CoprimeCache", ",", 
+      RowBox[{"_", "?", 
+       RowBox[{"(", 
+        RowBox[{
+         RowBox[{"#", "\[Equal]", "1"}], "&"}], ")"}]}]}], "]"}], 
+    "]"}]}]}], "\n", 
+ RowBox[{
+  RowBox[{"Coprimes", "[", "n_", "]"}], ":=", 
+  RowBox[{
+   RowBox[{"Coprimes", "[", "n", "]"}], "=", 
+   RowBox[{
+    RowBox[{"LegPhiCache", "[", 
+     RowBox[{"[", 
+      RowBox[{
+       RowBox[{"Mod", "[", 
+        RowBox[{
+         RowBox[{"n", "-", "1"}], ",", "WheelSize"}], "]"}], "+", "1"}], 
+      "]"}], "]"}], "+", 
+    RowBox[{
+     RowBox[{"Floor", "[", 
+      RowBox[{
+       RowBox[{"(", 
+        RowBox[{"n", "-", "1"}], ")"}], "/", "WheelSize"}], "]"}], " ", 
+     "FullWheel"}]}]}]}], "\n", 
+ RowBox[{
+  RowBox[{"WheelForID", "[", "n_", "]"}], ":=", 
+  RowBox[{
+   RowBox[{"WheelForID", "[", "n", "]"}], "=", 
+   RowBox[{
+    RowBox[{"CoprimeOffsets", "[", 
+     RowBox[{"[", 
+      RowBox[{
+       RowBox[{"Mod", "[", 
+        RowBox[{
+         RowBox[{"n", "-", "1"}], ",", "FullWheel"}], "]"}], "+", "1"}], 
+      "]"}], "]"}], "+", 
+    RowBox[{
+     RowBox[{"Floor", "[", 
+      RowBox[{
+       RowBox[{"(", 
+        RowBox[{"n", "-", "1"}], ")"}], "/", "FullWheel"}], "]"}], 
+     "WheelSize"}]}]}]}], "\n", 
+ RowBox[{"FirstNonWheel", ":=", 
+  RowBox[{"FirstNonWheel", "=", 
+   RowBox[{"WheelForID", "[", "2", "]"}]}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"alpha", "[", "n_", "]"}], ":=", 
+  RowBox[{"WheelForID", "[", "n", "]"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"phi", "[", 
+   RowBox[{"n_", ",", "K_"}], "]"}], ":=", 
+  RowBox[{"Coprimes", "[", "n", "]"}]}]}], "Input"],
+
+Cell[BoxData[""], "Input",
+ CellChangeTimes->{{3.6979964922027826`*^9, 3.6979964963070173`*^9}}],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"$RecursionLimit", "=", "10000"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"DkyBk", "[", 
+   RowBox[{"n_", ",", "0", ",", "y_"}], "]"}], ":=", 
+  "1"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"DkyBk", "[", 
+   RowBox[{"n_", ",", "k_", ",", "y_"}], "]"}], ":=", 
+  RowBox[{"If", "[", 
+   RowBox[{
+    RowBox[{"k", "\[Equal]", "0"}], ",", "1", ",", 
+    RowBox[{"If", "[", 
+     RowBox[{
+      RowBox[{"n", "<", 
+       RowBox[{
+        RowBox[{"alpha", "[", "y", "]"}], "^", "k"}]}], ",", "0", ",", 
+      RowBox[{"Sum", "[", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"Binomial", "[", 
+          RowBox[{"k", ",", "j"}], "]"}], 
+         RowBox[{"DkyBk", "[", 
+          RowBox[{
+           RowBox[{"n", "/", 
+            RowBox[{
+             RowBox[{"alpha", "[", "y", "]"}], "^", 
+             RowBox[{"(", 
+              RowBox[{"k", "-", "j"}], ")"}]}]}], ",", "j", ",", 
+           RowBox[{"y", "+", "1"}]}], "]"}]}], ",", 
+        RowBox[{"{", 
+         RowBox[{"j", ",", "0", ",", "k"}], "}"}]}], "]"}]}], "]"}]}], 
+   "]"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"PrimesWithDkyBk", "[", "n_", "]"}], ":=", 
+  RowBox[{
+   RowBox[{"Sum", "[", 
+    RowBox[{
+     RowBox[{"HarmonicNumber", "[", 
+      RowBox[{"Floor", "[", 
+       RowBox[{"Log", "[", 
+        RowBox[{
+         RowBox[{"Prime", "[", "p", "]"}], ",", "n"}], "]"}], "]"}], "]"}], 
+     ",", 
+     RowBox[{"{", 
+      RowBox[{"p", ",", "1", ",", "WheelEntries"}], "}"}]}], "]"}], "+", 
+   RowBox[{"Sum", "[", 
+    RowBox[{
+     RowBox[{
+      RowBox[{
+       RowBox[{
+        RowBox[{"(", 
+         RowBox[{"-", "1"}], ")"}], "^", 
+        RowBox[{"(", 
+         RowBox[{"k", "+", "1"}], ")"}]}], "/", "k"}], " ", 
+      RowBox[{"DkyBk", "[", 
+       RowBox[{"n", ",", "k", ",", "2"}], "]"}]}], ",", 
+     RowBox[{"{", 
+      RowBox[{"k", ",", "1", ",", 
+       RowBox[{"Log", "[", 
+        RowBox[{"FirstNonWheel", ",", "n"}], "]"}]}], "}"}]}], 
+    "]"}]}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"PrimeCountV4", "[", "n_", "]"}], ":=", 
+  RowBox[{"Sum", "[", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"(", 
+      RowBox[{
+       RowBox[{"MoebiusMu", "[", "k", "]"}], "/", "k"}], ")"}], 
+     RowBox[{"PrimesWithDkyBk", "[", 
+      RowBox[{"Floor", "[", 
+       RowBox[{"n", "^", 
+        RowBox[{"(", 
+         RowBox[{"1", "/", "k"}], ")"}]}], "]"}], "]"}]}], ",", 
+    RowBox[{"{", 
+     RowBox[{"k", ",", "1", ",", 
+      RowBox[{"Log2", "@", "n"}]}], "}"}]}], "]"}]}]}], "Input",
+ CellChangeTimes->{{3.69799649583399*^9, 3.6979965909824324`*^9}, {
+  3.6979966319297743`*^9, 3.697996765496414*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"DkyBk", "[", 
+  RowBox[{"1000", ",", "2", ",", "2"}], "]"}]], "Input",
+ CellChangeTimes->{{3.697996639580212*^9, 3.697996643679446*^9}}],
+
+Cell[BoxData["30"], "Output",
+ CellChangeTimes->{{3.6979966444174886`*^9, 3.6979966525599546`*^9}, {
+  3.6979967664464684`*^9, 3.6979967787541723`*^9}}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"PrimeCountV4", "[", "10000", "]"}]], "Input",
+ CellChangeTimes->{{3.697996716634619*^9, 3.697996753990756*^9}, {
+  3.6979968068907814`*^9, 3.6979968109080114`*^9}, {3.6979969113847585`*^9, 
+  3.697996922033367*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"$RecursionLimit", "::", "reclim"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Recursion depth of \[NoBreak]\\!\\(10000\\)\[NoBreak] \
+exceeded. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/$RecursionLimit/reclim\\\", ButtonNote -> \
+\\\"$RecursionLimit::reclim\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.6979969119507904`*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"-", "92031"}], "+", 
+  RowBox[{"If", "[", 
+   RowBox[{
+    RowBox[{"1000000", "<", 
+     RowBox[{"Hold", "[", 
+      RowBox[{
+       RowBox[{"CoprimeOffsets", "\[LeftDoubleBracket]", 
+        RowBox[{
+         RowBox[{"Mod", "[", 
+          RowBox[{
+           RowBox[{"9996", "-", "1"}], ",", "FullWheel"}], "]"}], "+", "1"}], 
+        "\[RightDoubleBracket]"}], "+", 
+       RowBox[{
+        RowBox[{"Floor", "[", 
+         FractionBox[
+          RowBox[{"9996", "-", "1"}], "FullWheel"], "]"}], " ", 
+        "WheelSize"}]}], "]"}]}], ",", "0", ",", 
+    RowBox[{
+     UnderoverscriptBox["\[Sum]", 
+      RowBox[{"j", "=", "0"}], "1"], 
+     RowBox[{
+      RowBox[{"Binomial", "[", 
+       RowBox[{"1", ",", "j"}], "]"}], " ", 
+      RowBox[{"DkyBk", "[", 
+       RowBox[{
+        FractionBox["1000000", 
+         SuperscriptBox[
+          RowBox[{"alpha", "[", "9996", "]"}], 
+          RowBox[{"1", "-", "j"}]]], ",", "j", ",", 
+        RowBox[{"9996", "+", "1"}]}], "]"}]}]}]}], "]"}]}]], "Output",
+ CellChangeTimes->{
+  3.6979967189607525`*^9, {3.697996750605562*^9, 3.697996811354037*^9}, 
+   3.697996914235921*^9}]
+}, Open  ]],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"DkyBk", "[", 
+   RowBox[{"n_", ",", "0", ",", "y_"}], "]"}], ":=", 
+  "1"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"DkyBk", "[", 
+   RowBox[{"n_", ",", "k_", ",", "y_"}], "]"}], ":=", 
+  RowBox[{"If", "[", 
+   RowBox[{
+    RowBox[{"k", "\[Equal]", "0"}], ",", "1", ",", 
+    RowBox[{"If", "[", 
+     RowBox[{
+      RowBox[{"n", "<", 
+       RowBox[{
+        RowBox[{"alpha", "[", "y", "]"}], "^", "k"}]}], ",", "0", ",", 
+      RowBox[{"Sum", "[", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"Binomial", "[", 
+          RowBox[{"k", ",", "j"}], "]"}], 
+         RowBox[{"DkyBk", "[", 
+          RowBox[{
+           RowBox[{"n", "/", 
+            RowBox[{
+             RowBox[{"alpha", "[", "y", "]"}], "^", 
+             RowBox[{"(", 
+              RowBox[{"k", "-", "j"}], ")"}]}]}], ",", "j", ",", 
+           RowBox[{"y", "+", "1"}]}], "]"}]}], ",", 
+        RowBox[{"{", 
+         RowBox[{"j", ",", "0", ",", "k"}], "}"}]}], "]"}]}], "]"}]}], 
+   "]"}]}], "\[IndentingNewLine]"}], "Input"]
+},
+WindowSize->{1259, 695},
+WindowMargins->{{0, Automatic}, {Automatic, 0}},
+FrontEndVersion->"8.0 for Microsoft Windows (64-bit) (February 23, 2011)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[557, 20, 3125, 99, 252, "Input"],
+Cell[3685, 121, 96, 1, 31, "Input"],
+Cell[3784, 124, 2645, 80, 112, "Input"],
+Cell[CellGroupData[{
+Cell[6454, 208, 160, 3, 31, "Input"],
+Cell[6617, 213, 152, 2, 30, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[6806, 220, 239, 4, 31, "Input"],
+Cell[7048, 226, 477, 10, 20, "Message"],
+Cell[7528, 238, 1158, 34, 57, "Output"]
+}, Open  ]],
+Cell[8701, 275, 1042, 31, 72, "Input"]
+}
+]
+*)
+
+(* End of internal cache information *)

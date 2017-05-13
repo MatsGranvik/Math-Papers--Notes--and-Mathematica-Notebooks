@@ -1,0 +1,247 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.css" integrity="sha384-wITovz90syo1dJWVh32uuETPVEtGigN07tkttEqPv+uR2SE/mbQcG7ATL28aI9H0" crossorigin="anonymous">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.js" integrity="sha384-/y1Nn9+QQAipbNQWU65krzJralCnuOasHncUFXGkdwntGeSvQicrYkiUBwsgUqc1" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/contrib/auto-render.min.js" integrity="sha384-dq1/gEHSxPZQ7DdrM82ID4YVol9BYyU7GbWlIwnwyPzotpoc57wDw/guX8EaYGPx" crossorigin="anonymous"></script>
+
+    <script src="http://d3js.org/d3.v3.min.js"></script>
+    <script src="http://maurizzzio.github.io/function-plot/js/function-plot.js"></script>
+    <script src="page.js"></script>
+    <link rel="stylesheet" href="css/IceCream.css" type="text/css" />
+    <meta charset="utf-8">
+</head>
+<body>
+    <div id="pageouter">
+        <div id="page2"><div id="content2"><img src="art/edgea.png" /></div></div>
+        <div id="page">
+            <div id="content7">
+                <!-- ---------------------------------------------------------------------------------------------------------- -->
+
+                <div id='title'>
+                    <h2>
+                        <center>
+                            Expressing $2^x$ as $\sum_{k=0}^\infty \binom{x}{k}$ to visualize its derivative
+                        </center>
+                    </h2>
+                </div><br />
+
+                <!-- ---------------------------------------------------------------------------------------------------------- -->
+
+                <div id="section1">
+                    <div id="para">
+                        This is one possible approach to developing some visual intution about the derivative of $2^x$ (I'm not going to be rigorous in what follows).
+                    </div>
+
+                    <div id="para">
+                        So first, as a point of visual reference, here is $2^x$.
+                    </div>
+                    <script>makeMathBox('section1', 'polynomial', '$$y=2^x$$')</script>
+                    <div id="para">
+                        I've drawn horizontal lines at the places where $y$ is an integer power of 2 to help make this a bit clearer.
+                    </div>
+                    <div id="para">
+                        Now, if $x$ is a positive real, the trick is to express $2^x$ as a sum of generalized binomials, which looks like this:
+                    </div>
+                    $$ 2^x = \sum_{k=0}^{\infty} \frac{x(x-1)...(x-k+1)}{k!}$$
+                    <div id="para">
+                        It's a well-known bit of trivial that the kth row of Pascal's Triangle adds up to $2^k$.  This equation is essentially a generalization of that fact.
+                    </div>
+                    <div id="para">
+                        Suppose we take a partial sum of that expression and name it as a new function, say $$f(t) = \sum_{k=0}^{t} \frac{x(x-1)...(x-k+1)}{k!}$$ or, which is basically the same thing, $$f(t) = f(t-1) + \frac{x(x-1)...(x-t+1)}{t!}$$
+                        It might not be obvious at first glance, but if we evaluate $f(t)$, once we collect all our terms, we'll see that $f(t)$ is a nice, tidy, typical polynomial of degree $t$ that is a better and better approximation of $2^x$ as $t$ grows larger.
+                    </div>
+                    <div id="para">
+                        For the sake of a little useful redundancy, in Mathematica, this is<br />
+                        <br /><br />binomial[x_, k_] := Product[(x - j)/(j + 1), {j, 0, k - 1}]
+                        <br />f[t_] := Expand@Sum[binomial[x, j], {j, 0, t}]
+                    </div>
+                    <div id="para">
+                        So, for example,
+                        $$f(1) = 1 + x$$
+                        $$f(2) = f(1) + \frac{x(x-1)}{2} = \frac{1}{2}x^2 + \frac{1}{2}x + 1$$
+                        $$f(3) = f(2) + \frac{x(x-1)(x-2)}{6} = \frac{1}{6}x^3+\frac{5}{6}x + 1$$
+                        $$f(4) = f(3) + \frac{x(x-1)(x-2)(x-3)}{24} = \frac{1}{24}x^4-\frac{1}{12}x^3+\frac{11}{24}x^2+\frac{7}{12}x + 1$$
+                        and so on.
+                    </div>
+                    <div id="para">
+                        To show this in action, I'll graph $f(3)$, $f(5)$, and $f(7)$, like so:
+                    </div>
+                    <script>
+                        makeMathBox('section1', 'polynomial2',
+                        '$$y_{blue}=\\frac{1}{6}x^3+\\frac{5}{6}x + 1$$ $$y_{red}=\\frac{1}{120}x^5-\\frac{1}{24}x^4+\\frac{5}{24}x^3+\\frac{1}{24}x^2+\\frac{47}{60}x+1$$  $$y_{green}=\\frac{1}{5040}x^7-\\frac{1}{360}x^6+\\frac{1}{45}x^5-\\frac{5}{72}x^4+\\frac{157}{720}x^3+\\frac{13}{180}x^2+\\frac{319}{420}x+1$$')
+                    </script>
+                    <div id="para">
+                        And here's a look at how good of an approximation $f(7)$, which is the polynomial $\frac{1}{5040}x^7-\frac{1}{360}x^6+\frac{1}{45}x^5-\frac{5}{72}x^4+\frac{157}{720}x^3+\frac{13}{180}x^2+\frac{319}{420}x+1$, is of $2^x$.
+                    </div>
+                    <script>
+                        makeMathBox('section1', 'polynomial3',
+                        '$$y_{blue}=2^x$$  $$y_{red}=\\frac{1}{5040}x^7-\\frac{1}{360}x^6+\\frac{1}{45}x^5-\\frac{5}{72}x^4+\\frac{157}{720}x^3+\\frac{13}{180}x^2+\\frac{319}{420}x+1$$')
+                    </script>
+                    <div id="para">
+                        And just for good measure, now I'll graph the difference between $2^x$ and $f(40)$, which is a polynomial with 40 terms.
+                    </div>
+                    <script>
+                        makeMathBox('section1', 'polynomial4',
+                        '$$y=2^x- f(40)$$')
+                    </script>
+                    <div id="para">
+                        which I hope is enough to convince you that the polynomial described by $f(40)$ is a really good approximation of $2^x$ for real values of $x$ between 0 and around 40.
+                    </div>
+
+                    <div id="para">
+                        Once you're convinced that the polynomials described by $f(t)$ are getting closer and closer to $2^x$ as $t$ grows larger, it's a simple matter of relying on previous visual intuition about polynomial derivatives and the power rule to take care of the rest.
+                    </div>
+                    <div id="para">
+                        So that's one way to think about the derivative of $2^x$ using some pre-existing skills and concepts.
+                    </div>
+                    <div id="para">
+                        Proofs about the convergence of this approach can be found on this page about the <a href="https://en.wikipedia.org/wiki/Binomial_series">binomial series</a>.
+                    </div>
+
+
+
+                    <div id="section2">
+                        <script>makeBasicTitle('Some extra details', 'section2');</script>
+
+                        <div id="para">
+                            What follows is a bit more complicated, though pretty fascinating (to me, anyway).  I am obviously not being anything remotely like rigorous here.
+                        </div>
+                        <div id="para">
+                            If you look at the three examples I just graphed, for $f(3)$, $f(5)$, and $f(7)$, the coefficient for $x^1$ goes from $\frac{5}{6}$ to $\frac{47}{60}$ to $\frac{319}{420}$.
+                        </div>
+                        <div id="para">
+                            If I calculate the polynomial for $f(10)$, that coefficient is $\frac{1627}{2520}$, which is around $0.645635$.
+                        </div>
+                        <div id="para">
+                            For $f(100)$, it's $\frac{47979622564155786918478609039662898122617 }{69720375229712477164533808935312303556800}$, which in decimal form is about $0.68817$.
+                        </div>
+                        <div id="para">
+                            You might reasonably wonder if that coefficient has a limit (or it might be pretty obvious).  And in fact, it is indeed approaching $\log 2$ exactly as you might expect.
+                        </div>
+                        <div id="para">
+                            This is actually much easier to see if we rewrite $f(t)$ in a somewhat different form.  When I originally expressed it in terms of a sum of
+                            generalized binomials, as $f(t) = \sum_{k=0}^{t} \frac{x(x-1)...(x-k+1)}{k!}$, I had to hand wave over the process of collecting terms
+                            to eventually find the coefficients of $x$, $x^2$, $x^3$, and so on.  In that form, it's not straightforward.
+                        </div>
+                        <div id="para">
+                            In fact, though, it's possible to define $f(t)$ and thus $2^x$ in such a way that terms don't need to be rearranged and collected to find the coefficients in the polynomial - the coefficients in $f(t)$ can be
+                            defined explicitly.  Specifically, we can write $f(t)$ as
+                            $$ f(t) = 1 +
+                            x \cdot \sum_{j \le t} \frac{(-1)^{j+1}}{j} +
+                            \frac{x^2}{2} \cdot \sum_{j+k \le t} \frac{(-1)^{j+k}}{j \cdot k} +
+                            \frac{x^3}{6} \cdot \sum_{j+k+l \le t} \frac{(-1)^{j+k+l+1}}{j \cdot k \cdot l}  + ... $$
+                            (here $j$, $k$, $l$, and so on are whole numbers > 0)
+                        </div>
+                        <div id="para">
+                            Put much more concisely and recursively, if
+                            $$g_k(n,j) = g_k(n,j+1) + \frac{(-1)^{j+1}}{j} \cdot \frac{x}{k} \cdot (1 + g_{k+1}(n-j,1))$$
+                            with terminating condition
+                            $$ \textrm{if }j > n, g_k(n,j) = 0$$
+                            then
+                            $$f(t) = 1+g_1(t, 1)$$
+                        </div>
+                        <div id="para">
+                            Just for the sake of a little double entry bookkeeping, in Mathematica, this is <br /><br />g[n_, j_, k_] := If[j > n, 0, g[n, j + 1, k] + (-1)^(j + 1)/j  (x/k) (1 + g[n - j, 1, k + 1])]<br />f[n_] := Expand[1 + g[n, 1, 1]]
+                        </div>
+                        <div id="para">
+                            So that's another way we can define $f(t)$.
+                        </div>
+                        <div id="para">
+                            And this definition leads immediately to expressing $2^x$ as
+                            $$2^x = \lim_{t \to \infty} 1 +
+                            x \cdot \sum_{j \le t} \frac{(-1)^{j+1}}{j} +
+                            \frac{x^2}{2} \cdot \sum_{j+k \le t} \frac{(-1)^{j+k}}{j \cdot k} +
+                            \frac{x^3}{6} \cdot \sum_{j+k+l \le t} \frac{(-1)^{j+k+l+1}}{j \cdot k \cdot l}  + ... $$
+                        </div>
+                        <div id="para">
+                            If we take that limit as $t$ goes to infinity, we should see that $\sum_{j \le t} \frac{(-1)^{j+1}}{j}$ becomes $\sum_{j=1}^\infty \frac{(-1)^{j+1}}{j}$,
+                            which is of course is $\log 2$.
+                        </div>
+                        <div id="para">
+                            As $t$ goes to infinity, the limit of $\sum_{j+k \le t} \frac{(-1)^{j+k}}{j \cdot k}$ is likewise $(\log 2)^2$, the limit of
+                            $\sum_{j+k+l \le t} \frac{(-1)^{j+k+l+1}}{j \cdot k \cdot l}$ is $(\log t)^3$, and, more generally, our defintion for $2^x$ looks like it ought to approach what we would like it to, which is
+                        </div>
+                        <div id="para">
+                            $$2^x = 1 +
+                            x \cdot \log 2 +
+                            \frac{x^2}{2} \cdot (\log 2)^2 +
+                            \frac{x^3}{6} \cdot (\log 2)^3  + ... $$
+                        </div>
+                        <div id="para">
+                            And then a derivative in terms of $x$ could be taken in the usual way, immediately revealing it to be $\log 2 \cdot 2^x$
+                        </div>
+                        <div id="para">
+                            And as a side side note, this also gives an interesting additive convolution definition for the generalized binomial coefficient, if $t$ is a whole number greater than $0$, as
+                        </div>
+                        $$ \binom{z}{t} =
+                        z \cdot \sum_{j = t} \frac{(-1)^{j+1}}{j} +
+                        \frac{z^2}{2} \cdot \sum_{j+k = t} \frac{(-1)^{j+k}}{j \cdot k} +
+                        \frac{z^3}{6} \cdot \sum_{j+k+l = t} \frac{(-1)^{j+k+l+1}}{j \cdot k \cdot l}  + ... $$
+                        <div id="para">
+                            I'm not sure how well-known this is.
+                        </div>
+                    </div>
+
+
+                    </center>
+
+                    <script id="jsbin-javascript">
+
+                        function binSum(t, k) {
+                            var ret = 1;
+                            var tot = 1;
+                            for (var j = 0; j < k; j++) {
+                                tot *= (t - j) / (j + 1);
+                                ret += tot;
+                            }
+                            return ret;
+                        }
+
+                        var ans = [];
+                        for (var k = 1; k < 14; k++) {
+                            ans.push({ x: k, text: 'x = ' + k });
+                            ans.push({ y: Math.pow(2, k), text: 'y = ' + Math.pow(2, k) });
+                        }
+
+                        function mk(divName, id) {
+                            if (id == 0) {
+                                functionPlot({ target: '#' + divName, xAxis: { domain: [0, 10] }, yAxis: { domain: [0, 400] }, annotations: ans, width: 800, data: [line(function (v) { return Math.pow(2, v.x); })] });
+                            }
+                            if (id == 1) {
+                                functionPlot({
+                                    target: '#' + divName, xAxis: { domain: [0, 10] }, yAxis: { domain: [0, 400] }, annotations: ans, width: 800, data: [
+                                        line(function (v) { return binSum(v.x, 3); }),
+                                        line(function (v) { return binSum(v.x, 5); }),
+                                        line(function (v) { return binSum(v.x, 7); })
+                                    ]
+                                });
+                            }
+                            if (id == 2) {
+                                functionPlot({
+                                    target: '#' + divName, xAxis: { domain: [0, 10] }, yAxis: { domain: [0, 400] }, annotations: ans, width: 800, data: [
+                                        line(function (v) { return Math.pow(2, v.x); }),
+                                        line(function (v) { return binSum(v.x, 7); })
+                                    ]
+                                });
+                            }
+                            if (id == 3) {
+                                functionPlot({
+                                    target: '#' + divName, xAxis: { domain: [-2, 50] }, yAxis: { domain: [-10, 400] }, annotations: ans, width: 800, data: [
+                                        line(function (v) { return Math.pow(2, v.x) - binSum(v.x, 40); })
+                                    ]
+                                });
+                            }
+                        }
+                        mk('polynomial', 0);
+                        mk('polynomial2', 1);
+                        mk('polynomial3', 2);
+                        mk('polynomial4', 3);
+                    </script>
+                </div>
+            </div>
+            <img src="art/edgeb.png" />
+        </div>
+        <script>renderMathInElement(document.body, { delimiters: [{ left: "$$", right: "$$", display: true }, { left: "$", right: "$", display: false }] });</script>
+</body>
+</html>

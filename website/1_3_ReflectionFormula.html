@@ -1,0 +1,406 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.css" integrity="sha384-wITovz90syo1dJWVh32uuETPVEtGigN07tkttEqPv+uR2SE/mbQcG7ATL28aI9H0" crossorigin="anonymous">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.js" integrity="sha384-/y1Nn9+QQAipbNQWU65krzJralCnuOasHncUFXGkdwntGeSvQicrYkiUBwsgUqc1" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/contrib/auto-render.min.js" integrity="sha384-dq1/gEHSxPZQ7DdrM82ID4YVol9BYyU7GbWlIwnwyPzotpoc57wDw/guX8EaYGPx" crossorigin="anonymous"></script>
+    <script src="http://d3js.org/d3.v3.min.js"></script>
+    <script src="http://maurizzzio.github.io/function-plot/js/function-plot.js"></script>
+    <script src="page.js"></script>
+    <link rel="stylesheet" href="css/IceCream.css" type="text/css" />
+    <script>
+        function makeTwo(sectionName, divBase, A, mA, u, v) {
+            makeVersus(sectionName, divBase, '\\sum_{t=1}^{\\lfloor x \\rfloor} t^{' + A + '} \\cos( 1000 \\log t )', '\\sum_{t=1}^{\\lfloor x \\rfloor} t^{' + mA + '} ( ' + u + ' \\cdot  \\cos( 1000 \\log t )  +' + v + ' \\cdot \\sin( 1000 \\log t ) )')
+            makeVersus(sectionName, divBase + '2', '\\sum_{t=1}^{\\lfloor x \\rfloor} t^{' + A + '} \\sin( 1000 \\log t )', '\\sum_{t=1}^{\\lfloor x \\rfloor} t^{' + mA + '} ( ' + (-u) + ' \\cdot \\sin( 1000 \\log t ) + ' + v + ' \\cdot  \\cos( 1000 \\log t ))')
+        }
+    </script>
+    <meta charset="utf-8">
+</head>
+<body>
+    <div id="pageouter">
+        <div id="page2"><div id="content2"><img src="art/edgea.png" /></div></div>
+        <div id="page">
+            <div id="content7">
+
+                <!-- ---------------------------------------------------------------------------------------------------------- -->
+
+                <div id='title'><h2><center>1-3: Symmetry and the Reflection Formula</center></h2></div>
+                <div id='underouter'><div id='under'></div></div>
+
+                <center><h4><a href="page2.html">Back to 1-2!</a></h4></center><br /><br />
+
+                <div id="para">
+                    So, we've explored the sum $\sum_{t=1}^x t^{A+f \cdot i}$ for several values of $A$ and $f$, and we've
+                    watched the sampling error associated with those sums change.  I hope this was enough for you to start getting
+                    some visual intuition about the workings of the sampling error of $\sum_{t=1}^x t^{A+f \cdot i}$.
+                </div>
+                <div id="para">
+                    Now let's turn to an interesting question - do the sampling errors for different values of $A$ and $f$ have any
+                    relationship to each other?
+                </div>
+                <div id="para">
+                    In this section, we'll note two relationships existing between the sampling errors of different values of $A$ and
+                    $f$.  The first of these will be very simple; the second, which is called the reflection formula, will be trickier and have
+                    further reaching consequences.
+                </div>
+
+                <!-- ---------------------------------------------------------------------------------------------------------- -->
+
+                <div id="section0a">
+                    <script>makeBasicTitle('The Symmetry of (-f)', 'section0a');</script>
+
+                    <div id="para">So here's the first symmetry we'll explore, the relationship between $A+f i$ and $A-f i$.</div>
+                    <div id="para">
+                        In earlier sections, we used <a href="https://en.wikipedia.org/wiki/Euler%27s_formula">Euler's formula</a> to
+                        say that
+                    </div>
+                    <div id='eq'>
+                        $$\sum_{t=1}^x t^{A+f \cdot i} = \sum_{t=1}^x t^A \cdot \cos( f \log t ) +
+                        i \cdot \sum_{t=1}^x t^A \cdot \sin( f \log t)$$
+                    </div>
+                    <div id="para">Now let's look at the case where we multiply $f$ by $-1$.</div>
+                    <div id='eq'>
+                        $$\sum_{t=1}^x t^{A+(- f) \cdot i} = \sum_{t=1}^x t^A \cdot \cos( (-f) \log t )
+                        + i \cdot \sum_{t=1}^x t^A \cdot \sin( (-f) \log t)$$
+                    </div>
+                    <div id="para">
+                        Given that cosine and sine are, respectively,
+                        <a href="https://en.wikipedia.org/wiki/Even_and_odd_functions">even and odd</a> functions,
+                        we can simplify this to
+                    </div>
+                    <div id='eq'>
+                        $$\sum_{t=1}^x t^{A- f \cdot i} = \sum_{t=1}^x t^A \cdot \cos( f \log t )
+                        - i \cdot \sum_{t=1}^x t^A \cdot \sin( f \log t)$$
+                    </div>
+                    <div id="para">
+                        The real sum (the one with the cosine term) is identical to our case when $f$ wasn't multiplied by -1,
+                        so they'll have the same sampling error.
+                    </div>
+                    <div id="para">
+                        And the imaginary sum (with sines) is identical to our original case but with the sign flipped, so they'll
+                        have the same sampling error but multiplied by $-1$.
+                    </div>
+                    <div id="para">
+                        Thus, if the sampling error of $\sum_{t=1}^x t^{A+f \cdot i}$ is $u+v$, then the sampling error
+                        of $\sum_{t=1}^x t^{A-f \cdot i}$ will be $u- v i$.
+                    </div>
+                    <div id="para">
+                        And particularly (this is important later), if the sampling error for some pair $A+f i$ is 0, then the
+                        sampling error for $A-f i$ will also be 0.
+                    </div>
+                    <div id="para">
+                        Alright.  So we've covered the first kind of symmetry.  This is an easy kind of symmetry.  But now
+                        let's move on to a much more surprising, unexpected, and important symmetry.
+                    </div>
+                </div>
+
+                <!-- ---------------------------------------------------------------------------------------------------------- -->
+
+                <div id="section0b">
+                    <script>makeBasicTitle('$h(z)$', 'section0b');</script>
+
+                    <div id="para">
+                        I want to show you the reflection formula, but to do that, I need to define an extra function,
+                        which I will call $h(z)$ (this formula has no standard name).  We will use this in the reflection formula.
+                    </div>
+                    <div id="para">So let's define $h(z)$.</div>
+                    <div id="para">
+                        I try to avoid complex numbers, but for what follows, their notation is so much more concise.
+                        So let's define a complex variable $z$, the combination of our amplitude and frequency:
+                    </div>
+                    <div id='eq'>$$z = A + f \cdot i$$</div>
+                    <div id="para">With $z$, let's define this function, $h(z)$:</div>
+                    <div id='eq'>$$h(z) = 2^{-z} \cdot \pi^{-z-1} \cdot \sin(-\frac{\pi}{2} \cdot z) \cdot \Gamma(1+z) $$</div>
+                    <div id="para">Because $z$ is a complex variable, let's talk through what these terms do.</div>
+                    <div id="para">
+                        We have already been raising numbers to complex powers using
+                        <a href="https://en.wikipedia.org/wiki/Euler%27s_formula">Euler's formula</a>, so both
+                        $2^{-z}$ and $\pi^{-z-1}$ should be familiar.
+                    </div>
+                    <div id="para">
+                        You might not be familiar with the sine function of complex arguments, but it's simply expressed
+                        with exponential functions as $\sin(z) = \frac{1}{2 i}(e^{i z} - e^{-i z})$, also as a consequence
+                        of <a href="https://en.wikipedia.org/wiki/Euler%27s_formula#Relationship_to_trigonometry">Euler's Formula</a>.
+                    </div>
+                    <div id='para'>
+                        Which leaves us with our last term, $\Gamma(1+z)$.  This is the
+                        <a href="https://en.wikipedia.org/wiki/Gamma_function">Gamma funcition</a> - essentially, a extended
+                        version of the factorial function that works for complex arguments.  It's a very important function.
+                    </div>
+                    <div id='para'>
+                        So those are the terms that make up $h(z)$.  We'll be computing $h(z)$ in Wolfram Alpha as
+                        <a href="https://www.wolframalpha.com/input/?i=2%5E-z+Pi%5E(-z-1)+Sin(-Pi+%2F2+z)+Gamma(1%2Bz)">this</a>
+                        - feel free to play around with it get a sense of how it works.
+                    </div>
+                </div>
+
+                <!-- ---------------------------------------------------------------------------------------------------------- -->
+
+                <div id="section0c">
+                    <script>makeBasicTitle('The Reflection Formula: the Symmetry with -(A+f i)-1', 'section0b');</script>
+
+                    <div id='para'>
+                        Done?  Good.  Now, why did I walk through $h(z)$ in such fine-grained detail?  Well, it turns out that
+                        the sum we've been examing so closely,
+                    </div>
+                    <div id='eq'>$$\sum_{t=1}^x t^z$$</div>
+                    <div id='para'>and a related sum, when scaled by $h(z)$,</div>
+                    <div id='eq'>$$h(z) \cdot \sum_{t=1}^x t^{-z-1}$$</div>
+                    <div id='para'>happen to have the exact same sampling error.</div>
+                    <div id='para'>This is surprising.</div>
+                    <div id='para'>This is also exactly the sort of idea that some visual examples might help clarify.</div>
+                    <div id='para'>But, some bookkeeping before we turn to those examples.</div>
+                    <div id="para">
+                        I try to keep us working with real numbers by splitting up complex functions into their real and
+                        imaginary parts.  It's just much easier to visualize and graph real-valued functions, and I'm all about
+                        visual intuitions.  Many programming languages don't handle complex numbers very well, either, and
+                        I'm all about experimentation.
+                    </div>
+                    <div id="para">
+                        Anyway, we've split our terms in the past with $\sum_{t=1}^x t^z$, and we'd really like to do it for
+                        $h(z) \cdot \sum_{t=1}^x t^{-z-1}$ too.
+                    </div>
+                    <div id="para">
+                        Unfortunately, that's not especially easy to do with $h(z)$ because of the term $\Gamma(1+z)$,
+                        the gamma function.  So instead, we'll just compute $h(z)$ with Wolfram Alpha and use its results.
+                        If we say that the output of $h(z)$ is the complex number
+                    </div>
+                    <div id='eq'>$$h(z) = h(A+f i) = u + v i$$</div>
+                    <div id="para">
+                        then we can replace $h(z)$ with $(u + v i)$ like so, and apply Euler's formula to the sum like we've
+                        done before, giving us,
+                    </div>
+                    <div id='eq'>
+                        $$h(z)\sum_{t=1}^x t^{-z - 1} = (u+ v i) \cdot ( \sum_{t=1}^x t^{-A-1} \cdot \cos( -f \log t )
+                        + i \cdot \sum_{t=1}^x t^{-A-1} \cdot \sin( -f \log t) )$$
+                    </div>
+                    <div id="para">
+                        If we collect some terms and rearrange, finally, the real part of $h(z) \cdot \sum_{t=1}^x t^{-z-1}$
+                        can be expressed as
+                    </div>
+                    <div id='eq'>$$\sum_{t=1}^x t^{-A-1} \cdot ( u \cdot \cos( f \log t ) + v \cdot \sin( f \log t) )$$</div>
+                    <div id="para">and the imaginary part as</div>
+                    <div id='eq'>$$i \cdot \sum_{t=1}^x t^{-A-1} \cdot ( v \cdot \cos( f \log t ) - u \cdot \sin( f \log t) )$$</div>
+                    <div id="para">If this is hard to follow, hopefully the examples that follow will make it clearer.</div>
+                    <div id="para">
+                        Okay, bookkeeping over.  Now let's just look at several examples of this symmetry in action.  We'll look at
+                        5 variations, all for the case where $f=1000$.
+                    </div>
+                </div>
+
+                <!-- ---------------------------------------------------------------------------------------------------------- -->
+
+                <div id="section1x">
+                    <script>makeBasicTitle('$A=\\frac{1}{2}$', 'section1x');</script>
+
+                    <div id="para">Let's look at our first example.  We'll compare the sampling error of</div>
+                    <div id='eq'>$$\sum_{t=1}^x t^{\frac{1}{2}+1000 i}$$</div>
+                    <div id="para">and</div>
+                    <div id='eq'>$$h(\frac{1}{2}+1000 i) \cdot \sum_{t=1}^x t^{-\frac{3}{2}-1000 i}$$</div>
+                    <div id="para">
+                        Checking $h(\frac{1}{2}+1000 i)$ in
+                        <a href="https://www.wolframalpha.com/input/?i=2%5E(-1%2F2-1000i)+Pi%5E((-1%2F2-1000i)-1)+Sin(Pi+(-1%2F2-1000i)%2F2)+Gamma(1-(-1%2F2-1000i))">
+                            Wolfram Alpha
+                        </a>, it says that
+                    </div>
+                    <div id='eq'>
+                        $$2^{-\frac{1}{2}-1000 i} \cdot \pi^{-\frac{1}{2}-1000 i-1} \cdot  \sin(-\frac{\pi}{2} \cdot
+                        (\frac{1}{2}+1000 i)) \cdot  \Gamma(1+\frac{1}{2}+1000 i) = -118.61203... -106.1202... i $$
+                    </div>
+                    <div id="para">So the real (first graph) and then imaginary (second graph) parts of these two sums are</div>
+                    <script>makeTwo('section1x', 'demog_', '\\frac{1}{2}', '-\\frac{3}{2}', -118.61203, -106.1202);</script>
+                    <div id="para">And, visually, anyway, they do indeed share the same sampling error.</div>
+                    <div id="para">Notice something handy here, too.</div>
+                    <div id="para">
+                        The wave part of $\sum_{t=1}^x t^{\frac{1}{2}+1000 i}$ does not converge to 0 - it grows without
+                        bounds as $x$ gets larger.
+                    </div>
+                    <div id="para">
+                        On the other hand, the wave part of $\sum_{t=1}^x t^{-\frac{3}{2}-1000 i}$ is quite miniscule,
+                        and it goes away pretty quickly, leaving just the sampling error.
+                    </div>
+                    <div id="para">
+                        Thus, using this symmetry, we can use both $h(\frac{1}{2}+1000 i)$ and the sampling error
+                        of $\sum_{t=1}^x t^{-\frac{3}{2}-1000 i}$, which we already know how to calculate, to find the sampling
+                        error of $\sum_{t=1}^x t^{\frac{1}{2}+1000 i}$, which we don't.  That's handy.
+                    </div>
+                </div>
+
+                <!-- ---------------------------------------------------------------------------------------------------------- -->
+
+                <div id="section1">
+                    <script>makeBasicTitle('$A=\\frac{1}{4}$', 'section1');</script>
+                    <div id="para">Let's look at another example.  We'll look at the sampling error of</div>
+                    <div id='eq'>$$\sum_{t=1}^x t^{\frac{1}{4}+1000 i}$$</div>
+                    <div id="para">and</div>
+                    <div id='eq'>$$h(\frac{1}{4}+1000 i) \cdot \sum_{t=1}^x t^{-\frac{5}{4}-1000 i}$$</div>
+                    <div id="para">
+                        We can look up $h(\frac{1}{4}+1000 i)$ in
+                        <a href="https://www.wolframalpha.com/input/?i=2%5E(-1%2F4-1000i)+Pi%5E((-1%2F4-1000i)-1)+Sin(Pi+(-1%2F4-1000i)%2F2)+Gamma(1-(-1%2F4-1000i))">
+                            Wolfram Alpha
+                        </a>, and it says that
+                    </div>
+                    <div id='eq'>
+                        $$2^{-\frac{1}{4}-1000 i} \cdot \pi^{-\frac{1}{4}-1000 i-1} \cdot  \sin(-\frac{\pi}{2}
+                        \cdot (\frac{1}{4}+1000 i)) \cdot  \Gamma(1+\frac{1}{4}+1000 i) = -33.3879...-29.8847... i $$
+                    </div>
+                    <div id="para">And so the real (first graph) and then imaginary (second graph) parts of our two sums are</div>
+                    <script>makeTwo('section1', 'demof_', '\\frac{1}{4}', '-\\frac{5}{4}', -33.3879, -29.8847);</script>
+                    <div id="para">
+                        And so the sampling error of $h(\frac{1}{4}+1000 i) \cdot \sum_{t=1}^x t^{-\frac{5}{4}-1000 i}$
+                        certainly seems to be the same as the sampling error for $\sum_{t=1}^x t^{\frac{1}{4}+1000 i}$, as suggested.
+                    </div>
+                    <div id="para">
+                        And thus, just as before, we could use $h(\frac{1}{4}+1000 i)$ and the easily computed sampling
+                        error of $\sum_{t=1}^x t^{-\frac{5}{4}-1000 i}$ to find the sampling error of $\sum_{t=1}^x t^{\frac{1}{4}+1000 i}$.
+                    </div>
+                </div>
+
+                <!-- ---------------------------------------------------------------------------------------------------------- -->
+
+                <div id="section1c">
+                    <script>makeBasicTitle('$A=-\\frac{1}{4}$', 'section1c');</script>
+
+                    <div id="para">And this example is the case where</div>
+                    <div id='eq'>$$\sum_{t=1}^x t^{-\frac{1}{4}+1000 i}$$</div>
+                    <div id="para">and</div>
+                    <div id='eq'>$$h(-\frac{1}{4}+1000 i) \cdot \sum_{t=1}^x t^{-\frac{3}{4}-1000 i}$$</div>
+                    <div id="para">Notice that the magnitudes of the two sums are growing closer still, compared to the previous cases.</div>
+                    <div id="para">And so the real (first graph) and then imaginary (second graph) parts of our two sums are</div>
+                    <script>makeTwo('section1c', 'demo1000_', '-\\frac{1}{4}', '-\\frac{3}{4}', -2.64595, -2.36952);</script>
+                </div>
+
+                <!-- ---------------------------------------------------------------------------------------------------------- -->
+
+                <div id="section1d">
+                    <script>makeBasicTitle('$A=-\\frac{1}{2}$', 'section1d');</script>
+
+                    <div id="para">
+                        And now, finally, we come to a very, very important example, one worth noting.  We're looking here
+                        at the sampling errors of
+                    </div>
+                    <div id='eq'>$$\sum_{t=1}^x t^{-\frac{1}{2}+1000 i}$$</div>
+                    <div id="para">and</div>
+                    <div id='eq'>$$h(-\frac{1}{2}+1000 i) \cdot \sum_{t=1}^x t^{-\frac{1}{2}-1000 i}$$</div>
+                    <div id="para">
+                        So notice, here, that our first sum has an $A$ of $-\frac{1}{2}$, and our second sum <i>also</i>
+                        has an $A$ of $-\frac{1}{2}$.  This is new.
+                    </div>
+                    <div id="para">
+                        For the past few examples, I've been pointing out that the magnitudes of the two sums were drawing
+                        closer.
+                    </div>
+                    <div id="para">
+                        Well, $A=-\frac{1}{2}$ is the crossing over point of this symmetry, the line across which sampling errors
+                        are mirrored (with a scaling factor of $h(z)$).
+                    </div>
+                    <div id="para">
+                        You might rightly think this suggests there's something very special about the value $A=-\frac{1}{2}$,
+                        and you'd be right.  In fact, the value $A=-\frac{1}{2}$ is central to the Riemann Hypothesis.  But let's not
+                        get ahead of ourselves.
+                    </div>
+                    <div id="para">And so the real (first graph) and then imaginary (second graph) parts of our two sums are</div>
+                    <script>makeTwo('section1d', 'demo', '-\\frac{1}{2}', '-\\frac{1}{2}', -0.744928, -0.667145);</script>
+                </div>
+
+                <!-- ---------------------------------------------------------------------------------------------------------- -->
+
+                <div id="section1e">
+                    <script>makeBasicTitle('$A=-\\frac{3}{4}$', 'section1e');</script>
+
+                    <div id="para">One last example, just for good measure.  Let's look at the sums</div>
+                    <div id='eq'>$$\sum_{t=1}^x t^{-\frac{3}{4}+1000 i}$$</div>
+                    <div id="para">and</div>
+                    <div id='eq'>$$h(-\frac{3}{4}+1000 i) \cdot \sum_{t=1}^x t^{-\frac{1}{4}-1000 i}$$</div>
+                    <div id="para">And so the real (first graph) and then imaginary (second graph) parts of our two sums are</div>
+                    <script>makeTwo('section1e', 'demo2_', '-\\frac{3}{4}', '-\\frac{1}{4}', -0.209735, -0.187824);</script>
+                    <div id="para">And so they share sampling errors, exactly as expected.</div>
+                </div>
+
+                <!-- ---------------------------------------------------------------------------------------------------------- -->
+
+                <div id="section2">
+                    <script>makeBasicTitle('General Formula for $\\zeta(-(A + f i))$', 'section2');</script>
+                    <div id='eq'>$$\zeta(-(A+f i)) = \lim_{x \to \infty} \sum_{t=1}^x t^{A+f i} - \int_{0}^x t^{A+f i} dt$$</div>
+                    <div id='eq'>$$\zeta(-(A+f i)) = \lim_{x \to \infty} \sum_{t=1}^x t^{A+f i} - \frac{x^{1+A+f i}}{1+A+f i}$$</div>
+                    <div id='eq'>$$\zeta(-(A+f i)) = h(A+f i) \cdot \zeta(A+f i+1)$$</div>
+                </div>
+
+                <!-- ---------------------------------------------------------------------------------------------------------- -->
+
+                <div id="section3">
+                    <script>makeBasicTitle('The Trivial Zeros of $\\zeta(-(A + f i))$', 'section3');</script>
+
+                    <div id='eq'>$$\zeta(-(A+f i)) = h(A+f i) \cdot \zeta(A+f i+1)$$</div>
+                    <div id='eq'>$$\zeta(-A) = h(A) \cdot \zeta(A+1)$$</div>
+                    <div id='eq'>$$h(x) = 2^{-x} \cdot \pi^{-x-1} \cdot \sin(-\frac{\pi}{2} \cdot x) \cdot x! $$</div>
+                    <script>
+                        //https://www.wolframalpha.com/input/?i=2%5E-x+Pi%5E(-x-1)+Sin(-Pi+%2F2+x)+Gamma(1%2Bx)+from+x+%3D+-10+to+0
+                        //https://www.wolframalpha.com/input/?i=2%5E-x+Pi%5E(-x-1)+Sin(-Pi+%2F2+x)+Gamma(1%2Bx)+from+x+%3D+0+to+10
+                        makeMathBox('section3', 'gamma_', '$$y = h(x) = 2^{-x} \\cdot \\pi^{-x-1} \\cdot \\sin(-\\frac{\\pi}{2} \\cdot x) \\cdot x!$$')</script>
+                </div>
+
+                <center><h3><a href="page4.html">On to Part 2-1!</a></h3></center><br /><br />
+
+                <h6><a href="http://www.icecreambreakfast.com/contact.html">(c) Nathan McKenzie 2017</a></h6>
+
+                <!-- ---------------------------------------------------------------------------------------------------------- -->
+                </center>
+                <script id="jsbin-javascript">
+
+                    var g = 7;
+                    var C = [0.99999999999980993, 676.5203681218851, -1259.1392167224028, 771.32342877765313, -176.61502916214059, 12.507343278686905, -0.13857109526572012, 9.9843695780195716e-6, 1.5056327351493116e-7];
+
+                    function gamma(z) {
+
+                        if (z < 0.5) return Math.PI / (Math.sin(Math.PI * z) * gamma(1 - z));
+                        else {
+                            z -= 1;
+
+                            var x = C[0];
+                            for (var i = 1; i < g + 2; i++)
+                                x += C[i] / (z + i);
+
+                            var t = z + g + 0.5;
+                            return Math.sqrt(2 * Math.PI) * Math.pow(t, (z + 0.5)) * Math.exp(-t) * x;
+                        }
+                    }
+
+                    function mk(divName, A, f, sc1, sc2, val1, val2, dm) {
+                        var sm = [], smo = [], smr = [], smr2 = [];
+                        var ans = addFrequencyMarkers(f);
+                        var ans2 = []; for (var k in ans) ans2.push(ans[k]); ans2.push({ y: val1, text: 'y = ' + val1 });
+                        var ans3 = []; for (var k in ans) ans3.push(ans[k]); ans3.push({ y: val2, text: 'y = ' + val2 });
+
+                        for (var k = 1; k < 300000; k++) {
+                            sumReal(k, A, f, sm);
+                            sumImag(k, A, f, smo);
+                            sumReal(k, -1 - A, f, smr);
+                            sumImag(k, -1 - A, f, smr2)
+                        }
+
+                        functionPlot({ target: '#' + divName, xAxis: { domain: [0, 200] }, yAxis: { domain: dm }, annotations: ans2, width: 800, data: [line(function (v) { return sc1 * sumReal(v.x, -1 - A, f, smr) + sc2 * sumImag(v.x, -1 - A, f, smr2); }), line(function (v) { return sumReal(v.x, A, f, sm); })] });
+                        functionPlot({ target: '#' + divName + '2', xAxis: { domain: [0, 200] }, yAxis: { domain: dm }, annotations: ans3, width: 800, data: [line(function (v) { return sc2 * sumReal(v.x, -1 - A, f, smr) - sc1 * sumImag(v.x, -1 - A, f, smr2); }), line(function (v) { return sumImag(v.x, A, f, smo); })] });
+                    }
+
+                    mk('demog_', .5, 1000, -118.61203, -106.1202, -123.5406746771219, -90.0000774946647, [-180, 60]);
+                    mk('demof_', .25, 1000, -33.3879, -29.8847, -33.61469020757686, -26.75552974311933, [-45, 15]);
+                    mk('demo1000_', -.25, 1000, -2.64595, -2.36952, -1.51495, -2.74712, [-5, 4]);
+                    mk('demo', -.5, 1000, -0.744928, -0.667145, 0.356334, -0.931998, [-2, 2]);
+                    mk('demo2_', -.75, 1000, -0.209735, -0.187824, 0.833713, -0.291623, [-2, 2]);
+
+                    function mk2(divName) {
+                        var ans = []; for (var k = 2; k < 40; k += 2) ans.push({ x: k, text: 'x = ' + k });
+                        functionPlot({ target: '#' + divName, xAxis: { domain: [0, 20] }, yAxis: { domain: [-.05, .05] }, annotations: ans, width: 800, data: [line(function (v) { var x = v.x; if (x < 0) return NaN; return Math.pow(2, -x) * Math.pow(Math.PI, -x - 1) * Math.sin(-Math.PI / 2 * x) * gamma(x + 1); })] });
+                    }
+
+                    mk2('gamma_');
+
+                </script>
+            </div>
+        </div>
+        <img src="art/edgeb.png" />
+    </div>
+    <script>renderMathInElement(document.body, { delimiters: [{ left: "$$", right: "$$", display: true }, { left: "$", right: "$", display: false }] });</script>
+</body>
+</html>

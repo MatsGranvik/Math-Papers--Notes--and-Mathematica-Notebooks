@@ -1,0 +1,145 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.css" integrity="sha384-wITovz90syo1dJWVh32uuETPVEtGigN07tkttEqPv+uR2SE/mbQcG7ATL28aI9H0" crossorigin="anonymous">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.js" integrity="sha384-/y1Nn9+QQAipbNQWU65krzJralCnuOasHncUFXGkdwntGeSvQicrYkiUBwsgUqc1" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/contrib/auto-render.min.js" integrity="sha384-dq1/gEHSxPZQ7DdrM82ID4YVol9BYyU7GbWlIwnwyPzotpoc57wDw/guX8EaYGPx" crossorigin="anonymous"></script>
+
+    <script src="http://d3js.org/d3.v3.min.js"></script>
+    <script src="http://maurizzzio.github.io/function-plot/js/function-plot.js"></script>
+    <script src="page.js"></script>
+    <link rel="stylesheet" href="css/IceCream.css" type="text/css" />
+    <meta charset="utf-8">
+</head>
+<body>
+    <div id="pageouter">
+        <div id="page2"><div id="content2"><img src="art/edgea.png" /></div></div>
+        <div id="page">
+            <div id="content7">
+                <!-- ---------------------------------------------------------------------------------------------------------- -->
+
+                <div id='title'>
+                    <h2>
+                        <center>
+                            The Other Natural Exponentiation Base
+                        </center>
+                    </h2>
+                </div><br />
+
+                <!-- ---------------------------------------------------------------------------------------------------------- -->
+
+                <div id="section1">
+                    <div id="para">
+                        This is one possible approach to developing some visual intution about the derivative of $2^x$ (I'm not going to be rigorous in what follows).
+                    </div>
+
+                    $$ \left( \binom{z}{t} \right) = \frac{z(z+1)...(z+t-1)}{t!} $$
+
+                    $$ \left( \binom{z}{t} \right) =
+                    z \cdot \sum_{j = t} \frac{1}{j} +
+                    \frac{z^2}{2} \cdot \sum_{j+k = t} \frac{1}{j \cdot k} +
+                    \frac{z^3}{6} \cdot \sum_{j+k+l = t} \frac{1}{j \cdot k \cdot l}  + ... $$
+
+                    <div id="para">
+                        <center>...</center>
+                    </div>
+
+
+                    $$ \left( \binom{z+1}{t} \right) = \frac{(z+1)(z+2)...(z+t)}{t!} $$
+
+                    $$ \left( \binom{z+1}{t} \right) = \prod_{k \le t} 1+\frac{z}{k} $$
+
+                    $$ \left( \binom{z+1}{t} \right) = \left( \binom{t}{z+1} \right) $$
+
+                    $$ \left( \binom{z+1}{t} \right) = \frac{(z+t)!}{z! t!}$$
+
+                    $$ \left( \binom{z+1}{t} \right) = \sum_{k=0}^t \left( \binom{z}{k} \right)$$
+
+                    $$ \left( \binom{z}{t} \right) = \left( \binom{z+1}{t} \right) - \left( \binom{z+1}{t-1} \right)$$
+
+                    $$ \left( \binom{z+1}{t} \right) = \sum_{k=0}^\infty \binom{z}{k} \binom{t}{k}$$
+
+                    <div id="para">
+                        $$ \left( \binom{z+1}{t} \right) = 1 +
+                        \binom{z}{1} \cdot \sum_{j \le t} 1 +
+                        \binom{z}{2} \cdot \sum_{j+k \le t} 1 +
+                        \binom{z}{3} \cdot \sum_{j+k+l \le t} 1  + ... $$
+                        (here $j$, $k$, $l$, and so on are whole numbers > 0)
+                    </div>
+
+
+                    <div id="para">
+                        $$ \left( \binom{z+1}{t} \right) = 1 +
+                        z \cdot \sum_{j \le t} \frac{1}{j} +
+                        \frac{z^2}{2} \cdot \sum_{j+k \le t} \frac{1}{j \cdot k} +
+                        \frac{z^3}{6} \cdot \sum_{j+k+l \le t} \frac{1}{j \cdot k \cdot l}  + ... $$
+                        (here $j$, $k$, $l$, and so on are whole numbers > 0)
+                    </div>
+
+                    <div id="para">
+                        Put much more concisely and recursively, if
+                        $$g_k(n,j) = g_k(n,j+1) + \frac{1}{j} \cdot \frac{z}{k} \cdot (1 + g_{k+1}(n-j,1))$$
+                        with terminating condition
+                        $$ \textrm{if }j > n, g_k(n,j) = 0$$
+                        then
+                        $$\left( \binom{z+1}{t} \right) = 1+g_1(t, 1)$$
+                    </div>
+
+                    <div id="para">
+                        <center>...</center>
+                    </div>
+
+                    $$ \left( \binom{z+1}{t} \right) = \prod_{k \le t} 1+\frac{z}{k} $$
+
+                    $$x^z = \lim_{t \to \infty } \prod_{\frac{t}{x} \le k \le t} 1+\frac{z}{k}$$
+
+                    $$ e^z = \lim_{t \to \infty } \prod_{k \le t} 1+\frac{z}{t} $$
+
+                    $$1^z = \lim_{t \to \infty } \prod_{t \le k \le t} 1+\frac{z}{k}$$
+
+                    $$2^z = \lim_{t \to \infty } \prod_{\frac{t}{2} \le k \le t} 1+\frac{z}{k}$$
+
+                    $$3^z = \lim_{t \to \infty } \prod_{\frac{t}{3} \le k \le t} 1+\frac{z}{k}$$
+                    
+                    $$4^z = \lim_{t \to \infty } \prod_{\frac{t}{4} \le k \le t} 1+\frac{z}{k}$$
+
+                    <div id="para">
+                        <center>...</center>
+                    </div>
+
+
+                </div>
+
+                </center>
+
+                <script id="jsbin-javascript">
+
+                    function binSum(t, k) {
+                        var ret = 1;
+                        var tot = 1;
+                        for (var j = 0; j < k; j++) {
+                            tot *= (t - j) / (j + 1);
+                            ret += tot;
+                        }
+                        return ret;
+                    }
+
+                    var ans = [];
+                    for (var k = 1; k < 14; k++) {
+                        ans.push({ x: k, text: 'x = ' + k });
+                        ans.push({ y: Math.pow(2, k), text: 'y = ' + Math.pow(2, k) });
+                    }
+
+                    function mk(divName, id) {
+                        if (id == 0) {
+                            functionPlot({ target: '#' + divName, xAxis: { domain: [0, 10] }, yAxis: { domain: [0, 400] }, annotations: ans, width: 800, data: [line(function (v) { return Math.pow(2, v.x); })] });
+                        }
+                    }
+                </script>
+            </div>
+        </div>
+        <img src="art/edgeb.png" />
+    </div>
+    <script>renderMathInElement(document.body, { delimiters: [{ left: "$$", right: "$$", display: true }, { left: "$", right: "$", display: false }] });</script>
+</body>
+</html>
