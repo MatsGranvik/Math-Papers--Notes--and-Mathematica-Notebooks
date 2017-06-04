@@ -1,0 +1,85 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.css" integrity="sha384-wITovz90syo1dJWVh32uuETPVEtGigN07tkttEqPv+uR2SE/mbQcG7ATL28aI9H0" crossorigin="anonymous">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.js" integrity="sha384-/y1Nn9+QQAipbNQWU65krzJralCnuOasHncUFXGkdwntGeSvQicrYkiUBwsgUqc1" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/contrib/auto-render.min.js" integrity="sha384-dq1/gEHSxPZQ7DdrM82ID4YVol9BYyU7GbWlIwnwyPzotpoc57wDw/guX8EaYGPx" crossorigin="anonymous"></script>
+    <script src="http://d3js.org/d3.v3.min.js"></script>
+    <script src="http://maurizzzio.github.io/function-plot/js/function-plot.js"></script>
+    <script src="factors.js"></script>
+    <script src="page.js"></script>
+    <link rel="stylesheet" href="css/IceCream.css" type="text/css" />
+    <meta charset="utf-8">
+</head>
+<body>
+    <div id="pageouter">
+        <div id="page2"><div id="content2"><img src="art/edgea.png" /></div></div>
+        <div id="page">
+            <div id="content7">
+                <div id='title'>
+                    <h2>
+                        <center>
+                            Counting Prime Numbers <br />
+                            with the Hyperbola Method<br /><br />
+                            Section 6. Wheel Factorization and Optimizations
+                        </center>
+                    </h2>
+                </div><br />
+                <div id='underouter'><div id='under'></div></div>
+
+
+                <div id="section8">
+                    <div id="para">
+                        So now let’s apply the same optimizations we previous applied to $D_{z,y}(n)$ to $W_{z,y}(n)$.
+                    </div>
+                    <div id="para">
+                        First, for the sake of avoiding the memory overhead of recursion, let’s note that
+                        $$ \sum_{k = 0}^{\lfloor \frac{\log n}{\log \alpha(y)} \rfloor} \binom{z}{k} W_{z-k,y+1}(\frac{n}{\alpha(y)^k})=
+                        W_{ z,y+1 }( n )+ \sum_{k = 1}^{\lfloor \frac{\log n}{\log \alpha(y)} \rfloor} \binom{z}{k} W_{z-k,y+1}(\frac{n}{\alpha(y)^k})$$
+                    </div>
+                    <div id="para">
+                        which, combined with the terminating condition $ \textrm{if } n < \alpha(y), W_{z,y}(n)=1$, lets us pare down the recursion as
+                        $$ W_{z,y}(n)=1+ \sum_{m = y}^{\phi(n,k)} \sum_{k = 1}^{\lfloor \frac{\log n}{\log \alpha(m)} \rfloor} \binom{z}{k} W_{z-k,m+1}(\frac{n}{\alpha(m)^k}) $$
+                    </div>
+                    <div id="fiddle"><script async src="http://jsfiddle.net/NathanMcKenzie/xsvae8ze/embed/js,result/"></script></div>
+                    <div id="para">
+                        Some work will show that that
+                        $$ W_{ z,y }( n )=1 + z \cdot ( \phi(n,K)-\phi(\alpha(y,K)) )$$
+                    </div>
+                    <div id="para">
+                        which we could use with our purely recursive definition,
+                    </div>
+                    <div id="para">
+                        but that we’ll apply instead to our equation with the recursion pared down as
+                    </div>
+                    $$ W_{z,y}(n)=1+z \cdot( \phi(n) - \phi(\max(\alpha(y-1),\lfloor n^{\frac{1}{2}} \rfloor), K) )+\sum_{m = y}^{\lfloor \phi(n^{\frac{1}{2}},K) \rfloor}\sum_{k = 1}^{\lfloor \frac{\log n}{\log \alpha(m)} \rfloor}\binom{z}{k} W_{z-k,m+1}(\lfloor \frac{n}{\alpha(m)^k} \rfloor)$$
+                    <div id="para">
+                    </div>
+                    <div id="fiddle"><script async src="http://jsfiddle.net/NathanMcKenzie/9hw1yx41/embed/js,result/"></script></div>
+                    <div id="para">
+                        Then, finally, we can then express our prime counting function as
+                        $$ \lim_{z \to 0} \frac{\partial}{\partial z} W_{z,2}(n)=
+                        \Pi( n ) -\sum_{p \in P_k} H_{ \lfloor \frac{\log n}{\log p} \rfloor } =
+                        \sum_{m = 2}^{\phi(n,K)} \sum_{k = 1}^{\lfloor \frac{\log n}{\log \alpha(m)} \rfloor} \frac{(-1)^{k+1}}{k} \cdot  W_{-k,m+1}(\frac{n}{\alpha(m)^k})$$
+                    </div>
+                    <div id="fiddle"><script async src="http://jsfiddle.net/NathanMcKenzie/1pccyern/embed/js,result/"></script></div>
+                    <div id="para">
+                        which can be simplified a bit further to
+                    </div>
+                    $$ \Pi( n )= \sum_{p \in P_k} H_{ \lfloor \frac{\log n}{\log p} \rfloor }+ ( \phi(n,K)-\phi(\lfloor n^{\frac{1}{2}} \rfloor,K) )+
+                    \sum_{m = 2}^{\lfloor \phi(n^{\frac{1}{2}},K) \rfloor} \sum_{k = 1}^{\lfloor \frac{\log n}{\log \alpha(m)} \rfloor} \frac{(-1)^{k+1}}{k} \cdot  W_{-k,m+1}(\frac{n}{\alpha(m)^k}) $$
+                    <div id="fiddle"><script async src="http://jsfiddle.net/NathanMcKenzie/y9ndjox3/embed/js,result/"></script></div>
+                    <div id="para">
+                        As mentioned in the introduction, the actual count of primes can be easily calculated via moebius inversion as
+                    </div>
+                    <div id="para">
+                        Viola!
+                    </div>
+                </div>
+            </div>
+        </div>
+        <img src="art/edgeb.png" />
+    </div>
+    <script>renderMathInElement(document.body, { delimiters: [{ left: "$$", right: "$$", display: true }, { left: "$", right: "$", display: false }] });</script>
+</body>
+</html>

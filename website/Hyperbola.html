@@ -1,0 +1,979 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.css" integrity="sha384-wITovz90syo1dJWVh32uuETPVEtGigN07tkttEqPv+uR2SE/mbQcG7ATL28aI9H0" crossorigin="anonymous">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.js" integrity="sha384-/y1Nn9+QQAipbNQWU65krzJralCnuOasHncUFXGkdwntGeSvQicrYkiUBwsgUqc1" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/contrib/auto-render.min.js" integrity="sha384-dq1/gEHSxPZQ7DdrM82ID4YVol9BYyU7GbWlIwnwyPzotpoc57wDw/guX8EaYGPx" crossorigin="anonymous"></script>
+    <script src="http://d3js.org/d3.v3.min.js"></script>
+    <script src="http://maurizzzio.github.io/function-plot/js/function-plot.js"></script>
+    <script src="factors.js"></script>
+    <script src="page.js"></script>
+    <link rel="stylesheet" href="css/IceCream.css" type="text/css" />
+    <meta charset="utf-8">
+</head>
+<body>
+    <div id="pageouter">
+        <div id="page2"><div id="content2"><img src="art/edgea.png" /></div></div>
+        <div id="page">
+            <div id="content7">
+                <div id='title'>
+                    <h2>
+                        <center>
+                            Counting Prime Numbers with the Hyperbola Method
+                        </center>
+                    </h2>
+                </div><br />
+                <div id='underouter'><div id='under'></div></div>
+
+                <!-- ---------------------------------------------------------------------------------------------------------- -->
+
+                <div id="section2">
+                    <script>makeBasicTitle('1. Overview', 'section2');</script>
+
+                    <div id="para">
+                        I have, elsewhere, detailed descriptions and an implementation of a prime counting algorithm that runs in
+                        something like $O(n^\frac{2}{3} \log n)$ time and $O(n^\frac{1}{3} \log n)$ or thereabouts.  It is, as far
+                        as I know, novel.
+                    </div>
+                    <div id="para">
+                        There is, however, a second approach that I’ve explored that I feel is very promising, but that I haven’t
+                        quite gotten as fast yet.  It’s an approach that feels like it’s one good idea away from being amazing,
+                        and is, at any rate, much more elegant.  In my best current implementations of this general idea,
+                        it seems to run in something like $O(n^\frac{4}{5} \log n)$ time and $O(\epsilon)$ space, with
+                        extremely favorable constant time factors.
+                    </div>
+                    <div id="para">
+                        So I’ll describe that approach here, in the hopes that someone else will pick it up and run with it.
+                    </div>
+                    <div id="para">
+                        Throughout this paper, I won’t be proving anything, but I will be placing runnable Mathematica code
+                        under most identities as a form of double entry book-keeping, and as an easy way to test what I’m describing.
+                    </div>
+                </div>
+
+                <!-- ---------------------------------------------------------------------------------------------------------- -->
+
+                <div id="section3">
+                    <script>makeBasicTitle('2. Basic Theory', 'section3');</script>
+
+                    <div id="para">
+                        First, I need to collect and present a bit of theory to give the general context I’m working in.
+                    </div>
+                    <div id="para">
+                        I start with the generalized number of divisors function, which I’ll define as
+                        $$ d_z( n ) = \prod_{p^a | n} \frac{z(z+1)...(z+a-1)}{a!} $$
+                        <code>
+                            <h5>dz[n_, z_] :=  If[n == 1, 1, Product[Pochhammer[z, p[[2]]]/p[[2]]!, {p, FactorInteger[n]}]]</h5>
+                        </code>
+                    </div>
+                    <div id="fiddle"><script async src="http://jsfiddle.net/NathanMcKenzie/x5abftrk/embed/js,result/"></script></div>
+                    <div id="para">
+                        $d_z(n)$ are also the coefficients for $\zeta(s)^z$.
+                    </div>
+                    <div id="para">
+                        The generalized number of divisors function is very naturally connected to a specific prime counting function as
+                        $$ \lim_{z \to 0} \frac{\partial}{\partial z} d_z( n ) = \frac{\Lambda(n) }{ \log n } $$
+                        <code>
+                            <h5>test[n_] := {D[dz[n, z], z] /. z -> 0, FullSimplify[ MangoldtLambda[n] / Log[ n ]] }</h5>
+                        </code>
+                    </div>
+                    <div id="para">
+                        where $\Lambda(n)$ is the Mangoldt lambda function.  This is the specific connection I will use to count primes.
+                        These are also, of course, the coefficients of $\log \zeta(s)$.
+                    </div>
+                    <div id="para">
+                        Now let’s define a generalized count of divisors summatory function.
+                        $$ D_z( n ) = \sum_{j=1}^n d_z( j ) $$
+                        <code>
+                            <h5>DivisorSum[n_, z_] :=  Sum[dz[j,z],{j,1,n}]</h5>
+                        </code>
+                    </div>
+                    <div id="para">
+                        Needless to say, using our above definition, $ d_z( n ) = \prod_{p^a | n} \frac{z(z+1)...(z+a-1)}{a!} $,
+                        would mean that computing $D_z(n)$ involves factoring
+                        all the numbers between 1 and n, which is onerous.  Our hope
+                        would be that there might be other, more tractable definitions
+                        for $D_z(n)$ if we view it on its own terms… and that hope will be justified.
+                        That’s what the rest of this paper describes, in fact.
+                    </div>
+                    <div id="para">
+                        The prime counting function we’ll be computing is just the summatory version of the previous identity:
+                        $$  \lim_{z \to 0} \frac{\partial}{\partial z} D_z( n ) = \sum_{k=1}^{\lfloor \frac{\log n}{\log 2} \rfloor} \frac{1}{k} \cdot
+                        \pi(n^{\frac{1}{k})  } = \Pi( n ) $$
+                        <code>
+                            <h5>PrimePowers[n_]:=Sum[PrimePi[n^(1/k)]/k,{k,1,Log2@n}]<br /></h5>
+                            <h5>test2[n_]:={D[DivisorSum[n, z],z]/.z->0, PrimePowers[n]}</h5>
+                        </code>
+                    </div>
+                    <div id="fiddle"><script async src="http://jsfiddle.net/NathanMcKenzie/69kkq0dc/embed/js,result/"></script></div>
+                    <div id="para">The function I’m naming here as $\Pi(n)$ lacks standard notation, but $\Pi(n)$ is used rather often, so I’ll stick with that.</div>
+                    <div id="para">
+                        And finally, by standard techniques, we can recover the count of primes, $\pi(n)$, from $\Pi(n)$ by using moebius inversion.
+                        <code>
+                            <h5>Primes[n_] := Sum[MoebiusMu[j]/j PrimePowers[n^(1/j)], {j, 1, Log2@n}]</h5>
+                        </code>
+                    </div>
+                </div>
+
+                <!-- ---------------------------------------------------------------------------------------------------------- -->
+
+                <div id="section3a">
+                    <script>makeBasicTitle('3.1 A Simple Identity for $D_z(n)$', 'section3a');</script>
+                    <div id="para">
+                        So now I want to talk about some ways to think about $D_z(n)$ on its own terms.
+                    </div>
+                    <div id="para">
+                        I want to start by showing what must be the simplest possible expression for, which is the following recursive formula.
+                    </div>
+                    <div id="para">
+                        If we define $f_k(n,j)$ as
+                        $$ f_k(n,j)  = f_k(n, j+1) + (\frac{z+1} {k} - 1)(1+f_{k+1}( \frac{n}{j}, 2 )) $$
+                        with terminating condition
+                        $$ \textrm{if } n < j, f_k(n,j) = 0 $$
+                        then
+                        $$ D_z(n) = 1+f_1(n,2) $$
+                        <code>
+                            <h5>DivisorSumV2[n_, z_, k_, j_] := If[n < j, 0, ((z + 1)/k - 1) (1 + DivisorSumV2[n/j, z, k + 1, 2]) + DivisorSumV2[n, z, k, j + 1]]<br /></h5>
+                            <h5>test3[n_] := {Expand[1 + DivisorSumV2[n, z, 1, 2]], Expand@DivisorSum[n, z]}</h5>
+                        </code>
+                    </div>
+                    <div id="para">
+                        If the recursion if flattened out, so to speak, another way to express this concept is as
+
+                        $$  D_z( n )=1+ \binom{z}{1}\sum_{t=2}^x 1+ \binom{z}{2} \sum_{t=2}^x \sum_{u=2}^{\lfloor \frac{x}{t} \rfloor} 1+ \binom{z}{3} \sum_{t=2}^x \sum_{u=2}^{\lfloor \frac{x}{t} \rfloor} \sum_{v=2}^{\lfloor \frac{x}{t \cdot u} \rfloor} 1+ ...$$
+                    </div>
+                    <div id="para">
+                        Once again, we can take the derivative of $D_z(n)$ at $0$ to yield a similar recursive
+                        formula for our prime counting funciton $\Pi(n)$.
+                    </div>
+                    <div id="para">
+                        If we define $f_k(n,j)$ as
+                        $$ f_k(n,j)  = f_k(n, j+1) + (\frac{1}{k}-f_{k+1}( \frac{n}{j}, 2 )) $$
+                        with terminating condition
+                        $$ \textrm{if } n < j, f_k(n,j) = 0 $$
+                        then
+                        $$ \lim_{z \to 0} \frac{\partial}{\partial z} D_z(n) = \Pi(n) = f_1(n,2) $$
+                        <code>
+                            <h5>PrimePowersV2[n_, k_, j_] := If[n < j, 0, (1/k - PrimePowersV2[n/j, k + 1, 2]) + PrimePowersV2[n, k, j + 1]]<br /></h5>
+                            <h5>test4[n_] := {PrimePowersV2[n, 1, 2], D[DivisorSum[n, z], z] /. z -> 0}</h5>
+                        </code>
+                    </div>
+                    <div id="fiddle">
+                    <script async src="http://jsfiddle.net/NathanMcKenzie/xdLea70w/embed/js,result/"></script></div>
+                    <div id="para">
+                        Flattening out the recursion, this is
+                        $$  \Pi( n )=\sum_{t=2}^x 1- \frac{1}{2} \sum_{t=2}^x \sum_{u=2}^{\lfloor \frac{x}{t} \rfloor} 1+ \frac{1}{3} \sum_{t=2}^x \sum_{u=2}^{\lfloor \frac{x}{t} \rfloor} \sum_{v=2}^{\lfloor \frac{x}{t \cdot u} \rfloor} 1- ...$$
+                    </div>
+                    <div id="para">
+                        These are useful expressions, though slow to compute as written.  They are in fact the basis
+                        of my other fast prime counting algorithm, mentioned in the introduction.
+                    </div>
+                    <div id="para">
+                        Conceptually, this approach is manually identifying every single possible permutation of whole numbers,
+                        where order is significant, that, when multiplied together, are less than or equal to n,
+                        with permutations scaled by different values depending on how many terms they have.
+                    </div>
+                </div>
+
+                <!-- ---------------------------------------------------------------------------------------------------------- -->
+
+                <div id="section4">
+
+                    <script>makeBasicTitle('3.2 The Hyperbola Method', 'section4');</script>
+                    <div id="para">
+                        Computing $D_z(n)$ quickly mostly hinges on finding and exploiting its natural symmetries.
+                        The approach I’m going to detail below, which feels to me very natural, involves, essentially,
+                        the same symmetry exploited in the Dirichlet hyperbola method.  But to convey it, I’m going
+                        to need to generalize $D_z(n)$ in a way that is highly analogous to the generalization of
+                        the zeta function $\zeta(0)$ to the Hurwitz zeta function $\zeta(0,y)$.
+                    </div>
+                    <div id="para">
+                        So I’m going to introduce the following function, $D_{z,y}(n)$.  If we define $f_k(n,j)$ as
+                        $$ f_k(n,j)  = f_k(n, j+1) + (\frac{z+1} {k} - 1)(1+f_{k+1}( \frac{n}{j}, y )) $$
+                        with terminating condition
+                        $$ \textrm{if } n < j, f_k(n,j) = 0 $$
+                        then
+                        $$ D_{z,y}(n) = 1+f_1(n,y) $$
+                        <code>
+                            <h5>DivisorSumClippedr[n_, z_, k_, j_,y_] := If[n < j, 0, ((z + 1)/k - 1) (1 + DivisorSumClippedr[n/j, z, k + 1, y,y]) + DivisorSumClippedr[n, z, k, j + 1,y]] <br /></h5>
+                            <h5>DivisorSumClipped[n_,z_,y_]:=1+DivisorSumClippedr[n,z,1,y,y] <br /></h5>
+                            <h5>test5[n_] := {Expand[DivisorSumClipped[n, z, 2]], Expand@DivisorSum[n, z]}</h5>
+                        </code>
+                    </div>
+                    <div id="para">
+                        If we flatten out the recursion, we are left with the following identity for $D{z,y}(n)$.
+                        $$  D_{z,y}( n )=1+ \binom{z}{1}\sum_{t=y}^x 1+ \binom{z}{2} \sum_{t=y}^x \sum_{u=y}^{\lfloor \frac{x}{t} \rfloor} 1+ \binom{z}{3} \sum_{t=y}^x \sum_{u=y}^{\lfloor \frac{x}{t} \rfloor} \sum_{v=y}^{\lfloor \frac{x}{t \cdot u} \rfloor} 1+ ...$$
+                    </div>
+                    <div id="para">
+                        So far, so good.
+                    </div>
+                    <div id="para">
+                        Now, here’s the motivation for this generalization.  It turns out that $D_{z,y}(n)$ can be
+                        expressed as concise sums of either $D_{z,y+1}(n)$ or $D_{z,y-1}(n)$, as
+                        $$ D_{z,y}(n) = \sum_{k = 0}^{\lfloor \frac{\log n}{\log y} \rfloor} \binom{z}{k} D_{z-k,y+1}(\frac{n}{y^k}) $$
+                        <code>
+                            <h5>bin[z_, k_] := bin[z,k] =  Product[z - j, {j, 0, k - 1}]/k! </br></h5>
+                            <h5>test6[n_,y_] := {Expand[DivisorSumClipped[n, z, y]], Expand[Sum[bin[z,k]DivisorSumClipped[n/y^k,z-k,y+1],{k,0,Log[y,n]}]]}</h5>
+                        </code>
+                    </div>
+                    <div id="para">
+                        and as
+                        $$  D_{z,y}(n) = \sum_{k = 0}^{\lfloor \frac{\log n}{\log (y-1)}  \rfloor} (-1)^k \binom{z}{k} D_{z-k,y-1}(\frac{n}{(y-1)^k}) $$
+                        <code>
+                            <h5>
+                                test7[n_,y_] := {Expand[DivisorSumClipped[n, z, y]], Expand[Sum[(-1)^k bin[z,k]DivisorSumClipped[n/(y-1)^k,z-k,y-1],{k,0,Log[y-1,n]}]]}
+                            </h5>
+                        </code>
+                    </div>
+                    <div id="para">
+                        We can actually use the first of these identities recursively by itself to define $D_{z,y}(n)$, and
+                        in turn $D_z(n)$ and $\Pi(n)$.  From inspection of the nested sum definition above, it should be clear that
+                        $$ \textrm{if } n < y, D_{z,y}(n)=1$$
+                    </div>
+                    <div id="para">
+                        as all of the sums will be $0$. This gives us a terminating condition for recursion, and so we can compute $D_{z}( n ) = D_{ z,2 }( n )$ as
+                        $$ D_{z,y}(n) = \sum_{k = 0}^{\lfloor \frac{\log n}{\log y} \rfloor} \binom{z}{k} D_{z-k,y+1}(\frac{n}{y^k}) $$
+                        with terminating condition
+                        $$ \textrm{if } n < y, D_{ z,y }( n )=1$$
+                        <code>
+                            <h5>DivisorSumClippedV2[n_,z_,y_]:=If[n < y,1,Sum[bin[z,k]DivisorSumClippedV2[n/y^k,z-k,y+1],{k,0,Log[y,n]}]] </br></h5>
+                            <h5>test8[n_] := {Expand[DivisorSum[n, z]], Expand[DivisorSumClippedV2[n,z,2]]}</h5>
+                        </code>
+                    </div>
+                    <div id="para">
+                        and thus $\Pi(n)$ is
+                        $$ \Pi( n ) = \lim_{ z \to 0 }\frac{ \partial }{\partial z} D_{ z,2 }( n ) $$
+                        <code>
+                            <h5>
+                                test9[n_] := {D[DivisorSum[n, z],z]/.z->0, D[DivisorSumClippedV2[n,z,2],z]/.z→0}
+                            </h5>
+                        </code>
+                    </div>
+                    <div id="para">
+                        Conceptually, the approach in section 3 counted all permutations of ordered whole numbers that,
+                        when multiplied together, were less than or equal to n.  This approach instead counts all possible
+                        unordered combinations of whole numbers greater than 1 that, when multiplied together, are less
+                        than or equal to n.  It then uses combinatorial identities to compute how many permutations that would result in.
+                    </div>
+                </div>
+
+                <!-- ---------------------------------------------------------------------------------------------------------- -->
+
+                <div id="section5">
+
+                    <script>makeBasicTitle('3.3 Core Optimizations', 'section5');</script>
+                    <div id="para">
+                        So I’ve suggested that $D_{z,y}(n)= \sum_{k = 0}^{\lfloor \frac{\log n}{\log y}  \rfloor} \binom{z}{k} D_{z-k,y+1}(\frac{n}{y^k})$
+                        is a very natural identity to use to compute $D_z(n)$ and thus $\Pi(n)$.  And I’ve provided some
+                        sample Mathematica code to demonstrate that it does, in fact, compute those functions.
+                    </div>
+                    <div id="para">
+                        But as we’re interested in efficient computation, there are tweaks we can make to the
+                        formula to make it more efficient in both time and space.  Like most such optimizations,
+                        we’re going to lose a lot of elegance along the way, of course.
+                    </div>
+                    <div id="para">
+                        So first, for the sake of avoiding the memory overhead of recursion, let’s note that
+
+                        $$ \sum_{k = 0}^{\lfloor \frac{\log n}{\log y} \rfloor} \binom{z}{k} D_{z-k,y+1}(\frac{n}{y^k}) =
+                        D_{ z,y+1 }( n ) + \sum_{k = 1}^{\lfloor \frac{\log n}{\log y}  \rfloor} \binom{z}{k} D_{z-k,y+1}(\frac{n}{y^k}) $$
+                    </div>
+                    <div id="para">
+                        which, combined with the terminating condition $ \textrm{if }n < y, D_{z,y}(n)=1$,
+                        let’s us pare down the recursion as
+                        $$  D_{z,y}(n)=1+ \sum_{m = y}^n \sum_{k = 1}^{\lfloor \frac{\log n}{\log m} \rfloor}\binom{z}{k} D_{z-k,m+1}(\frac{n}{m^k}) $$
+                        <code>
+                            <h5>
+                                DivisorSumClippedV3[n_, z_, y_] := 1 + Sum[bin[z, k] DivisorSumClippedV3[n/m^k, z - k, m + 1], {m, y, n}, {k, 1, Log[m, n]}]
+                            </h5>
+                        </code>
+                    </div>
+                    <div id="para">
+                        Note that this change converts the memory bounds of computing $D_{z,y}(n)$
+                        from greater than $O(n)$ down to the ballpark of $O(\log n)$.
+                    </div>
+                    <div id="para">
+                        A bit more thought or testing should likewise confirm that
+                        $$ D_{ z,y }( n )=1 + z \cdot ( n-y+1 ) $$
+                    </div>
+                    <div id="para">
+                        which we could use with our purely recursive definition as
+                        <code>
+                            <h5>
+                                DivisorSumClippedV4[n_, z_, y_] := If[n < y, 1, If[n < y^2, 1 + z (n - y + 1), 1 + Sum[bin[z, k] DivisorSumClippedV4[Floor[n/m^k], z - k, m + 1], {m, y, n}, {k, 1, Log[m, n]}]]]
+                            </h5>
+                        </code>
+                    </div>
+                    <div id="para">
+                        but that we’ll apply instead to our equation with the recursion pared down as
+                        $$ D_{z,y}(n)=1+z \cdot( n+1 - \max(y,1+\lfloor n^{\frac{1}{2}} \rfloor) )
+                        + \sum_{m = y}^{\lfloor n^{\frac{1}{2}} \rfloor} \sum_{k = 1}^{\lfloor \frac{\log n}{\log m}  \rfloor} \binom{z}{k} D_{z-k,m+1}(\lfloor \frac{n}{m^k} \rfloor) $$
+                        <code>
+                            <h5>
+                                DivisorSumClippedV5[n_, z_, y_] := DivisorSumClippedV5[n, z, y] = If[n < y, 1, 1 + z (n + 1 - Max[y, 1 + Floor[n^(1/2)]]) +
+                                Sum[bin[z, k] DivisorSumClippedV5[Floor[n/m^k], z - k, m + 1], {m, y, Floor[n^(1/2)]}, {k, 1, Log[m, n]}]]
+                            </h5>
+                        </code>
+                    </div>
+                    <div id="para">
+                        We’ll make two final, small optimizations with this approach before doing something drastic.
+                    </div>
+                    <div id="para">
+                        First, although the equations we’ve worked with thus far hold for a complex variable $z$, the
+                        actual computation of the resulting polynomials is much harder to handle than just
+                        computing a result for some fixed value of $z$.  Thus far, to calculate our count of primes,
+                        we’ve computed the polynomial, then taken its derivative at $z = 0$.  And that does work.
+                        But it’s not strictly necessary.  We can instead take our definition for $D_{z,y}(n)$, subtract $1$, divide by $z$,
+                        and then take the limit at $z=0$ to get
+                        $$ \lim_{z \to 0} \frac{\partial}{\partial z} D_{z,2}(n)=\Pi( n )=\sum_{m = 2}^n
+                        \sum_{k = 1}^{\lfloor \frac{\log n}{\log m} \rfloor}
+                        \frac{(-1)^{k+1}}{k} \cdot  D_{-k,m+1}(\frac{n}{m^k})$$
+                        <code>
+                            <h5>
+                                PrimePowersV3[n_] := Sum[(-1)^(k + 1)/k DivisorSumClippedV5[Floor[n/m^k], -k, m + 1], {m, 2, n}, {k, 1, Log[m, n]}]
+                            </h5>
+                        </code>
+                    </div>
+                    <div id="para">
+                        which can be simplified a bit further to
+                        $$
+                        \Pi( n )=
+                        ( n-\lfloor n^{\frac{1}{2}} \rfloor )+
+                        \sum_{m = 2}^{\lfloor n^{\frac{1}{2}} \rfloor}
+                        \sum_{k = 1}^{\lfloor \frac{\log n}{\log m} \rfloor}
+                        \frac{(-1)^{k+1}}{k} \cdot  D_{-k,m+1}(\frac{n}{m^k})
+                        $$
+                        <code>
+                            <h5>
+                                PrimePowersV4[n_] := (n - Floor[n^(1/2)]) + Sum[(-1)^(k + 1)/k DivisorSumClippedV5[Floor[n/m^k], -k, m + 1], {m, 2, Floor[n^(1/2)]}, {k, 1, Log[m, n]}]
+                            </h5>
+                        </code>
+                    </div>
+                    <div id="para">
+                        So there we go.  An interesting method for counting prime powers
+                        that has, with a better implementation, a running time in the very
+                        rough ballpark of $O(n)$ or so, comparable to the Sieve of Eratosthenes, while
+                        using $O(\epsilon)$ space, isn’t too hard to implement, and is trivially parallelizable.
+                    </div>
+                    <div id="para">
+                        As mentioned in the introduction, the actual count of primes can be easily calculated via moebius inversion as
+                        <code>
+                            <h5>
+                                PrimesV2[n_] := Sum[(MoebiusMu[k]/k)PrimePowersV4[Floor[n^(1/k)]],{k,1,Log2@n}]
+                            </h5>
+                        </code>
+                    </div>
+                </div>
+
+                <!-- ---------------------------------------------------------------------------------------------------------- -->
+
+                <div id="section6">
+
+                    <script>makeBasicTitle('4.1 Introducing a Wheel', 'section6');</script>
+
+                    <div id="para">
+                        So now we’re going to do something a bit more complicated.  This
+                        particular approach described above is radically sped up by the
+                        introduction of wheel.
+                    </div>
+                    <div id="para">
+                        First, let’s define the following two sets.
+                    </div>
+                    <div id="para">
+                        <center><i>Let $P_{K}$ be the set of the first K distinct primes, $\{ 2,3,5,..., p_K \}$.</i></center>
+                    </div>
+                    <div id="para">
+                        <center><i>Let $B_K$ be the set of all natural numbers $> 1$ not divisible by any members of $P_K$.</i></center>
+                    </div>
+                    <div id="para">
+                        Then, to use the wheel, we’ll need two extra functions.
+                    </div>
+                    <div id="para">
+                        First, we need a function giving the count of entries in $B_K$ that
+                        are $\le$ some given number n.  To that end, we’ll introduce the Legendre
+                        function $\phi(n,K)$, which does exactly that.
+                    </div>
+                    <div id="para">
+                        We’ll also need to introduce another function, which takes an index and
+                        returns the element of the sequence $B_K$ corresponding to that index.  We’ll label it $\alpha(n)$.
+                    </div>
+                    <div id="para">
+                        As long as $K$ is not too large (here, we’ll use a $K$ of $7$), we can construct
+                        large, fixed sized tables that let us compute $\phi(n,K)$ and $\alpha(n)$ quickly.
+                    </div>
+                    <div id="para">
+                        Below is Mathematica code showing one approach for implementing both $\phi(n,K)$
+                        and $\alpha(n)$ using tables.
+                        <code>
+                            <h5>binomial[z_, k_] := binomial[z, k] = Product[z - j, {j, 0, k - 1}]/k! <br /></h5>
+                            <h5>WheelEntries = 7; <br /></h5>
+                            <h5>WheelSize := WheelSize = Product[Prime[j], {j, 1, WheelEntries}]; <br /></h5>
+                            <h5>CoprimeCache := CoprimeCache = Table[If[CoprimeQ[WheelSize, n], 1, 0], {n, 1, WheelSize}] <br /></h5>
+                            <h5>LegPhiCache := LegPhiCache = Accumulate[CoprimeCache] <br /></h5>
+                            <h5>FullWheel := FullWheel = LegPhiCache[[WheelSize]] <br /></h5>
+                            <h5>CoprimeOffsets := CoprimeOffsets = Flatten[Position[CoprimeCache, _?(# == 1 &)]] <br /></h5>
+                            <h5>Coprimes[n_] := Coprimes[n] = LegPhiCache[[Mod[n - 1, WheelSize] + 1]] + Floor[(n - 1)/WheelSize] FullWheel <br /></h5>
+                            <h5>WheelForID[n_] := WheelForID[n] = CoprimeOffsets[[Mod[n - 1, FullWheel] + 1]] + Floor[(n - 1)/FullWheel] WheelSize <br /></h5>
+                            <h5>FirstNonWheel := FirstNonWheel = WheelForID[2] <br /></h5>
+                            <h5>phi[n_,K_]:=Coprimes[n] <br /></h5>
+                            <h5>alpha[n_]:=WheelForID[n] <br /></h5>
+                        </code>
+                    </div>
+                    <div id="para">
+                        With these two functions, we can now describe wheel versions of our previous
+                        generalized count of divisor summatory function, but we will notate it as $W_{z}(n)$ to indicate
+                        the wheel is being used.  Analogous to our original definition for $D_z(n)$, it can be defined as
+                        $$ W_{z}(n)= \sum_{j = 1}^{\phi(n,K)} d_z( \alpha(j) ) $$
+                        <code>
+                            <h5>
+                                DivisorSumWheel[n_, z_] := Sum[dz[alpha[j], z], {j, 1, phi[n,K]}]
+                            </h5>
+                        </code>
+                    </div>
+                    <div id="para">
+                        $D_z(n)$ and $W_z(n)$ can be expressed in terms of each other via multiplicative convolution,
+                        but it’s a bit complicated and we don’t need it for our purposes, and the relationship
+                        is far from obvious.  Much more significantly for us, though, we can use
+                        $W_z(n)$ to compute our prime counting function as
+                        $$ \lim_{z \to 0} \frac{\partial}{\partial z} W_z( n )+ \sum_{p \in P_k} H_{ \lfloor \frac{\log n}{\log p} \rfloor }=\Pi( n )$$
+                        <code>
+                            <h5>PiW[n_] := (D[DivisorSumWheel[n, z], z] /. z -> 0) + Sum[HarmonicNumber[Floor[Log[n]/Log[Prime[p]]]], {p, 1, WheelEntries}]</h5>
+                            <h5>Test19[n_] := {PiW[n], PrimePowers[n]}</h5>
+                        </code>
+                    </div>
+                    <div id="para">
+                        Analogously to $D_z(n)$, $W_z(n)$ can be expressed recursively like so.
+                    </div>
+                    <div id="para">
+                        If we define $f_k(n,j)$ as
+                        $$ f_k(n,j)  = f_k(n, j+1) + (\frac{z+1} {k} - 1)(1+f_{k+1}( \frac{n}{\alpha(j)}, 2 )) $$
+                        with terminating condition
+                        $$ \textrm{if } n < \alpha(j), f_k(n,j) = 0 $$
+                        then
+                        $$ W_{z}(n) = 1+f_1(n,2) $$
+                        <code>
+                            <h5>DivisorSumWheelV2[n_, z_, k_, j_] :=  If[n < alpha[j], 0, ((z + 1)/k - 1) (1 + DivisorSumWheelV2[n/alpha[j], z, k + 1, 2]) + DivisorSumWheelV2[n, z, k, j + 1]]<br /></h5>
+                            <h5>Test21[n_] := {Expand@DivisorSumWheel[n, z], Expand[1 + DivisorSumWheelV2[n, z, 1, 2]]}<br /></h5>
+                            <br />
+                            <h5>PiWV2[n_] := (D[1+DivisorSumWheelV2[n, z,1,2], z] /. z -> 0) + Sum[HarmonicNumber[Floor[Log[n]/Log[Prime[p]]]], {p, 1, WheelEntries}]<br /></h5>
+                            <h5>Test22[n_] := {PiWV2[n], PrimePowers[n]}</h5>
+                        </code>
+                    </div>
+                    <div id="para">
+                        With the recursion flattened, this means that
+                        $$ W_{z}(n)= \binom{z}{0} 1 + \binom{z}{1} \sum_{j <= n; j \in B_K} 1 + \binom{z}{2} \sum_{j \cdot k <= n; j,k \in B_K} 1 + \binom{z}{3} \sum_{j \cdot k \cdot l <= n; j,k,l \in B_K} 1 +...$$
+                    </div>
+                    <div id="para">
+                        and, if we take the derivative with respect to $z$ at $0$, that our prime counting function is
+                        $$ \Pi(n)= \sum_{p \in P_k} H_{ \lfloor \frac{\log n}{\log p} \rfloor } + \sum_{j <= n; j \in B_K} 1 - \frac{1}{2} \sum_{j \cdot k <= n; j,k \in B_K} 1 + \frac{1}{3} \sum_{j \cdot k \cdot l <= n; j,k,l \in B_K} 1 -... $$
+                    </div>
+                </div>
+
+                <!-- ---------------------------------------------------------------------------------------------------------- -->
+
+                <div id="section7">
+                    <script>makeBasicTitle('4.2 Combining the Wheel and the Hyperbola Method', 'section7');</script>
+
+                    <div id="para">
+                        And now, once again, following the same blue print from before, we will generalize $W_z(n)$ as $W_{z,y}(n)$
+                        If we define $f_{k}(n,j)$ as
+                        $$ f_k(n,j)  = f_k(n, j+1) + (\frac{z+1} {k} - 1)(1+f_{k+1}( \frac{n}{\alpha(j)}, y )) $$
+                        with terminating condition
+                        $$ \textrm{if } n < \alpha(j), f_k(n,j) = 0 $$
+                        then
+                        $$ W_{z,y}(n) = 1+f_1(n,y) $$
+                        <code>
+                            <h5>DivisorSumWheelClippedInner[n_, z_, k_, j_,y_] :=  If[n < alpha[j], 0, ((z + 1)/k - 1) (1 + DivisorSumWheelClippedInner[n/alpha[j], z, k + 1, y,y]) + DivisorSumWheelClippedInner[n, z, k, j + 1,y]]<br /></h5>
+                            <h5>DivisorSumWheelClipped[n_,z_,y_]:=1+DivisorSumWheelClippedInner[n,z,1,y,y]<br /></h5>
+                        </code>
+                    </div>
+                    <div id="para">
+                        With the recursion flattened out, this is
+                    </div>
+                    $$ W_{z,y}(n)= \binom{z}{0} 1 + \binom{z}{1} \sum_{j <= n; j \in B_K; j \ge \alpha(y)} 1 + \binom{z}{2} \sum_{j \cdot k <= n; j,k \in B_K; j,k \ge \alpha(y)} 1 + \binom{z}{3} \sum_{j \cdot k \cdot l <= n; j,k,l \in B_K; j,k,l \ge \alpha(y)} 1 +...$$
+                    <div id="para">
+                        As was the case with $D_{z,y}(n)$, $W_{z,y}(n)$ can be expressed
+                        as small sums of either $W_{z,y+1}(n)$ or $W_{z,y-1}(n)$, as
+                        $$ W_{z,y}(n) = \sum_{k = 0}^{\lfloor \frac{\log n}{\log \alpha(y)} \rfloor} \binom{z}{k} W_{z-k,y+1}(\frac{n}{\alpha(y)^k}) $$
+                        <code>
+                            <h5>test24[n_,y_] := {Expand[DivisorSumWheelClipped[n, z, y]], Expand[Sum[bin[z,k]DivisorSumWheelClipped[n/alpha[y]^k,z-k,y+1],{k,0,Log[alpha[y],n]}]]}<br /></h5>
+                        </code><br />
+                        and as
+                        $$
+                        W_{z,y}(n)=
+                        \sum_{k = 0}^{\lfloor \frac{\log n}{\log (y-1)} \rfloor} (-1)^k \binom{z}{k} W_{z-k,\alpha(y-1)}(\frac{n}{\alpha(y-1)^k})
+                        $$
+                        <code>
+                            <h5>test25[n_,y_] := {Expand[DivisorSumWheelClipped[n, z, y]], Expand[Sum[(-1)^k bin[z,k]DivisorSumClipped[n/(y-1)^k,z-k,y-1],{k,0,Log[y-1,n]}]]}<br /></h5>
+                        </code><br />
+                    </div>
+                    <div id="para">
+                        Again, we can use the first of these identities recursively by itself to define
+                        $W_{z,y}(n)$, and thus $W_{z}(n)$ and $\Pi(n)$.  It is the case that
+                        $$ \textrm{if } n < \alpha(y), W_{z,y}(n) = 1$$
+                    </div>
+                    <div id="para">
+                        which gives us a terminating condition for recursion, and so we can
+                        compute $W_z(n)= W_{z,2}(n)$ using just
+                        $\displaystyle W_{z,y}(n)=
+                        \sum_{k = 0}^{\lfloor \frac{\log n}{\log \alpha(y)} \rfloor} \binom{z}{k} W_{z-k,y+1}(\frac{n}{\alpha(y)^k})$ applied recursively as
+                        <code>
+                            <h5>DivisorSumWheelClippedV2[n_,z_,y_]:=If[ n < alpha[y],1,Sum[bin[z,k]DivisorSumWheelClippedV2[n/alpha[y]^k,z-k,y+1],{k,0,Log[alpha[y],n]}]]<br /></h5>
+                            <h5>test26[n_] := {Expand[DivisorSumWheel[n, z]], Expand[DivisorSumWheelClippedV2[n,z,2]]}<br /></h5>
+                        </code><br />
+                    </div>
+                    <div id="para">
+                        and thus $\Pi(n)$ can be computed as as
+                        <code>
+                            <h5>test27[n_] := {PrimePowers[n], (D[DivisorSumWheelClippedV2[n,z,2],z]/.z->0)+ Sum[HarmonicNumber[Floor[Log[n]/Log[Prime[p]]]], {p, 1, WheelEntries}]}<br /></h5>
+                        </code><br />
+                    </div>
+
+                </div>
+
+                <!-- ---------------------------------------------------------------------------------------------------------- -->
+
+                <div id="section8">
+                    <script>makeBasicTitle('4.3 Optimizing the Combined Wheel / Hyperbola Method', 'section8');</script>
+
+
+                    <div id="para">
+                        So now let’s apply the same optimizations we previous applied to $D_{z,y}(n)$ to $W_{z,y}(n)$.
+                    </div>
+                    <div id="para">
+                        First, for the sake of avoiding the memory overhead of recursion, let’s note that
+                        $$ \sum_{k = 0}^{\lfloor \frac{\log n}{\log \alpha(y)} \rfloor} \binom{z}{k} W_{z-k,y+1}(\frac{n}{\alpha(y)^k})=
+                        W_{ z,y+1 }( n )+ \sum_{k = 1}^{\lfloor \frac{\log n}{\log \alpha(y)} \rfloor} \binom{z}{k} W_{z-k,y+1}(\frac{n}{\alpha(y)^k})$$
+                    </div>
+                    <div id="para">
+                        which, combined with the terminating condition $ \textrm{if } n < \alpha(y), W_{z,y}(n)=1$, lets us pare down the recursion as
+                        $$ W_{z,y}(n)=1+ \sum_{m = y}^{\phi(n,k)} \sum_{k = 1}^{\lfloor \frac{\log n}{\log \alpha(m)} \rfloor} \binom{z}{k} W_{z-k,m+1}(\frac{n}{\alpha(m)^k}) $$
+                        <code>
+                            <h5>DivisorSumWheelClippedV3[n_, z_, y_] := 1 + Sum[bin[z, k] DivisorSumWheelClippedV3[Floor[n/alpha[m]^k], z - k, m + 1], {m, y, phi[n,K]}, {k, 1, Log[alpha[m], n]}]<br /></h5>
+                        </code>
+                    </div>
+                    <div id="para">
+                        Some work will show that that
+                        $$ W_{ z,y }( n )=1 + z \cdot ( \phi(n,K)-\phi(\alpha(y,K)) )$$
+                    </div>
+                    <div id="para">
+                        which we could use with our purely recursive definition as
+                        <code>
+                            <h5>DivisorSumWheelClippedV4[n_, z_, y_] := If[n < alpha[y], 1, If[n < alpha[y]^2, 1 + z (phi[n,K]-phi[alpha[y],K]), 1 + Sum[bin[z, k] DivisorSumWheelClippedV4[Floor[n/alpha[m]^k], z - k, m + 1], {m, y, n}, {k, 1, Log[alpha[m], n]}]]]<br /></h5>
+                        </code>
+                    </div>
+                    <div id="para">
+                        but that we’ll apply instead to our equation with the recursion pared down as
+                    </div>
+                    $$ W_{z,y}(n)=1+z \cdot( \phi(n) - \phi(\max(\alpha(y-1),\lfloor n^{\frac{1}{2}} \rfloor), K) )+\sum_{m = y}^{\lfloor \phi(n^{\frac{1}{2}},K) \rfloor}\sum_{k = 1}^{\lfloor \frac{\log n}{\log \alpha(m)} \rfloor}\binom{z}{k} W_{z-k,m+1}(\lfloor \frac{n}{\alpha(m)^k} \rfloor)$$
+                    <div id="para">
+                        <code>
+                            <h5>DivisorSumWheelClippedV5[n_,z_,y_] := If[n < alpha[y],1,1+z (phi[n,K]-phi[Max[alpha[y-1],Floor[n^(1/2)]],K])+Sum[bin[z,k] DivisorSumWheelClippedV5[Floor[n/alpha[m]^k],z-k,m+1],{m,y,phi[Floor[n^(1/2)],K]},{k,1,Log[alpha[m],n]}]]<br /></h5>
+                        </code>
+                    </div>
+                    <div id="para">
+                        Then, finally, we can then express our prime counting function as
+                        $$ \lim_{z \to 0} \frac{\partial}{\partial z} W_{z,2}(n)=
+                        \Pi( n ) -\sum_{p \in P_k} H_{ \lfloor \frac{\log n}{\log p} \rfloor } =
+                        \sum_{m = 2}^{\phi(n,K)} \sum_{k = 1}^{\lfloor \frac{\log n}{\log \alpha(m)} \rfloor} \frac{(-1)^{k+1}}{k} \cdot  W_{-k,m+1}(\frac{n}{\alpha(m)^k})$$
+                        <code>
+                            <h5>PrimesWithDivisorSumWheelClipped[n_]:=Sum[HarmonicNumber[Floor[Log[Prime[p],n]]], {p, 1, WheelEntries}]+Sum[(-1)^(k+1)/k DivisorSumWheelClippedV5[Floor[n/alpha[m]^k],-k,m+1],{m,2,phi[n,K]},{k,1,Log[alpha[m],n]}]<br /></h5>
+                        </code>
+                    </div>
+                    <div id="para">
+                        which can be simplified a bit further to
+                    </div>
+                    $$ \Pi( n )= \sum_{p \in P_k} H_{ \lfloor \frac{\log n}{\log p} \rfloor }+ ( \phi(n,K)-\phi(\lfloor n^{\frac{1}{2}} \rfloor,K) )+
+                    \sum_{m = 2}^{\lfloor \phi(n^{\frac{1}{2}},K) \rfloor} \sum_{k = 1}^{\lfloor \frac{\log n}{\log \alpha(m)} \rfloor} \frac{(-1)^{k+1}}{k} \cdot  W_{-k,m+1}(\frac{n}{\alpha(m)^k}) $$
+                    <div id="para">
+                        <code>
+                            <h5>PrimesWithDivisorSumWheelClippedV2[n_]:= Sum[HarmonicNumber[Floor[Log[Prime[p],n]]], {p, 1, WheelEntries}]+(phi[n,K]-phi[Floor[n^(1/2)],K])+Sum[(-1)^(k+1)/k DivisorSumWheelClippedV5[Floor[n/alpha[m]^k],-k,m+1],{m,2,phi[Floor[n^(1/2)],K]},{k,1,Log[alpha[m],n]}]<br /></h5>
+                        </code>
+                    </div>
+                    <div id="fiddle"><script async src="http://jsfiddle.net/NathanMcKenzie/3Lge2m15/embed/js,result/"></script></div>
+                    <div id="para">
+                        As mentioned in the introduction, the actual count of primes can be easily calculated via moebius inversion as
+                        <code>
+                            <h5>PrimesV3[n_] := Sum[(MoebiusMu[k]/k) PrimesWithDivisorSumWheelClippedV2[Floor[n^(1/k)]],{k,1,Log2@n}]<br /></h5>
+                        </code>
+                    </div>
+                    <div id="para">
+                        Viola!
+                    </div>
+
+                </div>
+
+                <!-- ---------------------------------------------------------------------------------------------------------- -->
+
+                <div id="section9">
+                    <script>makeBasicTitle('5. Where to Go from Here', 'section9');</script>
+
+                </div>
+
+                <!-- ---------------------------------------------------------------------------------------------------------- -->
+
+                <div id="section10">
+                    <script>makeBasicTitle('6. A Variant', 'section10');</script>
+
+                    <div id="para">
+                        There’s another variant of this that I’ve put considerably more time into,
+                        although I think it’s just a little bit less elegant.  I’ll try to cover this more quickly.
+                    </div>
+                    <div id="para">
+                        First, start with the nested sum identity for $\Pi(n)$ from section 3.1, as
+                        well as it’s wheel version from section 4.1.  As a reminder, those were
+                        $$  \Pi( n )=\sum_{t=2}^x 1- \frac{1}{2} \sum_{t=2}^x \sum_{u=2}^{\lfloor \frac{x}{t} \rfloor} 1+ \frac{1}{3} \sum_{t=2}^x \sum_{u=2}^{\lfloor \frac{x}{t} \rfloor} \sum_{v=2}^{\lfloor \frac{x}{t \cdot u} \rfloor} 1- ...$$
+                        and
+                        $$ \Pi(n)= \sum_{p \in P_k} H_{ \lfloor \frac{\log n}{\log p} \rfloor } + \sum_{j <= n; j \in B_K} 1 - \frac{1}{2} \sum_{j \cdot k <= n; j,k \in B_K} 1 + \frac{1}{3} \sum_{j \cdot k \cdot l <= n; j,k,l \in B_K} 1 -... $$
+                    </div>
+                    <div id="para">
+                        Now, I’m going to define a new family of count of divisors summatory functions,
+                        which I’ll label as $D^\#_{k,y}(n)$ and its wheel equivalent as $ W^\#_{k,y}(n)$.
+                        Those two functions can be defined recursively.
+                    </div>
+                    <div id="para">
+                        For $D^\#_{k,y}(n)$, if we have the recursive function
+                        $$ f_k(n,j) = f_k(n,j+1) + f_{k-1}(\frac{n}{j},y) $$
+                        with specials cases
+                        $$ \textrm{ if } n < j \textrm{ and } k > 0, f_k(n,j) = 0 $$
+                        and
+                        $$ \textrm{ if } k = 0, f_k(n,j) = 1 $$
+                        then
+                        $$ D^\#_{k,y}(n) = f_k(n,y) $$
+                    </div>
+                    <div id="para">
+                        And likewise, for $W_{k,y}'(n)$, if we have the recursive function
+                        $$ f_k(n,j) = f_k(n,j+1) + f_{k-1}(\frac{n}{\alpha(j)},y) $$
+                        with specials cases
+                        $$ \textrm{ if } n < \alpha(j) \textrm{ and } k > 0, f_k(n,j) = 0 $$
+                        and
+                        $$ \textrm{ if } k = 0, f_k(n,j) = 1 $$
+                        then
+                        $$ W^\#_{k,y}(n) = f_k(n,y) $$
+                    </div>
+                    <div id="para">
+                        Alternatively, we can write these explicitly as sums as
+                    </div>
+                    <div id="para">
+                        $$D^\#_{ 1,y }( n ) = \sum_{t=y}^x 1$$
+                        $$D^\#_{ 2,y }( n ) = \sum_{t=y}^x \sum_{u=y}^{\lfloor \frac{x}{t} \rfloor} 1$$
+                        $$D^\#_{ 3,y }( n ) = \sum_{t=y}^x \sum_{u=y}^{\lfloor \frac{x}{t} \rfloor} \sum_{v=y}^{\lfloor \frac{x}{t \cdot u} \rfloor} 1$$
+                    </div>
+                    <div id="para">
+                        with the wheel version being
+                        $$ W^\#_{1,y}(n)=\sum_{j <= n; j \in B_K; j \ge \alpha(y)} 1 $$
+                        $$ W^\#_{2,y}(n)=\sum_{j \cdot k <= n; j,k \in B_K; j,k \ge \alpha(y)}1$$
+                        $$ W^\#_{3,y}(n)=\sum_{j \cdot k \cdot l <= n; j,k,l \in B_K; j,k,l \ge \alpha(y)}1$$
+                    </div>
+                    <div id="para">
+                        Just from inspection, if $n < y^k, D_{ k,y }'(n)=0$, and likewise, if
+                        $n < \alpha(y)^k, W^\#_{ k,y }(n) = 0$ . This fact will be useful momentarily.
+                    </div>
+                    <div id="para">
+                        So, with these new functions, we can rewrite the nested sum identities for $\Pi(n)$ I just wrote as
+                        $$  \Pi( n )= \sum_{k = 1}^{ \lfloor \frac{\log n}{\log 2} \rfloor } \frac{( -1 )^{ k+1 }}{k}\cdot D^\#_{ k,2 }( n )$$
+                        and
+                        $$ \Pi( n )= \sum_{p \in P_k} H_{ \lfloor \frac{\log n}{\log p} \rfloor } + \sum_{k = 1}^{ \lfloor \frac{\log n}{\log 2} \rfloor } \frac{( -1 )^{ k+1 }}{k}\cdot W^\#_{ k,2 }( n ) $$
+                    </div>
+                    <div id="para">
+                        Now, previously, in section 3.2, in what I called the hyperbola method,
+                        I showed how $D_{z,y}(n)$ could be expressed in terms of small sums of either
+                        $D_{z,y+1}(n)$ or $D_{z,y-1}(n)$.  And there are similar identities for
+                        $W_{z,y+1}(n)$ or $W_{z,y-1}(n)$
+                    </div>
+                    <div id="para">
+                        It turns out there are comparable identities for $D^\#_{k,y}(n)$ and $ W^\#_{k,y}(n)$.
+                    </div>
+                    <div id="para">
+                        Specifically, for $D^\#_{k,y}(n)$, those are
+                        $$ D^\#_{k,y}(n) = \sum_{j = 0}^k  \binom{k}{j} D^\#_{k-j,y+1}(\frac{n}{y^{j}}) $$
+                        and
+                        $$ D^\#_{k,y}(n) = \sum_{j = 0}^k (-1)^{k-j} \binom{k}{j} D^\#_{k-j,y-1}(\frac{n}{(y-1)^{j}}) $$
+                    </div>
+                    <div id="para">
+                        And for the wheel version $ W^\#_{k,y}(n) $, those are
+                        $$ W^\#_{k,y}(n) = \sum_{j = 0}^k  \binom{k}{j} W^\#_{k-j,y+1}(\frac{n}{y^{\alpha(j)}}) $$
+                        and
+                        $$ W^\#_{k,y}(n) = \sum_{j = 0}^k (-1)^{k-j} \binom{k}{j} W^\#_{k-j,y-1}(\frac{n}{(y-1)^{\alpha(j)}}) $$
+                    </div>
+                    <div id="para">
+                        Now, to cut to the chase.  Similar to how we did before in Section 3.2, we can define $D^\#_{k,y}(n)$
+                        purely in terms of these identities as
+                        $$ D^\#_{k,y}(n) = \sum_{j = 0}^k \binom{k}{j} D^\#_{k-j,y+1}(\frac{n}{y}^{j}) $$
+                        with
+                        $$ D^\#_{0,y}(n)=1 $$
+                        and
+                        $$ \textrm{ if } n < y^k, D^\#_{k,y}(n)=0 $$.
+                    </div>
+                    <div id="para">
+                        Likewise, we can define $ W^\#_{k,y}$ as
+                        $$ W^\#_{k,y}(n) = \sum_{j = 0}^k \binom{k}{j} W^\#_{k-j,y+1}(\frac{n}{\alpha(y)}^{j}) $$
+                        with
+                        $$ W^\#_{0,y}(n)=1 $$
+                        and
+                        $$ \textrm{ if } n < \alpha( y )^k, W^\#_{k,y}(n)=0 $$.
+                    </div>
+                    <div id="para">
+                        $$ W^\#_{1,y}(n) = \phi( n,K ) - \phi( \alpha(y),K ) $$
+                        $$ W^\#_{2,y}(n) = \phi( \lfloor n^{\frac{1}{2}} \rfloor,K ) - y + 2 \sum_{m=y+1}^{ \phi( \lfloor n^{\frac{1}{2}} \rfloor,K)} W_{ 1,m }( \lfloor \frac{n}{\alpha(m)} \rfloor ) $$
+                    </div>
+                    $$ W^\#_{k,y}(n) = \phi( \lfloor n^{\frac{1}{k}} \rfloor,K ) - y +
+                    k \sum_{m=y+1}^{ \phi( \lfloor n^{\frac{1}{k}} \rfloor,K)}
+                    W_{ 1,m }( \lfloor \frac{n}{\alpha(m)^{k-1}} \rfloor )+
+                    \sum_{m = y+1}^{ \phi( \lfloor n^{\frac{1}{k}} \rfloor, K) }
+                    \sum_{j = 2}^{k-1} \binom{ k }{ j } W^\#_{ j,m }( \lfloor \frac{n}{\alpha(m)^{k-j}} \rfloor )$$
+                    <div id="para">
+                        <code>
+                            <h5>DivisorSumWheelExcludeOne[n_,y_,1]:=DivisorSumWheelExcludeOne[n,y,1]=phi[n,K]-phi[alpha[y],K]<br /></h5>
+                            <h5>DivisorSumWheelExcludeOne[n_,y_,2]:=DivisorSumWheelExcludeOne[n,y,2]=(phi[Floor[n^(1/2)],K]-y)+2Sum[DivisorSumWheelExcludeOne[Floor[n/alpha[m]],m,1],{m,y+1,phi[Floor[n^(1/2)],K]}]<br /></h5>
+                            <h5>
+                                DivisorSumWheelExcludeOne[n_,y_,k_]:=DivisorSumWheelExcludeOne[n,y,k]=(phi[Floor[n^(1/k)],K]-y)+k Sum[DivisorSumWheelExcludeOne[Floor[n/(alpha[m]^(k-1))],m,1],{m,y+1,phi[Floor[n^(1/k)],K]}]+
+                                Sum[binomial[k,j]DivisorSumWheelExcludeOne[Floor[n/(alpha[m]^(k-j))],m,j],{m,y+1,phi[Floor[n^(1/k)],K]},{j,2,k-1}]<br />
+                            </h5>
+                        </code>
+                    </div>
+                </div>
+
+                <script id="jsbin-javascript">
+
+                    //_____________________
+
+                    let EPSILON=.000000001,M=Math,pow=M.pow,log=M.log,log2=M.log2,
+                    floor=n=>M.floor(EPSILON+n),
+                    Sum=(a,z,fn)=>{var t=0;for(var j=a;j<=floor(z);j++)t+=fn(j);return t},
+                    factor=n=>{let o=[],k=2;while(k*k<n){let t=0;while(n%k<1)t++,n/=k;t>0?o.push(t):{};k++}n>1?o.push(1):{};return o},
+                    Z=n=>1-Sum(2,n,j=>Z(n/j)),moebius=n=>n<2?1:Z(n)-Z(n-1),
+                    binomial=(z,k)=>{var t=1;for(var j=0;j<k;j++)t*=(z-j)/(j+1);return t},
+                    multiset=(z,k)=>{var t=1;for(var j=0;j<k;j++)t*=(z+j)/(j+1);return t}
+
+                    // WheelEntries=E, Prime=P, WheelSize=S, LegPhiCache=L, CoprimeCache=C
+                    // CoprimeOffsets = 0, FullWheel = F, divisibleByWheel=D
+                    /*let P=[2,3,5,7,11,13,17,19,23],E=7,S=1,C=[],L=[0],O=[],F,j,R=Math.floor;
+                    for(j=0;j<E;j++)S*=P[j];for(var n=1;n<=S;n++){let D=0;for(j=0;j<E;j++)if(n%P[j]<1){D=1;break}C.push(1-D)}
+                    for(j=0;j<C.length;j++)L.push(L[L.length-1]+C[j]);F=L[L.length-1];for(j=0;j<C.length;j++)if(C[j]==1)O.push(j+1);
+                    let T=n=>L[n%S]+R(n/S)*F,W=n=>O[n%F]+R(n/F)*S,FirstNonWheel=W(1),phi=(n, K)=>T(n-1),alpha=n=>W(n-1)*/
+
+
+                    function binomialCoefficient(z, k) {
+                        if (Number.isInteger(z) && z > -1 && z < 20) return Binomial[z][k];
+                        var total = 1;
+                        for (var j = 0; j < k; j++)
+                            total *= (z - j) / (j + 1);
+                        return total;
+                    }
+
+                    //_____________________
+
+                    function dz(n, z) {
+                        if (n == 1)
+                            return 1;
+                        var t = 1;
+                        var f = factor(n);
+                        for (var j = 0; j < f.length; j++)
+                            t *= multiset(z, f[j]);
+                        return t;
+                    }
+                    function DivisorSum(n, z) {
+                        var total = 0;
+                        for (var j = 1; j <= n; j++)
+                            total += dz(j, z);
+                        return total;
+                    }
+                    function PrimePowers(n) {
+                        var total = 0;
+                        for (k = 1; k <= floor( Math.log(n) / Math.log(2)) ; k++)
+                            total += PrimePi[floor(Math.pow(n, 1 / k))] / k;
+                        return total;
+                    }
+                    function test2(n) {
+                        console.log("" + ((DivisorSum(n, EPSILON) - 1) / EPSILON) + " " + PrimePowers(n));
+                    }
+                    function Primes(n) {
+                        var total = 0;
+                        for (var j = 1; j <= floor(Math.log(n) / Math.log(2)) ; j++)
+                            total += MoebiusMu[j] / j * PrimePowers(floor(Math.pow(n, 1 / j)));
+                        return total;
+                    }
+
+                    //_____________________
+
+                    function DivisorSumV2(n, z, k, j) {
+                        if (n < j) return 0;
+                        return ((z + 1) / k - 1) * (1 + DivisorSumV2(n / j, z, k + 1, 2)) + DivisorSumV2(n, z, k, j + 1)
+                    };
+                    function test3(n, z) {
+                        console.log((1 + DivisorSumV2(n, z, 1, 2)) + " " + DivisorSum(n, z));
+                    }
+                    function PrimePowersV2(n, k, j) {
+                        if (n < j) return 0;
+                        return (1 / k - PrimePowersV2(n / j, k + 1, 2)) + PrimePowersV2(n, k, j + 1);
+                    }
+                    function test4(n) {
+                        console.log(PrimePowersV2(100, 1, 2) + " " + ((DivisorSum(100, EPSILON) - 1) / EPSILON));
+                    }
+
+                    //_____________________
+
+                    function DivisorSumClippedr(n, z, k, j, y) {
+                        if (n < j) return 0;
+                        return ((z + 1) / k - 1) * (1 + DivisorSumClippedr(n / j, z, k + 1, y, y)) + DivisorSumClippedr(n, z, k, j + 1, y);
+                    }
+                    function DivisorSumClipped(n, z, y) { return 1 + DivisorSumClippedr(n, z, 1, y, y); }
+                    function test5(n, z) {
+                        console.log(DivisorSumClipped(n, z, 2) + " " + DivisorSum(n, z));
+                    }
+
+                    function test6(n, z, y) {
+                        var total = 0;
+                        for (var k = 0; k <= floor(Math.log(n) / Math.log(y)) ; k++)
+                            total += binomialCoefficient(z, k) * DivisorSumClipped(n / Math.pow(y, k), z - k, y + 1);
+                        console.log(DivisorSumClipped(n, z, y) + " " + total);
+                    }
+                    function test7(n, z, y) {
+                        var total = 0;
+                        for (var k = 0; k <= floor(Math.log(n) / Math.log(y)) ; k++)
+                            total += Math.pow(-1, k) * binomialCoefficient(z, k) * DivisorSumClipped(n / Math.pow(y - 1, k), z - k, y - 1);
+                        console.log(DivisorSumClipped(n, z, y) + " " + total);
+                    }
+                    function DivisorSumClippedV2(n, z, y) {
+                        if (n < y) return 1;
+                        var total = 0;
+                        for (var k = 0; k <= floor(Math.log(n) / Math.log(y)) ; k++)
+                            total += binomialCoefficient(z, k) * DivisorSumClippedV2(n / Math.pow(y, k), z - k, y + 1);
+                        return total;
+                    }
+                    function test8(n, z) {
+                        console.log(DivisorSum(n, z), DivisorSumClippedV2(n, z, 2));
+                    }
+                    function test9(n) {
+                        console.log(((DivisorSum(100, EPSILON) - 1) / EPSILON) + " " + ((DivisorSumClippedV2(100, EPSILON, 2) - 1) / EPSILON));
+                    }
+
+                    //_____________________
+
+                    function DivisorSumClippedV3(n, z, y) {
+                        var total = 1;
+                        for (var m = y; m <= n; m++)
+                            for (var k = 1; k <= floor(Math.log(n) / Math.log(m)) ; k++)
+                                total += binomialCoefficient(z, k) * DivisorSumClippedV3(n / Math.pow(m, k), z - k, m + 1);
+                        return total;
+                    }
+                    function DivisorSumClippedV4(n, z, y) {
+                        if (n < y) return 1;
+                        if (n < y * y) return 1 + z * (n - y + 1);
+                        var total = 1;
+                        for (var m = y; m <= n; m++)
+                            for (var k = 1; k <= floor(Math.log(n) / Math.log(m)) ; k++)
+                                total += binomialCoefficient(z, k) * DivisorSumClippedV4(floor(n / Math.pow(m, k)), z - k, m + 1);
+                        return total;
+                    }
+                    function DivisorSumClippedV5(n, z, y) {
+                        if (n < y) return 1;
+                        var total = 1 + z * (n + 1 - Math.max(y, 1 + floor(Math.pow(n, 1 / 2))));
+                        for (var m = y; m <= floor(Math.pow(n, 1 / 2)) ; m++)
+                            for (var k = 1; k <= floor(Math.log(n) / Math.log(m)) ; k++)
+                                total += binomialCoefficient(z, k) * DivisorSumClippedV5(floor(n / Math.pow(m, k)), z - k, m + 1);
+                        return total;
+                    }
+                    function PrimePowersV3(n) {
+                        var total = 0;
+                        for (var m = 2; m <= n; m++)
+                            for (var k = 1; k <= floor( Math.log(n) / Math.log(m)) ; k++)
+                                total += Math.pow(-1, k + 1) / k * DivisorSumClippedV5(floor(n / Math.pow(m, k)), -k, m + 1);
+                        return total;
+                    }
+                    function PrimePowersV4(n) {
+                        var total = n - floor(Math.pow(n, (1 / 2)));
+                        for (var m = 2; m <= floor(Math.pow(n, 1 / 2)) ; m++)
+                            for (var k = 1; k <= floor(Math.log(n) / Math.log(m)) ; k++)
+                                total += Math.pow(-1, k + 1) / k * DivisorSumClippedV5(floor(n / Math.pow(m, k)), -k, m + 1);
+                        return total;
+                    }
+                    function PrimesV2(n) {
+                        var total = 0;
+                        for (var k = 1; k <= floor(Math.log(n) / Math.log(2)) ; k++)
+                            total += MoebiusMu[k] / k * PrimePowersV4(floor(Math.pow(n, 1 / k)));
+                        return total;
+                    }
+
+                    //_____________________
+
+
+                    var WheelEntries = 7;
+                    var WheelSize = 1
+                    for (var j = 0; j < WheelEntries; j++) {
+                        WheelSize *= Prime[j];
+                    }
+                    var CoprimeCache = [];
+                    for (var n = 1; n <= WheelSize; n++) {
+                        var divisibleByWheel = false;
+                        for (var j = 0; j < WheelEntries; j++) {
+                            if (n % Prime[j] == 0) {
+                                divisibleByWheel = true;
+                                break;
+                            }
+                        }
+                        if (!divisibleByWheel) {
+                            CoprimeCache.push(1);
+                        } else {
+                            CoprimeCache.push(0);
+                        }
+                    }
+                    var LegPhiCache = [0];
+                    for (var j = 0; j < CoprimeCache.length; j++) {
+                        LegPhiCache.push(LegPhiCache[LegPhiCache.length - 1] + CoprimeCache[j]);
+                    }
+                    var FullWheel = LegPhiCache[LegPhiCache.length - 1];
+
+                    var CoprimeOffsets = [];
+                    for( var j = 0; j < CoprimeCache.length; j++ ){
+                        if( CoprimeCache[j] == 1 ){
+                            CoprimeOffsets.push( j + 1 );
+                        }
+                    }
+                    function Coprimes(n) {
+                        return LegPhiCache[(n - 1) % (WheelSize )] + Math.floor((n - 1) / WheelSize) * FullWheel;
+                    }
+                    function WheelForID(n){
+                        return CoprimeOffsets[ (n - 1)% FullWheel ] + Math.floor((n - 1) / FullWheel) * WheelSize;
+                    }
+                    var FirstNonWheel = WheelForID(2);
+                    function phi(n, K) {
+                        return Coprimes(n);
+                    }
+                    function alpha(n){
+                        return WheelForID(n);
+                    }
+
+                    //_____________________
+
+                    function DivisorSumWheel(n, z){
+                        var total = 0;
+                        console.log(phi(n, 7));
+                        for( var j = 1; j <= phi(n,7); j++ )
+                            total += dz(alpha(j),z);
+                        return total;
+                    }
+
+                    /*var A = 0, f = 100;
+                    function ival(ff, s) { return 1 / (pow(Math.E, (2 * Math.PI * s) / ff) - 1); }
+                    for (var k = 1; k < pow(f, 1 / 3) ; k++) { var cur = ival(Math.abs(f), k); if (cur == ival(Math.abs(f), k - .5)) { break; }  }
+                    var samps = [], samps2 = [];
+                    var ansbase = [{ y: 6.51721, text: 'y = 6.51721' }, { y: -.181288, text: 'y = -.181288...' }];
+                    var dm = { label: 'x axis', domain: [0, 50] };
+                    var dm2 = { label: 'y axis' };
+                    var ans = addFrequencyMarkers(f, { y: 6.51721, text: 'y = 6.51721' });
+                    var ans2 = addFrequencyMarkers(f, { y: 6.51721, text: 'y = 6.51721' }); ans2.push({ y: -.181288, text: 'y = -.181288...' });
+                    functionPlot({ target: '#demo0', xAxis: dm, yAxis: dm2, annotations: ansbase, width: 800, data: [line(function (v) { return sumImag(fl(v.x), A, f, samps2); }), line(function (v) { return sumReal(fl(v.x), A, f, samps); })] });
+                    functionPlot({ target: '#demo', xAxis: dm, yAxis: dm2, annotations: ans, width: 800, data: [line(function (v) { return integralReal(v.x, A, f); }), line(function (v) { return sumReal(fl(v.x), A, f, samps); })] });
+                    functionPlot({ target: '#demo2', xAxis: dm, yAxis: dm2, annotations: ans, width: 800, data: [line(function (v) { return integralRealDerivative(v.x, A, f); }, true), line(function (v) { return integralRealDerivative(fl(v.x), A, f); }, true)] });
+                    functionPlot({ target: '#demo3', xAxis: dm, yAxis: dm2, annotations: ans2, width: 800, data: [line(function (v) { return sumImag(fl(v.x), A, f, samps2) - integralImag(v.x, A, f); }), line(function (v) { return sumReal(fl(v.x), A, f, samps) - integralReal(v.x, A, f); })] });*/
+                </script>
+            </div>
+        </div>
+        <img src="art/edgeb.png" />
+    </div>
+    <script>renderMathInElement(document.body, { delimiters: [{ left: "$$", right: "$$", display: true }, { left: "$", right: "$", display: false }] });</script>
+</body>
+</html>
+

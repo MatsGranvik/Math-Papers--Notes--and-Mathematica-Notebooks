@@ -1,0 +1,157 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.css" integrity="sha384-wITovz90syo1dJWVh32uuETPVEtGigN07tkttEqPv+uR2SE/mbQcG7ATL28aI9H0" crossorigin="anonymous">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.js" integrity="sha384-/y1Nn9+QQAipbNQWU65krzJralCnuOasHncUFXGkdwntGeSvQicrYkiUBwsgUqc1" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/contrib/auto-render.min.js" integrity="sha384-dq1/gEHSxPZQ7DdrM82ID4YVol9BYyU7GbWlIwnwyPzotpoc57wDw/guX8EaYGPx" crossorigin="anonymous"></script>
+    <script src="http://d3js.org/d3.v3.min.js"></script>
+    <script src="http://maurizzzio.github.io/function-plot/js/function-plot.js"></script>
+    <script src="factors.js"></script>
+    <script src="page.js"></script>
+    <link rel="stylesheet" href="css/IceCream.css" type="text/css" />
+    <meta charset="utf-8">
+</head>
+<body>
+    <div id="pageouter">
+        <div id="page2"><div id="content2"><img src="art/edgea.png" /></div></div>
+        <div id="page">
+            <div id="content7">
+                <div id='title'>
+                    <h2>
+                        <center>
+                            Counting Prime Numbers <br />
+                            with the Hyperbola Method<br /><br />
+                            Section 8. A Variant
+                        </center>
+                    </h2>
+                </div><br />
+                <div id='underouter'><div id='under'></div></div>
+
+                <div id="section10">
+                    <div id="para">
+                        There’s another variant of this that I’ve put considerably more time into,
+                        although I think it’s just a little bit less elegant.  I’ll try to cover this more quickly.
+                    </div>
+                    <div id="para">
+                        First, start with the nested sum identity for $\Pi(n)$ from section 3.1, as
+                        well as it’s wheel version from section 4.1.  As a reminder, those were
+                        $$  \Pi( n )=\sum_{t=2}^x 1- \frac{1}{2} \sum_{t=2}^x \sum_{u=2}^{\lfloor \frac{x}{t} \rfloor} 1+ \frac{1}{3} \sum_{t=2}^x \sum_{u=2}^{\lfloor \frac{x}{t} \rfloor} \sum_{v=2}^{\lfloor \frac{x}{t \cdot u} \rfloor} 1- ...$$
+                        and
+                        $$ \Pi(n)= \sum_{p \in P_k} H_{ \lfloor \frac{\log n}{\log p} \rfloor } + \sum_{j <= n; j \in B_K} 1 - \frac{1}{2} \sum_{j \cdot k <= n; j,k \in B_K} 1 + \frac{1}{3} \sum_{j \cdot k \cdot l <= n; j,k,l \in B_K} 1 -... $$
+                    </div>
+                    <div id="para">
+                        Now, I’m going to define a new family of count of divisors summatory functions,
+                        which I’ll label as $D^\#_{k,y}(n)$ and its wheel equivalent as $ W^\#_{k,y}(n)$.
+                        Those two functions can be defined recursively.
+                    </div>
+                    <div id="para">
+                        For $D^\#_{k,y}(n)$, if we have the recursive function
+                        $$ f_k(n,j) = f_k(n,j+1) + f_{k-1}(\frac{n}{j},y) $$
+                        with specials cases
+                        $$ \textrm{ if } n < j \textrm{ and } k > 0, f_k(n,j) = 0 $$
+                        and
+                        $$ \textrm{ if } k = 0, f_k(n,j) = 1 $$
+                        then
+                        $$ D^\#_{k,y}(n) = f_k(n,y) $$
+                    </div>
+                    <div id="fiddle"><script async src="http://jsfiddle.net/NathanMcKenzie/hu70xh7w/embed/js,result/"></script></div>
+                    <div id="para">
+                        And likewise, for $W_{k,y}'(n)$, if we have the recursive function
+                        $$ f_k(n,j) = f_k(n,j+1) + f_{k-1}(\frac{n}{\alpha(j)},y) $$
+                        with specials cases
+                        $$ \textrm{ if } n < \alpha(j) \textrm{ and } k > 0, f_k(n,j) = 0 $$
+                        and
+                        $$ \textrm{ if } k = 0, f_k(n,j) = 1 $$
+                        then
+                        $$ W^\#_{k,y}(n) = f_k(n,y) $$
+                    </div>
+                    <div id="para">
+                        Alternatively, we can write these explicitly as sums as
+                    </div>
+                    <div id="para">
+                        $$D^\#_{ 1,y }( n ) = \sum_{t=y}^x 1$$
+                        $$D^\#_{ 2,y }( n ) = \sum_{t=y}^x \sum_{u=y}^{\lfloor \frac{x}{t} \rfloor} 1$$
+                        $$D^\#_{ 3,y }( n ) = \sum_{t=y}^x \sum_{u=y}^{\lfloor \frac{x}{t} \rfloor} \sum_{v=y}^{\lfloor \frac{x}{t \cdot u} \rfloor} 1$$
+                    </div>
+                    <div id="para">
+                        with the wheel version being
+                        $$ W^\#_{1,y}(n)=\sum_{j <= n; j \in B_K; j \ge \alpha(y)} 1 $$
+                        $$ W^\#_{2,y}(n)=\sum_{j \cdot k <= n; j,k \in B_K; j,k \ge \alpha(y)}1$$
+                        $$ W^\#_{3,y}(n)=\sum_{j \cdot k \cdot l <= n; j,k,l \in B_K; j,k,l \ge \alpha(y)}1$$
+                    </div>
+                    <div id="para">
+                        Just from inspection, if $n < y^k, D_{ k,y }'(n)=0$, and likewise, if
+                        $n < \alpha(y)^k, W^\#_{ k,y }(n) = 0$ . This fact will be useful momentarily.
+                    </div>
+                    <div id="para">
+                        So, with these new functions, we can rewrite the nested sum identities for $\Pi(n)$ I just wrote as
+                        $$  \Pi( n )= \sum_{k = 1}^{ \lfloor \frac{\log n}{\log 2} \rfloor } \frac{( -1 )^{ k+1 }}{k}\cdot D^\#_{ k,2 }( n )$$
+                        and
+                        $$ \Pi( n )= \sum_{p \in P_k} H_{ \lfloor \frac{\log n}{\log p} \rfloor } + \sum_{k = 1}^{ \lfloor \frac{\log n}{\log 2} \rfloor } \frac{( -1 )^{ k+1 }}{k}\cdot W^\#_{ k,2 }( n ) $$
+                    </div>
+                    <div id="para">
+                        Now, previously, in section 3.2, in what I called the hyperbola method,
+                        I showed how $D_{z,y}(n)$ could be expressed in terms of small sums of either
+                        $D_{z,y+1}(n)$ or $D_{z,y-1}(n)$.  And there are similar identities for
+                        $W_{z,y+1}(n)$ or $W_{z,y-1}(n)$
+                    </div>
+                    <div id="para">
+                        It turns out there are comparable identities for $D^\#_{k,y}(n)$ and $ W^\#_{k,y}(n)$.
+                    </div>
+                    <div id="para">
+                        Specifically, for $D^\#_{k,y}(n)$, those are
+                        $$ D^\#_{k,y}(n) = \sum_{j = 0}^k  \binom{k}{j} D^\#_{k-j,y+1}(\frac{n}{y^{j}}) $$
+                        and
+                        $$ D^\#_{k,y}(n) = \sum_{j = 0}^k (-1)^{k-j} \binom{k}{j} D^\#_{k-j,y-1}(\frac{n}{(y-1)^{j}}) $$
+                    </div>
+                    <div id="para">
+                        And for the wheel version $ W^\#_{k,y}(n) $, those are
+                        $$ W^\#_{k,y}(n) = \sum_{j = 0}^k  \binom{k}{j} W^\#_{k-j,y+1}(\frac{n}{y^{\alpha(j)}}) $$
+                        and
+                        $$ W^\#_{k,y}(n) = \sum_{j = 0}^k (-1)^{k-j} \binom{k}{j} W^\#_{k-j,y-1}(\frac{n}{(y-1)^{\alpha(j)}}) $$
+                    </div>
+                    <div id="para">
+                        Now, to cut to the chase.  Similar to how we did before in Section 3.2, we can define $D^\#_{k,y}(n)$
+                        purely in terms of these identities as
+                        $$ D^\#_{k,y}(n) = \sum_{j = 0}^k \binom{k}{j} D^\#_{k-j,y+1}(\frac{n}{y}^{j}) $$
+                        with
+                        $$ D^\#_{0,y}(n)=1 $$
+                        and
+                        $$ \textrm{ if } n < y^k, D^\#_{k,y}(n)=0 $$.
+                    </div>
+                    <div id="para">
+                        Likewise, we can define $ W^\#_{k,y}$ as
+                        $$ W^\#_{k,y}(n) = \sum_{j = 0}^k \binom{k}{j} W^\#_{k-j,y+1}(\frac{n}{\alpha(y)}^{j}) $$
+                        with
+                        $$ W^\#_{0,y}(n)=1 $$
+                        and
+                        $$ \textrm{ if } n < \alpha( y )^k, W^\#_{k,y}(n)=0 $$.
+                    </div>
+                    <div id="para">
+                        $$ W^\#_{1,y}(n) = \phi( n,K ) - \phi( \alpha(y),K ) $$
+                        $$ W^\#_{2,y}(n) = \phi( \lfloor n^{\frac{1}{2}} \rfloor,K ) - y + 2 \sum_{m=y+1}^{ \phi( \lfloor n^{\frac{1}{2}} \rfloor,K)} W_{ 1,m }( \lfloor \frac{n}{\alpha(m)} \rfloor ) $$
+                    </div>
+                    $$ W^\#_{k,y}(n) = \phi( \lfloor n^{\frac{1}{k}} \rfloor,K ) - y +
+                    k \sum_{m=y+1}^{ \phi( \lfloor n^{\frac{1}{k}} \rfloor,K)}
+                    W_{ 1,m }( \lfloor \frac{n}{\alpha(m)^{k-1}} \rfloor )+
+                    \sum_{m = y+1}^{ \phi( \lfloor n^{\frac{1}{k}} \rfloor, K) }
+                    \sum_{j = 2}^{k-1} \binom{ k }{ j } W^\#_{ j,m }( \lfloor \frac{n}{\alpha(m)^{k-j}} \rfloor )$$
+                    <div id="para">
+                        <code>
+                            <h5>DivisorSumWheelExcludeOne[n_,y_,1]:=DivisorSumWheelExcludeOne[n,y,1]=phi[n,K]-phi[alpha[y],K]<br /></h5>
+                            <h5>DivisorSumWheelExcludeOne[n_,y_,2]:=DivisorSumWheelExcludeOne[n,y,2]=(phi[Floor[n^(1/2)],K]-y)+2Sum[DivisorSumWheelExcludeOne[Floor[n/alpha[m]],m,1],{m,y+1,phi[Floor[n^(1/2)],K]}]<br /></h5>
+                            <h5>
+                                DivisorSumWheelExcludeOne[n_,y_,k_]:=DivisorSumWheelExcludeOne[n,y,k]=(phi[Floor[n^(1/k)],K]-y)+k Sum[DivisorSumWheelExcludeOne[Floor[n/(alpha[m]^(k-1))],m,1],{m,y+1,phi[Floor[n^(1/k)],K]}]+
+                                Sum[binomial[k,j]DivisorSumWheelExcludeOne[Floor[n/(alpha[m]^(k-j))],m,j],{m,y+1,phi[Floor[n^(1/k)],K]},{j,2,k-1}]<br />
+                            </h5>
+                        </code>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <img src="art/edgeb.png" />
+    </div>
+    <script>renderMathInElement(document.body, { delimiters: [{ left: "$$", right: "$$", display: true }, { left: "$", right: "$", display: false }] });</script>
+</body>
+</html>
+

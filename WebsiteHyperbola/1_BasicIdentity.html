@@ -1,0 +1,124 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.css" integrity="sha384-wITovz90syo1dJWVh32uuETPVEtGigN07tkttEqPv+uR2SE/mbQcG7ATL28aI9H0" crossorigin="anonymous">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.js" integrity="sha384-/y1Nn9+QQAipbNQWU65krzJralCnuOasHncUFXGkdwntGeSvQicrYkiUBwsgUqc1" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/contrib/auto-render.min.js" integrity="sha384-dq1/gEHSxPZQ7DdrM82ID4YVol9BYyU7GbWlIwnwyPzotpoc57wDw/guX8EaYGPx" crossorigin="anonymous"></script>
+    <script src="http://d3js.org/d3.v3.min.js"></script>
+    <script src="http://maurizzzio.github.io/function-plot/js/function-plot.js"></script>
+    <script src="factors.js"></script>
+    <script src="page.js"></script>
+    <link rel="stylesheet" href="css/IceCream.css" type="text/css" />
+    <meta charset="utf-8">
+</head>
+<body>
+    <div id="pageouter">
+        <div id="page2"><div id="content2"><img src="art/edgea.png" /></div></div>
+        <div id="page">
+            <div id="content7">
+                <div id='title'>
+                    <h2>
+                        <center>
+                            Counting Prime Numbers <br />
+                            with Linnik's Identity<br /><br />
+                            Section 1. The Basic Identity
+                        </center>
+
+                    </h2>
+                </div><br />
+                <div id='underouter'><div id='under'></div></div>
+
+                <!-- ---------------------------------------------------------------------------------------------------------- -->
+
+                <div id="section3a">
+                    <div id="para">
+                        So now let's talk about ways to express $D_z(n)$ on its own terms,
+                        then use those to compute our weighted prime counting function $\Pi(n)$.
+                    </div>
+                    <div id="para">
+                        I'll start with what must be the simplest possible expression for $D_z(n)$, the following recursive formula.
+                    </div>
+                    <div id="para">
+                        If we define $f_k(n,j)$ as
+                        $$ f_k(n,j)  = f_k(n, j+1) + (\frac{z+1} {k} - 1)(1+f_{k+1}( \frac{n}{j}, 2 )) $$
+                        with terminating condition
+                        $$ \textrm{if } n < j, f_k(n,j) = 0 $$
+                        then
+                        $$ D_z(n) = 1+f_1(n,2) $$
+                    </div>
+                    <div id="para">
+                        Here's live code showing values for the case of $z=2$.  Click "Edit in JSFiddle" to try other values of $z$.
+                    </div>
+                    <div id="fiddle">
+                    <script async src="http://jsfiddle.net/NathanMcKenzie/jq3rkugd/embed/js,result/"></script></div>
+                    <div id="para">
+                        For another perspective on what this is doing, if the recursion if flattened out, another way to express this idea is as
+
+                        $$  D_z( n )=1+ \binom{z}{1}\sum_{t=2}^x 1+ \binom{z}{2} \sum_{t=2}^x \sum_{u=2}^{\lfloor \frac{x}{t} \rfloor} 1+ \binom{z}{3} \sum_{t=2}^x \sum_{u=2}^{\lfloor \frac{x}{t} \rfloor} \sum_{v=2}^{\lfloor \frac{x}{t \cdot u} \rfloor} 1+ ...$$
+                    </div>
+                    <div id="para">
+                        Now, we can use this identity to compute our weighted prime counting function, $\lim_{z \to 0} \frac{D_z(n)-1}{z} = \Pi(n)$.
+                    </div>
+                    <div id="para">
+                        So let's do that.  If we apply those operations to our nested sum definition of $D_z(n)$, we have
+                    </div>
+                    <div id="para">
+                        $$  \Pi( n )=\sum_{t=2}^x 1- \frac{1}{2} \sum_{t=2}^x \sum_{u=2}^{\lfloor \frac{x}{t} \rfloor} 1+ \frac{1}{3} \sum_{t=2}^x \sum_{u=2}^{\lfloor \frac{x}{t} \rfloor} \sum_{v=2}^{\lfloor \frac{x}{t \cdot u} \rfloor} 1- ...$$
+                    </div>
+                    <div id="para">
+                        We can rewrite this nested sum definition into a more concise recursive one (which is much easier to program) like so.
+                    </div>
+                    <div id="para">
+                        If we define $f_k(n,j)$ as
+                        $$ f_k(n,j)  = f_k(n, j+1) + (\frac{1}{k}-f_{k+1}( \frac{n}{j}, 2 )) $$
+                        with terminating condition
+                        $$ \textrm{if } n < j, f_k(n,j) = 0 $$
+                        then
+                        $$ \Pi(n) = f_1(n,2) $$
+                    </div>
+                    <div id="para">
+                        You can see $\Pi(n)$ being computed with this identity in the following javascript code.
+                    </div>
+                    <div id="fiddle">
+                    <script async src="http://jsfiddle.net/NathanMcKenzie/xdLea70w/embed/js,result/"></script></div>
+                    <div id="para">
+                        The nested sum definition for $\Pi(n)$ is the identity I independently discovered back in 2004, kicking off my entire quixotic quest.
+                    </div>
+                    <div id="para">
+                        As a matter of fact, I've never actually seen this identity in print, either the recursive version or the flattened sums.
+                    </div>
+                    <div id="para">
+                        However, if you take the forward difference of it, you're left with
+                        $$\frac{\Lambda(n)}{\log(n)}=1- \frac{1}{2} \sum_{t \cdot u = x; t , u > 1} 1+ \frac{1}{3} \sum_{t \cdot u \cdot v = x; t,u,v > 1}  1- ...$$
+                        which is an identify from Yuri Linnik, first discovered in 1960, which
+                        can be found in section 13.3 of H. Iwaniec's and E. Kowalski's "Analytic Number Theory".  Here $\Lambda(n)$ is the <a href="https://en.wikipedia.org/wiki/Von_Mangoldt_function">von Mangoldt function</a>.
+                    </div>
+                    <div id="para">
+                        This expression for $\Pi(n)$ is useful, though very, very slow to compute as written above.
+                        Nevertheless, the faster of my two prime counting algorithms, which runs in
+                        something like $O(n^\frac{2}{3} \log n)$ time and $O(n^\frac{1}{3} \log n)$ space,
+                        essentially involves computing this idea, although hugely sped up with some additional combinatorial
+                        identities interleaved with sieving.  A description of this algorithm, as a well as a C implementation
+                        of it, can be found <a href="http://icecreambreakfast.com/primecount/PrimeCounting_NathanMcKenzie.pdf">here</a>.
+                    </div>
+                    <div id="para">
+                        The other major combinatorial identity at the heart of this approach is a modified version of the following
+                        identity for $D_k(n)$, where $k$ is whole number and $t$ is a whole number $ < n $ (in the paper, I use $t=n^\frac{1}{3}$).
+                    </div>
+                    $$ 
+                    D_k(n) = D_k(t)+
+                    \sum_{j = {t+1}}^{\lfloor n \rfloor} D_{k-1}(\frac{n}{j})
+                    + \sum_{j = 1}^t \sum_{s = { { \lfloor \frac{t}{j} \rfloor}+1}}^{\lfloor \frac{n}{j} \rfloor} \sum_{m = 1}^{k-1} d_m(j) \cdot  D_{ k-m-1 }( \frac{n}{j s} )
+                    $$
+                </div>
+                <div id="para">
+                    The actual mechanics are rather complicated, though, and are explained better in the paper.
+                </div>
+                <br /><br /><h3><center><a href="2_HyperbolaMethod.html">Go to the next article!</a></center></h3>
+            </div>
+        </div>
+        <img src="art/edgeb.png" />
+    </div>
+    <script>renderMathInElement(document.body, { delimiters: [{ left: "$$", right: "$$", display: true }, { left: "$", right: "$", display: false }] });</script>
+</body>
+</html>

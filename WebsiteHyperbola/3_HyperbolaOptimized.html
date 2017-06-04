@@ -1,0 +1,116 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.css" integrity="sha384-wITovz90syo1dJWVh32uuETPVEtGigN07tkttEqPv+uR2SE/mbQcG7ATL28aI9H0" crossorigin="anonymous">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.js" integrity="sha384-/y1Nn9+QQAipbNQWU65krzJralCnuOasHncUFXGkdwntGeSvQicrYkiUBwsgUqc1" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/contrib/auto-render.min.js" integrity="sha384-dq1/gEHSxPZQ7DdrM82ID4YVol9BYyU7GbWlIwnwyPzotpoc57wDw/guX8EaYGPx" crossorigin="anonymous"></script>
+    <script src="http://d3js.org/d3.v3.min.js"></script>
+    <script src="http://maurizzzio.github.io/function-plot/js/function-plot.js"></script>
+    <script src="factors.js"></script>
+    <script src="page.js"></script>
+    <link rel="stylesheet" href="css/IceCream.css" type="text/css" />
+    <meta charset="utf-8">
+</head>
+<body>
+    <div id="pageouter">
+        <div id="page2"><div id="content2"><img src="art/edgea.png" /></div></div>
+        <div id="page">
+            <div id="content7">
+                <div id='title'>
+                    <h2>
+                        <center>
+                            Counting Prime Numbers <br />
+                            with the Hyperbola Method<br /><br />
+                            Section 3. Optimizations
+                        </center>
+
+                    </h2>
+                </div><br />
+                <div id='underouter'><div id='under'></div></div>
+
+                <div id="section5">
+
+                    <div id="para">
+                        So I’ve suggested that $D_{z,y}(n)= \sum_{k = 0}^{\lfloor \frac{\log n}{\log y}  \rfloor} \binom{z}{k} D_{z-k,y+1}(\frac{n}{y^k})$
+                        is a very natural identity to use to compute $D_z(n)$ and thus $\Pi(n)$.  And I’ve provided some
+                        sample Mathematica code to demonstrate that it does, in fact, compute those functions.
+                    </div>
+                    <div id="para">
+                        But as we’re interested in efficient computation, there are tweaks we can make to the
+                        formula to make it more efficient in both time and space.  Like most such optimizations,
+                        we’re going to lose a lot of elegance along the way, of course.
+                    </div>
+                    <div id="para">
+                        So first, for the sake of avoiding the memory overhead of recursion, let’s note that
+
+                        $$ \sum_{k = 0}^{\lfloor \frac{\log n}{\log y} \rfloor} \binom{z}{k} D_{z-k,y+1}(\frac{n}{y^k}) =
+                        D_{ z,y+1 }( n ) + \sum_{k = 1}^{\lfloor \frac{\log n}{\log y}  \rfloor} \binom{z}{k} D_{z-k,y+1}(\frac{n}{y^k}) $$
+                    </div>
+                    <div id="para">
+                        which, combined with the terminating condition $ \textrm{if }n < y, D_{z,y}(n)=1$,
+                        let’s us pare down the recursion as
+                        $$  D_{z,y}(n)=1+ \sum_{m = y}^n \sum_{k = 1}^{\lfloor \frac{\log n}{\log m} \rfloor}\binom{z}{k} D_{z-k,m+1}(\frac{n}{m^k}) $$
+                    </div>
+                    <div id="fiddle"><script async src="http://jsfiddle.net/NathanMcKenzie/c4md8wg1/embed/js,result/"></script></div>
+                    <div id="para">
+                        Note that this change converts the memory bounds of computing $D_{z,y}(n)$
+                        from greater than $O(n)$ down to the ballpark of $O(\log n)$.
+                    </div>
+                    <div id="para">
+                        A bit more thought or testing should likewise confirm that
+                        $$ D_{ z,y }( n )=1 + z \cdot ( n-y+1 ) $$
+                    </div>
+                    <div id="para">
+                        which we could use with our purely recursive definition as
+                    </div>
+                    <div id="fiddle"><script async src="http://jsfiddle.net/NathanMcKenzie/hqkydu7v/embed/js,result/"></script></div>
+                    <div id="para">
+                        but that we’ll apply instead to our equation with the recursion pared down as
+                        $$ D_{z,y}(n)=1+z \cdot( n+1 - \max(y,1+\lfloor n^{\frac{1}{2}} \rfloor) )
+                        + \sum_{m = y}^{\lfloor n^{\frac{1}{2}} \rfloor} \sum_{k = 1}^{\lfloor \frac{\log n}{\log m}  \rfloor} \binom{z}{k} D_{z-k,m+1}(\lfloor \frac{n}{m^k} \rfloor) $$
+                    </div>
+                    <div id="fiddle"><script async src="http://jsfiddle.net/NathanMcKenzie/um4pqxLv/embed/js,result/"></script></div>
+                    <div id="para">
+                        We’ll make two final, small optimizations with this approach before doing something drastic.
+                    </div>
+                    <div id="para">
+                        First, although the equations we’ve worked with thus far hold for a complex variable $z$, the
+                        actual computation of the resulting polynomials is much harder to handle than just
+                        computing a result for some fixed value of $z$.  Thus far, to calculate our count of primes,
+                        we’ve computed the polynomial, then taken its derivative at $z = 0$.  And that does work.
+                        But it’s not strictly necessary.  We can instead take our definition for $D_{z,y}(n)$, subtract $1$, divide by $z$,
+                        and then take the limit at $z=0$ to get
+                        $$ \lim_{z \to 0} \frac{\partial}{\partial z} D_{z,2}(n)=\Pi( n )=\sum_{m = 2}^n
+                        \sum_{k = 1}^{\lfloor \frac{\log n}{\log m} \rfloor}
+                        \frac{(-1)^{k+1}}{k} \cdot  D_{-k,m+1}(\frac{n}{m^k})$$
+                    </div>
+                    <div id="fiddle"><script async src="http://jsfiddle.net/NathanMcKenzie/vjjkpzed/embed/js,result/"></script></div>
+                    <div id="para">
+                        which can be simplified a bit further to
+                        $$
+                        \Pi( n )=
+                        ( n-\lfloor n^{\frac{1}{2}} \rfloor )+
+                        \sum_{m = 2}^{\lfloor n^{\frac{1}{2}} \rfloor}
+                        \sum_{k = 1}^{\lfloor \frac{\log n}{\log m} \rfloor}
+                        \frac{(-1)^{k+1}}{k} \cdot  D_{-k,m+1}(\frac{n}{m^k})
+                        $$
+                    </div>
+                    <div id="fiddle"><script async src="http://jsfiddle.net/NathanMcKenzie/rj4c98nd/embed/js,result/"></script></div>
+                    <div id="para">
+                        So there we go.  An interesting method for counting prime powers
+                        that has, with a better implementation, a running time in the very
+                        rough ballpark of $O(n)$ or so, comparable to the Sieve of Eratosthenes, while
+                        using $O(\epsilon)$ space, isn’t too hard to implement, and is trivially parallelizable.
+                    </div>
+                    <div id="para">
+                        As mentioned in the introduction, the actual count of primes can be easily calculated via moebius inversion as
+                    </div>
+                </div>
+            </div>
+        </div>
+        <img src="art/edgeb.png" />
+    </div>
+    <script>renderMathInElement(document.body, { delimiters: [{ left: "$$", right: "$$", display: true }, { left: "$", right: "$", display: false }] });</script>
+</body>
+</html>
+

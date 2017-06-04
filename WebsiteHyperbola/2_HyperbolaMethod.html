@@ -1,0 +1,245 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.css" integrity="sha384-wITovz90syo1dJWVh32uuETPVEtGigN07tkttEqPv+uR2SE/mbQcG7ATL28aI9H0" crossorigin="anonymous">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.js" integrity="sha384-/y1Nn9+QQAipbNQWU65krzJralCnuOasHncUFXGkdwntGeSvQicrYkiUBwsgUqc1" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/contrib/auto-render.min.js" integrity="sha384-dq1/gEHSxPZQ7DdrM82ID4YVol9BYyU7GbWlIwnwyPzotpoc57wDw/guX8EaYGPx" crossorigin="anonymous"></script>
+    <script src="http://d3js.org/d3.v3.min.js"></script>
+    <script src="http://maurizzzio.github.io/function-plot/js/function-plot.js"></script>
+    <script src="factors.js"></script>
+    <script src="page.js"></script>
+    <link rel="stylesheet" href="css/IceCream.css" type="text/css" />
+    <meta charset="utf-8">
+</head>
+<body>
+    <div id="pageouter">
+        <div id="page2"><div id="content2"><img src="art/edgea.png" /></div></div>
+        <div id="page">
+            <div id="content7">
+                <div id='title'>
+                    <h2>
+                        <center>
+                            Counting Prime Numbers <br />
+                            with Linnik's Identity<br /><br />
+                            Section 2. The Hyperbola Method
+                        </center>
+                    </h2>
+                </div><br />
+                <div id='underouter'><div id='under'></div></div>
+
+                <!-- ---------------------------------------------------------------------------------------------------------- -->
+
+                <div id="para">
+                    So now on to my other approach, which is a bit slower but I'm convinced more promising
+                    for future development.  
+                    Computing $D_z(n)$ quickly hinges on finding and exploiting its natural symmetries.
+                    The two approaches detailed below, which feel to me very natural, involve
+                    the same symmetry captured in the Dirichlet hyperbola method.
+                </div>
+
+
+                <div id="section5">
+                    <div id="para">
+                        So, the first variation.  Let's start by looking back at our nested sum
+                        definitions of $D_z(n)$ and our weighted prime counting function $\Pi(n)$ from the previous page, which were
+                        $$  D_z( n )=1+ \binom{z}{1}\sum_{t=2}^x 1+ \binom{z}{2} \sum_{t=2}^x \sum_{u=2}^{\lfloor \frac{x}{t} \rfloor} 1+ \binom{z}{3} \sum_{t=2}^x \sum_{u=2}^{\lfloor \frac{x}{t} \rfloor} \sum_{v=2}^{\lfloor \frac{x}{t \cdot u} \rfloor} 1+ ...$$
+                        and
+                        $$  \Pi( n )=\sum_{t=2}^x 1- \frac{1}{2} \sum_{t=2}^x \sum_{u=2}^{\lfloor \frac{x}{t} \rfloor} 1+ \frac{1}{3} \sum_{t=2}^x \sum_{u=2}^{\lfloor \frac{x}{t} \rfloor} \sum_{v=2}^{\lfloor \frac{x}{t \cdot u} \rfloor} 1- ...$$
+                    </div>
+                    <div id="para">
+                        Now, what I'm going to do is define a slightly different count of
+                        divisor summatory function, which I'll label as $D^\#_{k,y}(n)$.
+                        I'll define it like so
+                    </div>
+                    <div id="para">
+                        $$D^\#_{ 0,y }( n ) = 1$$
+                        $$D^\#_{ 1,y }( n ) = \sum_{t=y}^x 1$$
+                        $$D^\#_{ 2,y }( n ) = \sum_{t=y}^x \sum_{u=y}^{\lfloor \frac{x}{t} \rfloor} 1$$
+                        $$D^\#_{ 3,y }( n ) = \sum_{t=y}^x \sum_{u=y}^{\lfloor \frac{x}{t} \rfloor} \sum_{v=y}^{\lfloor \frac{x}{t \cdot u} \rfloor} 1$$
+                        and so on.
+                    </div>
+                    <div id="para">
+                        Just to keep things conceptually clear here, combinatorially, we can think of these functions like so:
+                    </div>
+                    <div id="para">
+                        $D^\#_{ 1,y }( n )$ is the count of solutions to $a \le n$ where $a$ is a whole number $\ge y$.
+                    </div>
+                    <div id="para">
+                        $D^\#_{ 2,y }( n )$ is the count of solutions to $a  \cdot b \le n$ where $a$ and $b$ are whole numbers $\ge y$ and order matters.
+                    </div>
+                    <div id="para">
+                        $D^\#_{ 3,y }( n )$ is the count of solutions to $a \cdot b \cdot c \le n$ where $a$, $b$, and $c$ are whole numbers $\ge y$ and order matters.
+                    </div>
+                    <div id="para">
+                        and so on.
+                    </div>
+                    <div id="para">
+                        Using our new function, we can then define $D_z(n)$ in terms of $D^\#_{k,2}(n)$ as
+                    </div>
+                    $$ D_z( n )= \sum_{k = 0}^{ \lfloor \frac{\log n}{\log 2} \rfloor } \binom{z}{k}\cdot D^\#_{ k,2 }( n )$$
+                    <div id="para">
+                        And our weighted prime counting function as
+                    </div>
+                    $$  \Pi( n )= \sum_{k = 1}^{ \lfloor \frac{\log n}{\log 2} \rfloor } \frac{( -1 )^{ k+1 }}{k}\cdot D^\#_{ k,2 }( n )$$
+                    <div id="para">
+                        Okay?  Good.
+                    </div>
+                    <div id="para">
+                        Given these last few statements, you might wonder why we are generalizing $D^\#_{k,y}(n)$ with the addition of this extra parameter $y$.
+                    </div>
+                    <div id="para">
+                        Well, it turns out, using this parameter $y$, we can define $D^\#_{k,y}(n)$ purely recursively in terms of itself as
+                        $$ D^\#_{k,y}(n) = \sum_{j = 0}^k \binom{k}{j} D^\#_{k-j,y+1}(\frac{n}{y^j}) $$
+                        with
+                        $$ D^\#_{0,y}(n)=1 $$
+                        and
+                        $$ \textrm{ if } n < y^k, D^\#_{k,y}(n)=0 $$.
+                    </div>
+                    <div id="para">
+                        Which in turn means we can compute $D_z(n)$ as
+                    </div>
+                    <div id="fiddle">
+                        <script async src="http://jsfiddle.net/NathanMcKenzie/g8oadx2t/embed/js,result/"></script>
+                    </div>
+                    <div id="para">
+                        and our weighted prime counting function $\Pi(n)$ as
+                    </div>
+                    <div id="fiddle">
+                        <script async src="http://jsfiddle.net/NathanMcKenzie/Lwjgtffx/embed/js,result/"></script>
+                    </div>
+                    <div id="para">
+                        So this provides another way to compute our weighted prime counting function $\Pi(n)$.  And
+                        we can use that, in turn, to easily compute the count of primes using moebius inversion, as I
+                        showed in the first section.
+                    </div>
+                    <div id="para">
+                        Although this is the core identity for this counting approach, I do, of course, make use of some
+                        more obvious combinatorial techniques to speed it up and to eliminate its memory consumption,
+                        which can be seen in the C versions I'll link in just a second.
+                        I first came up with this approach, more or less, back in early 2005.
+                    </div>
+                    <div id="para">
+                        One very interesting aspect of this approach is that it can have suprisingly good constant time performance,
+                        especially for an algorithm that uses $O(n^\epsilon)$ memory.
+                        In particular, it is vastly sped up by using wheel factorization, to an unusual degree.
+                        Whereas the algorithm described in the previous page runs about 6 times faster when using
+                        a wheel that discards numbers divisible by the first 7 primes (which is a very typical speed up for wheel
+                        factorization), my best implementation of the above approach is sped up by something like a factor
+                        of x5000 when using the same wheel, and has its big-O running time improved too.
+                    </div>
+                    <div id="para">
+                        Source code in C for the non-wheel-factorized version is <a href="http://icecreambreakfast.com/primes/PrimeCount.cpp">here</a>,
+                        Source code in C for the version using wheel factorization is <a href="http://icecreambreakfast.com/primes/NMPrimeCounter.cpp">here</a>.
+                    </div>
+                    <div id="para">
+                        You can see timings for the non-wheel-factorized version <a href="http://icecreambreakfast.com/primes/TimingBasic.jpg">here</a>,
+                        and timings for the version using wheel factorization <a href="http://icecreambreakfast.com/primes/TimingWheel.jpg">here</a>.
+                    </div>
+                    <div id="para">
+                        I'm not great at algorithmic analysis, so I don't feel confident about the time bounds on this
+                        algorithm.  You can look at those screenshots to get a sense, empirically, on how its execution
+                        time grows with increasing input sizes.  I've asserted, empirically, that the non-wheel version
+                        seems to run in something like $O(n \log n)$ time, and that my wheel version runs in something
+                        like $O(n^\frac{4}{5} \log n)$, but that's just eyeballing the screenshots I just provided.
+                    </div>
+                    <div id="para">
+                        The memory bound, on the other hand, is totally straightforward.  Aside from the fixed size of the
+                        wheel (which uses about 45 Megs if I use a wheel that discards numbers divisible by the first 7 primes),
+                        both versions of the algorithm use a neglible amount of memory - probably less than 1 k of RAM for
+                        any reasonable input.
+                    </div>
+                    <div id="para">
+                        This memory bound hasn't actually been a goal of mine.  I'd much prefer to use memoization somehow to improve the
+                        speed bound of this algorithm, but I've never been able to figure out a way to do so successfully.  One
+                        reason I'd like to get this published is the hope that someone else might have some ideas about
+                        speeding it up with memoization.
+                    </div>
+                </div>
+
+                <!-- ---------------------------------------------------------------------------------------------------------- -->
+
+                <div id="section4">
+                    <script>makeBasicTitle('Another Hyperbola Method Variation', 'section4');</script>
+                    <div id="para">
+                        Here's a different, very closely related approach, another hyperbola method variation.  In the previous section,
+                        we introduced a new function, $D^\#_{k,y}(n)$ that we expressed $D_z(n)$ and $\Pi(n)$ in terms of, and
+                        that $y$ parameter let us express $D^\#_{k,y}(n)$ recursively in terms of itself.  Here, we're going to instead
+                        introduce a similar $y$ parameter to $D_z(n)$, which will let us express it in terms of itself.
+                    </div>
+                    <div id="para">
+                        So let's introduce this generalization, $D_{z,y}(n)$.  If we define $f_k(n,j)$ as
+                        $$ f_k(n,j)  = f_k(n, j+1) + (\frac{z+1} {k} - 1)(1+f_{k+1}( \frac{n}{j}, y )) $$
+                        with terminating condition
+                        $$ \textrm{if } n < j, f_k(n,j) = 0 $$
+                        then
+                        $$ D_{z,y}(n) = 1+f_1(n,y) $$
+                    </div>
+                    <div id="para">
+                        With this, our previous function is $D_z(n) = D_{z,2}(n)$.  So computing, for example, $D_{2,2}(n)$ looks like this:
+                    </div>
+                    <div id="fiddle">
+                        <script async src="http://jsfiddle.net/NathanMcKenzie/fvdpza70/embed/js,result/"></script>
+                    </div>
+                    <div id="para">
+                        Flatten out the recursion, and we are left with the following identity for $D_{z,y}(n)$.
+                        $$  D_{z,y}( n )=1+ \binom{z}{1}\sum_{t=y}^x 1+ \binom{z}{2} \sum_{t=y}^x \sum_{u=y}^{\lfloor \frac{x}{t} \rfloor} 1+ \binom{z}{3} \sum_{t=y}^x \sum_{u=y}^{\lfloor \frac{x}{t} \rfloor} \sum_{v=y}^{\lfloor \frac{x}{t \cdot u} \rfloor} 1+ ...$$
+                    </div>
+                    <div id="para">
+                        Note that this is very similar to the the flattened definition we had for $D_z(n)$ in the previous
+                        article, only with the lower bound of $2$ replaced with a lower bound of $y$.
+                    </div>
+                    <div id="para">
+                        So far, so good.
+                    </div>
+                    <div id="para">
+                        Now, here’s the motivation for this generalization.  $D_{z,y}(n)$ can be
+                        expressed as very concise sums of $D_{z,y+1}(n)$ as
+                        $$ D_{z,y}(n) = \sum_{k = 0}^{\lfloor \frac{\log n}{\log y} \rfloor} \binom{z}{k} D_{z-k,y+1}(\frac{n}{y^k}) $$
+                    </div>
+                    <div id="para">
+                        which, combined with the terminating condition
+                        $$ \textrm{if } n < y, D_{z,y}(n)=1$$
+                    </div>
+                    <div id="para">
+                        gives us a different recursive way to compute $D_z(n)$ and thus $\Pi(n)$.
+                    </div>
+                    <div id="para">
+                        In javascript, this approach looks like this:
+                    </div>
+                    <div id="fiddle">
+                        <script async src="http://jsfiddle.net/NathanMcKenzie/rb46u11a/embed/js,result/"></script>
+                    </div>
+                    <div id="para">
+                        And $\Pi(n)$, which is
+                        $$ \Pi( n ) = \lim_{ z \to 0 }\frac{ D_{z,2}(n)-1 }{z} $$
+                        can be computed as
+                    </div>
+                    <div id="fiddle">
+                        <script async src="http://jsfiddle.net/NathanMcKenzie/ez31sju1/embed/js,result/"></script>
+                    </div>
+                    <div id="para">
+                        To make this fast, of course, requires applying a bunch of other, messy combinatorial
+                        techniques that I won't show here.
+                    </div>
+                    <div id="para">
+                        This approach is similar, in many ways, to the approach I described above, including
+                        the fact that it runs much, much faster with wheel factorization applied to it.
+                        Nevertheless, I've never developed any algorithms for counting primes with it that
+                        have had quite the success as the one I detailed above. I'm mostly including it here because
+                        I'm optimistic that it might provide some alternate interesting possibilities for memoization.
+                    </div>
+                    <div id="para">
+                        I actually have a lot more to say about this approach and why I'm optimistic about its
+                        potential for memoization, but that's too complicated to include here.
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <img src="art/edgeb.png" />
+    </div>
+    <script>renderMathInElement(document.body, { delimiters: [{ left: "$$", right: "$$", display: true }, { left: "$", right: "$", display: false }] });</script>
+</body>
+</html>
+

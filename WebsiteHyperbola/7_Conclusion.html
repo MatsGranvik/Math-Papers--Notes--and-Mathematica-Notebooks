@@ -1,0 +1,274 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.css" integrity="sha384-wITovz90syo1dJWVh32uuETPVEtGigN07tkttEqPv+uR2SE/mbQcG7ATL28aI9H0" crossorigin="anonymous">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.js" integrity="sha384-/y1Nn9+QQAipbNQWU65krzJralCnuOasHncUFXGkdwntGeSvQicrYkiUBwsgUqc1" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/contrib/auto-render.min.js" integrity="sha384-dq1/gEHSxPZQ7DdrM82ID4YVol9BYyU7GbWlIwnwyPzotpoc57wDw/guX8EaYGPx" crossorigin="anonymous"></script>
+    <script src="http://d3js.org/d3.v3.min.js"></script>
+    <script src="http://maurizzzio.github.io/function-plot/js/function-plot.js"></script>
+    <script src="factors.js"></script>
+    <script src="page.js"></script>
+    <link rel="stylesheet" href="css/IceCream.css" type="text/css" />
+    <meta charset="utf-8">
+</head>
+<body>
+    <div id="pageouter">
+        <div id="page2"><div id="content2"><img src="art/edgea.png" /></div></div>
+        <div id="page">
+            <div id="content7">
+                <div id='title'>
+                    <h2>
+                        <center>
+                            Counting Prime Numbers <br />
+                            with the Hyperbola Method<br /><br />
+                            Section 7. Conclusions
+                        </center>
+                    </h2>
+                </div><br />
+                <div id='underouter'><div id='under'></div></div>
+
+
+
+                <script id="jsbin-javascript">
+
+                    //_____________________
+
+                    let EPSILON=.000000001,M=Math,pow=M.pow,log=M.log,log2=M.log2,
+                    floor=n=>M.floor(EPSILON+n),
+                    Sum=(a,z,fn)=>{var t=0;for(var j=a;j<=floor(z);j++)t+=fn(j);return t},
+                    factor=n=>{let o=[],k=2;while(k*k<n){let t=0;while(n%k<1)t++,n/=k;t>0?o.push(t):{};k++}n>1?o.push(1):{};return o},
+                    Z=n=>1-Sum(2,n,j=>Z(n/j)),moebius=n=>n<2?1:Z(n)-Z(n-1),
+                    binomial=(z,k)=>{var t=1;for(var j=0;j<k;j++)t*=(z-j)/(j+1);return t},
+                    multiset=(z,k)=>{var t=1;for(var j=0;j<k;j++)t*=(z+j)/(j+1);return t}
+
+                    // WheelEntries=E, Prime=P, WheelSize=S, LegPhiCache=L, CoprimeCache=C
+                    // CoprimeOffsets = 0, FullWheel = F, divisibleByWheel=D
+                    /*let P=[2,3,5,7,11,13,17,19,23],E=7,S=1,C=[],L=[0],O=[],F,j,R=Math.floor;
+                    for(j=0;j<E;j++)S*=P[j];for(var n=1;n<=S;n++){let D=0;for(j=0;j<E;j++)if(n%P[j]<1){D=1;break}C.push(1-D)}
+                    for(j=0;j<C.length;j++)L.push(L[L.length-1]+C[j]);F=L[L.length-1];for(j=0;j<C.length;j++)if(C[j]==1)O.push(j+1);
+                    let T=n=>L[n%S]+R(n/S)*F,W=n=>O[n%F]+R(n/F)*S,FirstNonWheel=W(1),phi=(n, K)=>T(n-1),alpha=n=>W(n-1)*/
+
+
+                    function binomialCoefficient(z, k) {
+                        if (Number.isInteger(z) && z > -1 && z < 20) return Binomial[z][k];
+                        var total = 1;
+                        for (var j = 0; j < k; j++)
+                            total *= (z - j) / (j + 1);
+                        return total;
+                    }
+
+                    //_____________________
+
+                    function dz(n, z) {
+                        if (n == 1)
+                            return 1;
+                        var t = 1;
+                        var f = factor(n);
+                        for (var j = 0; j < f.length; j++)
+                            t *= multiset(z, f[j]);
+                        return t;
+                    }
+                    function DivisorSum(n, z) {
+                        var total = 0;
+                        for (var j = 1; j <= n; j++)
+                            total += dz(j, z);
+                        return total;
+                    }
+                    function PrimePowers(n) {
+                        var total = 0;
+                        for (k = 1; k <= floor( Math.log(n) / Math.log(2)) ; k++)
+                            total += PrimePi[floor(Math.pow(n, 1 / k))] / k;
+                        return total;
+                    }
+                    function test2(n) {
+                        console.log("" + ((DivisorSum(n, EPSILON) - 1) / EPSILON) + " " + PrimePowers(n));
+                    }
+                    function Primes(n) {
+                        var total = 0;
+                        for (var j = 1; j <= floor(Math.log(n) / Math.log(2)) ; j++)
+                            total += MoebiusMu[j] / j * PrimePowers(floor(Math.pow(n, 1 / j)));
+                        return total;
+                    }
+
+                    //_____________________
+
+                    function DivisorSumV2(n, z, k, j) {
+                        if (n < j) return 0;
+                        return ((z + 1) / k - 1) * (1 + DivisorSumV2(n / j, z, k + 1, 2)) + DivisorSumV2(n, z, k, j + 1)
+                    };
+                    function test3(n, z) {
+                        console.log((1 + DivisorSumV2(n, z, 1, 2)) + " " + DivisorSum(n, z));
+                    }
+                    function PrimePowersV2(n, k, j) {
+                        if (n < j) return 0;
+                        return (1 / k - PrimePowersV2(n / j, k + 1, 2)) + PrimePowersV2(n, k, j + 1);
+                    }
+                    function test4(n) {
+                        console.log(PrimePowersV2(100, 1, 2) + " " + ((DivisorSum(100, EPSILON) - 1) / EPSILON));
+                    }
+
+                    //_____________________
+
+                    function DivisorSumClippedr(n, z, k, j, y) {
+                        if (n < j) return 0;
+                        return ((z + 1) / k - 1) * (1 + DivisorSumClippedr(n / j, z, k + 1, y, y)) + DivisorSumClippedr(n, z, k, j + 1, y);
+                    }
+                    function DivisorSumClipped(n, z, y) { return 1 + DivisorSumClippedr(n, z, 1, y, y); }
+                    function test5(n, z) {
+                        console.log(DivisorSumClipped(n, z, 2) + " " + DivisorSum(n, z));
+                    }
+
+                    function test6(n, z, y) {
+                        var total = 0;
+                        for (var k = 0; k <= floor(Math.log(n) / Math.log(y)) ; k++)
+                            total += binomialCoefficient(z, k) * DivisorSumClipped(n / Math.pow(y, k), z - k, y + 1);
+                        console.log(DivisorSumClipped(n, z, y) + " " + total);
+                    }
+                    function test7(n, z, y) {
+                        var total = 0;
+                        for (var k = 0; k <= floor(Math.log(n) / Math.log(y)) ; k++)
+                            total += Math.pow(-1, k) * binomialCoefficient(z, k) * DivisorSumClipped(n / Math.pow(y - 1, k), z - k, y - 1);
+                        console.log(DivisorSumClipped(n, z, y) + " " + total);
+                    }
+                    function DivisorSumClippedV2(n, z, y) {
+                        if (n < y) return 1;
+                        var total = 0;
+                        for (var k = 0; k <= floor(Math.log(n) / Math.log(y)) ; k++)
+                            total += binomialCoefficient(z, k) * DivisorSumClippedV2(n / Math.pow(y, k), z - k, y + 1);
+                        return total;
+                    }
+                    function test8(n, z) {
+                        console.log(DivisorSum(n, z), DivisorSumClippedV2(n, z, 2));
+                    }
+                    function test9(n) {
+                        console.log(((DivisorSum(100, EPSILON) - 1) / EPSILON) + " " + ((DivisorSumClippedV2(100, EPSILON, 2) - 1) / EPSILON));
+                    }
+
+                    //_____________________
+
+                    function DivisorSumClippedV3(n, z, y) {
+                        var total = 1;
+                        for (var m = y; m <= n; m++)
+                            for (var k = 1; k <= floor(Math.log(n) / Math.log(m)) ; k++)
+                                total += binomialCoefficient(z, k) * DivisorSumClippedV3(n / Math.pow(m, k), z - k, m + 1);
+                        return total;
+                    }
+                    function DivisorSumClippedV4(n, z, y) {
+                        if (n < y) return 1;
+                        if (n < y * y) return 1 + z * (n - y + 1);
+                        var total = 1;
+                        for (var m = y; m <= n; m++)
+                            for (var k = 1; k <= floor(Math.log(n) / Math.log(m)) ; k++)
+                                total += binomialCoefficient(z, k) * DivisorSumClippedV4(floor(n / Math.pow(m, k)), z - k, m + 1);
+                        return total;
+                    }
+                    function DivisorSumClippedV5(n, z, y) {
+                        if (n < y) return 1;
+                        var total = 1 + z * (n + 1 - Math.max(y, 1 + floor(Math.pow(n, 1 / 2))));
+                        for (var m = y; m <= floor(Math.pow(n, 1 / 2)) ; m++)
+                            for (var k = 1; k <= floor(Math.log(n) / Math.log(m)) ; k++)
+                                total += binomialCoefficient(z, k) * DivisorSumClippedV5(floor(n / Math.pow(m, k)), z - k, m + 1);
+                        return total;
+                    }
+                    function PrimePowersV3(n) {
+                        var total = 0;
+                        for (var m = 2; m <= n; m++)
+                            for (var k = 1; k <= floor( Math.log(n) / Math.log(m)) ; k++)
+                                total += Math.pow(-1, k + 1) / k * DivisorSumClippedV5(floor(n / Math.pow(m, k)), -k, m + 1);
+                        return total;
+                    }
+                    function PrimePowersV4(n) {
+                        var total = n - floor(Math.pow(n, (1 / 2)));
+                        for (var m = 2; m <= floor(Math.pow(n, 1 / 2)) ; m++)
+                            for (var k = 1; k <= floor(Math.log(n) / Math.log(m)) ; k++)
+                                total += Math.pow(-1, k + 1) / k * DivisorSumClippedV5(floor(n / Math.pow(m, k)), -k, m + 1);
+                        return total;
+                    }
+                    function PrimesV2(n) {
+                        var total = 0;
+                        for (var k = 1; k <= floor(Math.log(n) / Math.log(2)) ; k++)
+                            total += MoebiusMu[k] / k * PrimePowersV4(floor(Math.pow(n, 1 / k)));
+                        return total;
+                    }
+
+                    //_____________________
+
+
+                    var WheelEntries = 7;
+                    var WheelSize = 1
+                    for (var j = 0; j < WheelEntries; j++) {
+                        WheelSize *= Prime[j];
+                    }
+                    var CoprimeCache = [];
+                    for (var n = 1; n <= WheelSize; n++) {
+                        var divisibleByWheel = false;
+                        for (var j = 0; j < WheelEntries; j++) {
+                            if (n % Prime[j] == 0) {
+                                divisibleByWheel = true;
+                                break;
+                            }
+                        }
+                        if (!divisibleByWheel) {
+                            CoprimeCache.push(1);
+                        } else {
+                            CoprimeCache.push(0);
+                        }
+                    }
+                    var LegPhiCache = [0];
+                    for (var j = 0; j < CoprimeCache.length; j++) {
+                        LegPhiCache.push(LegPhiCache[LegPhiCache.length - 1] + CoprimeCache[j]);
+                    }
+                    var FullWheel = LegPhiCache[LegPhiCache.length - 1];
+
+                    var CoprimeOffsets = [];
+                    for( var j = 0; j < CoprimeCache.length; j++ ){
+                        if( CoprimeCache[j] == 1 ){
+                            CoprimeOffsets.push( j + 1 );
+                        }
+                    }
+                    function Coprimes(n) {
+                        return LegPhiCache[(n - 1) % (WheelSize )] + Math.floor((n - 1) / WheelSize) * FullWheel;
+                    }
+                    function WheelForID(n){
+                        return CoprimeOffsets[ (n - 1)% FullWheel ] + Math.floor((n - 1) / FullWheel) * WheelSize;
+                    }
+                    var FirstNonWheel = WheelForID(2);
+                    function phi(n, K) {
+                        return Coprimes(n);
+                    }
+                    function alpha(n){
+                        return WheelForID(n);
+                    }
+
+                    //_____________________
+
+                    function DivisorSumWheel(n, z){
+                        var total = 0;
+                        console.log(phi(n, 7));
+                        for( var j = 1; j <= phi(n,7); j++ )
+                            total += dz(alpha(j),z);
+                        return total;
+                    }
+
+                    /*var A = 0, f = 100;
+                    function ival(ff, s) { return 1 / (pow(Math.E, (2 * Math.PI * s) / ff) - 1); }
+                    for (var k = 1; k < pow(f, 1 / 3) ; k++) { var cur = ival(Math.abs(f), k); if (cur == ival(Math.abs(f), k - .5)) { break; }  }
+                    var samps = [], samps2 = [];
+                    var ansbase = [{ y: 6.51721, text: 'y = 6.51721' }, { y: -.181288, text: 'y = -.181288...' }];
+                    var dm = { label: 'x axis', domain: [0, 50] };
+                    var dm2 = { label: 'y axis' };
+                    var ans = addFrequencyMarkers(f, { y: 6.51721, text: 'y = 6.51721' });
+                    var ans2 = addFrequencyMarkers(f, { y: 6.51721, text: 'y = 6.51721' }); ans2.push({ y: -.181288, text: 'y = -.181288...' });
+                    functionPlot({ target: '#demo0', xAxis: dm, yAxis: dm2, annotations: ansbase, width: 800, data: [line(function (v) { return sumImag(fl(v.x), A, f, samps2); }), line(function (v) { return sumReal(fl(v.x), A, f, samps); })] });
+                    functionPlot({ target: '#demo', xAxis: dm, yAxis: dm2, annotations: ans, width: 800, data: [line(function (v) { return integralReal(v.x, A, f); }), line(function (v) { return sumReal(fl(v.x), A, f, samps); })] });
+                    functionPlot({ target: '#demo2', xAxis: dm, yAxis: dm2, annotations: ans, width: 800, data: [line(function (v) { return integralRealDerivative(v.x, A, f); }, true), line(function (v) { return integralRealDerivative(fl(v.x), A, f); }, true)] });
+                    functionPlot({ target: '#demo3', xAxis: dm, yAxis: dm2, annotations: ans2, width: 800, data: [line(function (v) { return sumImag(fl(v.x), A, f, samps2) - integralImag(v.x, A, f); }), line(function (v) { return sumReal(fl(v.x), A, f, samps) - integralReal(v.x, A, f); })] });*/
+                </script>
+            </div>
+        </div>
+        <img src="art/edgeb.png" />
+    </div>
+    <script>renderMathInElement(document.body, { delimiters: [{ left: "$$", right: "$$", display: true }, { left: "$", right: "$", display: false }] });</script>
+</body>
+</html>
+

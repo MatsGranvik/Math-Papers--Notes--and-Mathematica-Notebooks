@@ -1,0 +1,80 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.css" integrity="sha384-wITovz90syo1dJWVh32uuETPVEtGigN07tkttEqPv+uR2SE/mbQcG7ATL28aI9H0" crossorigin="anonymous">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.js" integrity="sha384-/y1Nn9+QQAipbNQWU65krzJralCnuOasHncUFXGkdwntGeSvQicrYkiUBwsgUqc1" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/contrib/auto-render.min.js" integrity="sha384-dq1/gEHSxPZQ7DdrM82ID4YVol9BYyU7GbWlIwnwyPzotpoc57wDw/guX8EaYGPx" crossorigin="anonymous"></script>
+    <script src="http://d3js.org/d3.v3.min.js"></script>
+    <script src="http://maurizzzio.github.io/function-plot/js/function-plot.js"></script>
+    <script src="factors.js"></script>
+    <script src="page.js"></script>
+    <link rel="stylesheet" href="css/IceCream.css" type="text/css" />
+    <meta charset="utf-8">
+</head>
+<body>
+    <div id="pageouter">
+        <div id="page2"><div id="content2"><img src="art/edgea.png" /></div></div>
+        <div id="page">
+            <div id="content7">
+                <div id='title'>
+                    <h2>
+                        <center>
+                            Counting Prime Numbers <br />
+                            with the Hyperbola Method<br /><br />
+                            Section 5. Wheel Factorization and the Hyperbola Method
+                        </center>
+
+                    </h2>
+                </div><br />
+                <div id='underouter'><div id='under'></div></div>
+
+                <div id="section7">
+                    <div id="para">
+                        And now, once again, following the same blue print from before, we will generalize $W_z(n)$ as $W_{z,y}(n)$
+                        If we define $f_{k}(n,j)$ as
+                        $$ f_k(n,j)  = f_k(n, j+1) + (\frac{z+1} {k} - 1)(1+f_{k+1}( \frac{n}{\alpha(j)}, y )) $$
+                        with terminating condition
+                        $$ \textrm{if } n < \alpha(j), f_k(n,j) = 0 $$
+                        then
+                        $$ W_{z,y}(n) = 1+f_1(n,y) $$
+                    </div>
+                    <div id="fiddle"><script async src="http://jsfiddle.net/NathanMcKenzie/7r5wt66b/embed/js,result/"></script></div>
+                    <div id="para">
+                        With the recursion flattened out, this is
+                    </div>
+                    $$ W_{z,y}(n)= \binom{z}{0} 1 + \binom{z}{1} \sum_{j <= n; j \in B_K; j \ge \alpha(y)} 1 + \binom{z}{2} \sum_{j \cdot k <= n; j,k \in B_K; j,k \ge \alpha(y)} 1 + \binom{z}{3} \sum_{j \cdot k \cdot l <= n; j,k,l \in B_K; j,k,l \ge \alpha(y)} 1 +...$$
+                    <div id="para">
+                        As was the case with $D_{z,y}(n)$, $W_{z,y}(n)$ can be expressed
+                        as small sums of either $W_{z,y+1}(n)$ or $W_{z,y-1}(n)$, as
+                        $$ W_{z,y}(n) = \sum_{k = 0}^{\lfloor \frac{\log n}{\log \alpha(y)} \rfloor} \binom{z}{k} W_{z-k,y+1}(\frac{n}{\alpha(y)^k}) $$
+                        and as
+                        $$
+                        W_{z,y}(n)=
+                        \sum_{k = 0}^{\lfloor \frac{\log n}{\log (y-1)} \rfloor} (-1)^k \binom{z}{k} W_{z-k,\alpha(y-1)}(\frac{n}{\alpha(y-1)^k})
+                        $$
+                    </div>
+                    <div id="para">
+                        Again, we can use the first of these identities recursively by itself to define
+                        $W_{z,y}(n)$, and thus $W_{z}(n)$ and $\Pi(n)$.  It is the case that
+                        $$ \textrm{if } n < \alpha(y), W_{z,y}(n) = 1$$
+                    </div>
+                    <div id="para">
+                        which gives us a terminating condition for recursion, and so we can
+                        compute $W_z(n)= W_{z,2}(n)$ using just
+                        $\displaystyle W_{z,y}(n)=
+                        \sum_{k = 0}^{\lfloor \frac{\log n}{\log \alpha(y)} \rfloor} \binom{z}{k} W_{z-k,y+1}(\frac{n}{\alpha(y)^k})$ applied recursively as
+                    </div>
+                    <div id="fiddle"><script async src="http://jsfiddle.net/NathanMcKenzie/wzzoqgf7/embed/js,result/"></script></div>
+                    <div id="para">
+                        and thus $\Pi(n)$ can be computed as as
+                    </div>
+                    <div id="fiddle"><script async src="http://jsfiddle.net/NathanMcKenzie/spxpzhLy/embed/js,result/"></script></div>
+                </div>
+            </div>
+        </div>
+        <img src="art/edgeb.png" />
+    </div>
+    <script>renderMathInElement(document.body, { delimiters: [{ left: "$$", right: "$$", display: true }, { left: "$", right: "$", display: false }] });</script>
+</body>
+</html>
+
