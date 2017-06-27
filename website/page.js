@@ -9,6 +9,25 @@ function integralImag(x,A,f){ return pow(x,(1+A)) / (pow((1+A),2)+pow(f,2)) *((1
 function sumReal(x,A,f,sm){ if( x < 1 )return 0; x = fl(x); if( sm[x] != undefined )return sm[x]; sm[x]=pow(x,A)*cos(f*log(x))+sumReal(x-1,A,f,sm);}
 function sumImag(x, A, f, sm ){ if( x < 1 )return 0;  x = fl(x); if( sm[x] != undefined )return sm[x]; sm[x]=pow(x,A)*sin(f*log(x))+sumImag(x-1, A, f, sm);}
 
+var factorials = [1,1,2,6,24,120,720,5040,40320,362880,3628800,39916800,479001600,6227020800,87178291200,1307674368000,20922789888000,355687428096000,6402373705728000,121645100408832000,2432902008176640000];
+var facts = [];
+function factor(n){ if( facts[n] != undefined )return facts[n]; let o=[],k=2;while(k*k<=n){let t=0;while(n%k<1)t++,n/=k;t>0?o.push(t):{};k++}n>1?o.push(1):{}; facts[n] = o; return o}
+var ezs=[];
+function ez(n){ if(ezs[n] != undefined ) return ezs[n]; var t  = 1; var o = factor(n); for( var k = 0; k < o.length; k++ )t *= 1/factorials[o[k]]; ezs[n] = t; return t;}
+
+function sumRealP(x,A,f,sm){ 
+	if( x < 1 )
+	return 0; 
+	x = fl(x); 
+	if( sm[x] != undefined )
+		return sm[x]; 
+	
+	var v = ez(x);
+	sm[x]=v*pow(x,A)*cos(f*log(x))+sumRealP(x-1,A,f,sm);
+	
+	}
+function sumImagP(x, A, f, sm ){ if( x < 1 )return 0;  x = fl(x); if( sm[x] != undefined )return sm[x]; sm[x]=ez(x)*pow(x,A)*sin(f*log(x))+sumImagP(x-1, A, f, sm);}
+
 function integralRealX(x,A,f){ return pow(x,(1+A))*cos(f*log(x)); }
 function integralImagX(x,A,f){ return pow(x,(1+A))*sin(f*log(x)); }
 function sumRealX(x,A,f,sm){ if( x < 1 )return 0; x = fl(x); if( sm[x] != undefined )return sm[x]; sm[x]=pow(x,A)*((A+1)*cos(f*log(x))-f*sin(f*log(x)))+sumRealX(x-1,A,f,sm);}
